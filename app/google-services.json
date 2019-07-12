@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "207410681478",
+    "firebase_url": "https://wegeekteste-e16e4.firebaseio.com",
+    "project_id": "wegeekteste-e16e4",
+    "storage_bucket": "wegeekteste-e16e4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:207410681478:android:dcc036430d94bdb6",
+        "android_client_info": {
+          "package_name": "com.wegeekteste.fulanoeciclano.nerdzone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "207410681478-lsmaerv1ffpujv83bi7apqtfvilit73o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wegeekteste.fulanoeciclano.nerdzone",
+            "certificate_hash": "f39cecea1992d3c9700e14a9bb8b6d84c3d07336"
+          }
+        },
+        {
+          "client_id": "207410681478-ou7hd4e18sinl4256768el9hln8v6r08.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3JY4IE3PStaW3B0FzecZJBYESkXg37-I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "207410681478-ou7hd4e18sinl4256768el9hln8v6r08.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
