@@ -61,7 +61,7 @@ public class Adapter_meus_Contos extends RecyclerView.Adapter<Adapter_meus_Conto
 
         DatabaseReference topicoscurtidas= ConfiguracaoFirebase.getFirebaseDatabase()
                 .child("conto-likes")
-                .child(conto.getUid());
+                .child(conto.getId());
         topicoscurtidas.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -91,7 +91,7 @@ public class Adapter_meus_Contos extends RecyclerView.Adapter<Adapter_meus_Conto
 
         DatabaseReference conto_add_colecao= ConfiguracaoFirebase.getFirebaseDatabase()
                 .child("conto-colecao")
-                .child(conto.getUid());
+                .child(conto.getId());
         conto_add_colecao.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -153,7 +153,7 @@ public class Adapter_meus_Contos extends RecyclerView.Adapter<Adapter_meus_Conto
         @Override
         public void onClick(View v) {
             Intent it = new Intent(context , EditarContosActivity.class);
-            it.putExtra("id_conto",conto.getUid());
+            it.putExtra("id_conto",conto.getId());
             context.startActivity(it);
         }
     });

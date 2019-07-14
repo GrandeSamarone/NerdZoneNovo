@@ -20,7 +20,7 @@ import java.util.UUID;
 
 public class Conto   implements Serializable {
 
-    private String uid;
+    private String id;
     private String idauthor;
     private String nomeauthor;
     private String titulo;
@@ -39,17 +39,17 @@ public class Conto   implements Serializable {
            // String IdConto= Base64Custom.codificarBase64("danlelis");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> newConto = new HashMap<>();
-        newConto.put("id",getUid());
+        newConto.put("id",getId());
         newConto.put("titulo", getTitulo());
-        newConto.put("descricao", getMensagem());
-        newConto.put("id_autor", getIdauthor());
-        newConto.put("nome_autor", getNomeauthor());
+        newConto.put("mensagem", getMensagem());
+        newConto.put("idauthor", getIdauthor());
+        newConto.put("nomeauthor", getNomeauthor());
         newConto.put("data",getData());
 
 // Add a new document with a generated ID
             db.collection("Conto")
-                    .document(getIdauthor())
-                    .collection("Historias")
+                    //.document(getIdauthor())
+                    //.collection("Historias")
                     //.document("sdsdsdsdsdsdwsd")
                     .add(newConto)
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -68,14 +68,14 @@ public class Conto   implements Serializable {
     public void salvarContoPublico(){
         DatabaseReference anuncioref = ConfiguracaoFirebase.getFirebaseDatabase()
                 .child("conto");
-        anuncioref.child(getUid()).setValue(this);
+        anuncioref.child(getId()).setValue(this);
     }
     public  void AdicioneiConto(){
         String identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
         DatabaseReference anuncioref = ConfiguracaoFirebase.getFirebaseDatabase()
                 .child("adicionei-conto");
         anuncioref.child(identificadorUsuario)
-                .child(getUid()).setValue(this);
+                .child(getId()).setValue(this);
 
         salvarContoPublico();
     }
@@ -85,7 +85,7 @@ public class Conto   implements Serializable {
         DatabaseReference anuncioref = ConfiguracaoFirebase.getFirebaseDatabase()
                 .child("meusconto")
                 .child(identificadorUsuario)
-                .child(getUid());
+                .child(getId());
 
         anuncioref.removeValue();
      removerContocolecao();
@@ -96,7 +96,7 @@ public class Conto   implements Serializable {
     public void removerContoPublico(){
         DatabaseReference anuncioref = ConfiguracaoFirebase.getFirebaseDatabase()
                 .child("conto")
-                .child(getUid());
+                .child(getId());
 
         anuncioref.removeValue();
 
@@ -104,7 +104,7 @@ public class Conto   implements Serializable {
     public void removerContoLike(){
         DatabaseReference anuncioref = ConfiguracaoFirebase.getFirebaseDatabase()
                 .child("conto-likes")
-                .child(getUid());
+                .child(getId());
 
         anuncioref.removeValue();
 
@@ -112,18 +112,18 @@ public class Conto   implements Serializable {
     public void removerContocolecao(){
         DatabaseReference anuncioref = ConfiguracaoFirebase.getFirebaseDatabase()
                 .child("conto-colecao")
-                .child(getUid());
+                .child(getId());
 
         anuncioref.removeValue();
 
     }
 
-    public String getUid() {
-        return uid;
+    public String getId() {
+        return id;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getIdauthor() {

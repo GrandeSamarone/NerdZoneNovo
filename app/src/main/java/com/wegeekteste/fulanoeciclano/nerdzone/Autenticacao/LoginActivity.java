@@ -1,5 +1,6 @@
 package com.wegeekteste.fulanoeciclano.nerdzone.Autenticacao;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +8,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -35,7 +37,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.wegeekteste.fulanoeciclano.nerdzone.Activits.MainActivity;
 import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
@@ -44,6 +48,8 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Model.Usuario;
 import com.wegeekteste.fulanoeciclano.nerdzone.Politica_Privacidade.Politica_PrivacidadeActivity;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 import com.wegeekteste.fulanoeciclano.nerdzone.Splash.TelaSplash;
+
+import java.util.Collection;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -59,7 +65,9 @@ public class LoginActivity extends AppCompatActivity {
     private String identificadorUsuario;
     Usuario usuarioLogado;
     private FirebaseFirestore db;
+    private CollectionReference citiesRef;
 
+    @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,8 +78,11 @@ public class LoginActivity extends AppCompatActivity {
 
         //Configuracoes Originais
         db = FirebaseFirestore.getInstance();
+        citiesRef=db.collection("Usuarios");
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        Dialog();
         textoprivacidade = findViewById(R.id.textView);
         textoprivacidade.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,10 +92,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // Check if user is signed in (non-null) and update UI accordingly.
 
         botaologin = findViewById(R.id.sign_in_button);
-
         botaologin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,11 +101,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // SharedPreferences
-        sPreferences = getSharedPreferences("firstRun", MODE_PRIVATE);
-
-
-        FirebaseUser currentUser = auth.getCurrentUser();
+       //verificiando se o cliente já fez o login
         if (currentUser == null) {
             // Configure Google Sign In
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -107,41 +112,26 @@ public class LoginActivity extends AppCompatActivity {
             mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         } else {
+            //Toast.makeText(this, "Ta entrando aqui", Toast.LENGTH_SHORT).show();
             Intent it = new Intent(LoginActivity.this, TelaSplash.class);
             startActivity(it);
             finish();
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(false);
-        LayoutInflater layoutInflater = LayoutInflater.from(LoginActivity.this);
-        final View view = layoutInflater.inflate(R.layout.dialog_carregando_gif_comscroop, null);
-        ImageView imageViewgif = view.findViewById(R.id.gifimage);
 
-        Glide.with(getApplicationContext())
-                .asGif()
-                .load(R.drawable.gif_briguinha)
-                .into(imageViewgif);
-        builder.setView(view);
-        dialog = builder.create();
-    }
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
-
-
         dialog.show();
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        dialog.dismiss();
+
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             dialog.dismiss();
@@ -155,11 +145,93 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(this, "Erro, Verifique sua Conexão com a internet e tente Novamente.", Toast.LENGTH_LONG).show();
                 Log.i("sdoaskaok", String.valueOf(e));
 
+                dialog.dismiss();
 
-                // ...
             }
         }
     }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        //  Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+
+        dialog.show();
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        auth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+
+
+                            //Veirica se a conta existe no Database
+                            VerificandoCadastro();
+
+                        } else {
+                            dialog.dismiss();
+                            Toast.makeText(LoginActivity.this,
+                                    "Tente Novamente mais tarde", Toast.LENGTH_LONG).show();
+                            // If sign in fails, display a message to the user.
+                          /* Toast.makeText(GoogleSignInActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                           */
+                        }
+
+                        // ...
+                    }
+                });
+    }
+    
+        public void VerificandoCadastro () {
+            identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
+            FirebaseUser user = auth.getCurrentUser();
+            Query query = citiesRef.whereEqualTo("id", identificadorUsuario);
+            if (!query.equals(null)) {
+                dialog.dismiss();
+                Intent its = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(its);
+                finish();
+            }
+            dialog.dismiss();
+            usuario = new Usuario();
+            usuario.setId(identificadorUsuario);
+            usuario.setNome(user.getDisplayName());
+            usuario.setFoto(String.valueOf(user.getPhotoUrl()));
+            usuario.setCapa("");
+            usuario.setSeguidores(usuario.getSeguidores());
+            usuario.setSeguindo(usuario.getSeguindo());
+            usuario.setContos(usuario.getContos());
+            usuario.setTopicos(usuario.getTopicos());
+            usuario.setArts(usuario.getArts());
+            usuario.setComercio(usuario.getComercio());
+            usuario.setEvento(usuario.getEvento());
+            usuario.setTipoconta(user.getEmail());
+            usuario.setTiposuario("usuario");
+            //   String  identificadorUsuario = Base64Custom.codificarBase64(usuario.getNome());
+            usuario.setId(identificadorUsuario);
+            usuario.salvar();
+
+            Intent it = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(it);
+            finish();
+        }
+
+    private void Dialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        LayoutInflater layoutInflater = LayoutInflater.from(LoginActivity.this);
+        final View view = layoutInflater.inflate(R.layout.dialog_carregando_gif_comscroop, null);
+        ImageView imageViewgif = view.findViewById(R.id.gifimage);
+
+        Glide.with(getApplicationContext())
+                .asGif()
+                .load(R.drawable.gif_briguinha)
+                .into(imageViewgif);
+        builder.setView(view);
+        dialog = builder.create();
+
+    }
+
+    //Trocar a cor do topo
 
     private void TrocarFundos_status_bar() {
         //mudando a cor do statusbar
@@ -200,115 +272,5 @@ public class LoginActivity extends AppCompatActivity {
         }
         win.setAttributes(winParams);
     }
-
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        //  Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(false);
-        LayoutInflater layoutInflater = LayoutInflater.from(LoginActivity.this);
-        final View view = layoutInflater.inflate(R.layout.dialog_carregando_gif_comscroop, null);
-        ImageView imageViewgif = view.findViewById(R.id.gifimage);
-
-        Glide.with(getApplicationContext())
-                .asGif()
-                .load(R.drawable.gif_briguinha)
-                .into(imageViewgif);
-        builder.setView(view);
-
-        dialog = builder.create();
-
-        dialog.show();
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        auth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-
-
-                            //Veirica se a conta existe no Database
-                            VerificandoCadastro();
-
-                        } else {
-                            dialog.dismiss();
-                            Toast.makeText(LoginActivity.this,
-                                    "Tente Novamente mais tarde", Toast.LENGTH_LONG).show();
-                            // If sign in fails, display a message to the user.
-                          /* Toast.makeText(GoogleSignInActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                           */
-                        }
-
-                        // ...
-                    }
-                });
-    }
-
-    public void VerificandoCadastro() {
-        identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
-        FirebaseUser user = auth.getCurrentUser();
-        /*database_perfil.child(identificadorUsuario)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists()){
-                            dialog.dismiss();
-                            Intent its = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(its);
-                            finish();
-
-                        }*/
-        dialog.dismiss();
-        usuario = new Usuario();
-        usuario.setId(identificadorUsuario);
-        usuario.setNome(user.getDisplayName());
-        usuario.setFoto(String.valueOf(user.getPhotoUrl()));
-        usuario.setCapa("");
-        usuario.setSeguidores(usuario.getSeguidores());
-        usuario.setSeguindo(usuario.getSeguindo());
-        usuario.setContos(usuario.getContos());
-        usuario.setTopicos(usuario.getTopicos());
-        usuario.setArts(usuario.getArts());
-        usuario.setComercio(usuario.getComercio());
-        usuario.setEvento(usuario.getEvento());
-        usuario.setTipoconta(user.getEmail());
-        usuario.setTiposuario("usuario");
-        //   String  identificadorUsuario = Base64Custom.codificarBase64(usuario.getNome());
-        usuario.setId(identificadorUsuario);
-        usuario.salvar();
-
-        Intent it = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(it);
-        finish();
-    }
-
-
-
-
-
-
-    public void Verificar(){
-
-        if (sPreferences.getBoolean("firstRun", true)) {
-            sPreferences.edit().putBoolean("firstRun", false).apply();
-            /*Intent it = new Intent(LoginActivity.this,Cadastrar_icon_nome_Activity.class);
-            startActivity(it);*/
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                finishAffinity();  //Método para matar a activity e não deixa-lá indexada na pilhagem
-            }else{
-
-            }
-        } else {
-
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                finishAffinity();  //Método para matar a activity e não deixa-lá indexada na pilhagem
-            }else{
-                finish();
-            }
-
-        }
-    }
-
 
 }

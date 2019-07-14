@@ -142,9 +142,9 @@ public class ListaConto extends AppCompatActivity  {
 
                             for (DocumentChange change : snapshots.getDocumentChanges()) {
                                 Conto conto = change.getDocument().toObject(Conto.class);
-                                conto.setUid(change.getDocument().getId());
+                                conto.setId(change.getDocument().getId());
                                     Log.i("sdsdsd",change.getDocument().getId());
-                              Log.i("sdsdsd2",conto.getUid());
+                              Log.i("sdsdsd2",conto.getId());
                                 switch (change.getType()) {
                                     case ADDED:
                                         Listaconto.add(0, conto);
@@ -159,7 +159,7 @@ public class ListaConto extends AppCompatActivity  {
                                     case MODIFIED:
                                         for (Conto ct : Listaconto) {
 
-                                        if(conto.getUid().equals(ct.getUid())){
+                                        if(conto.getId().equals(ct.getId())){
                                         Listaconto.remove(ct);
                                         break;
                                         }
@@ -175,7 +175,7 @@ public class ListaConto extends AppCompatActivity  {
                                     case REMOVED:
                                         for (Conto ct : Listaconto) {
 
-                                            if(conto.getUid().equals(ct.getUid())){
+                                            if(conto.getId().equals(ct.getId())){
                                                 Listaconto.remove(ct);
                                                 break;
                                             }

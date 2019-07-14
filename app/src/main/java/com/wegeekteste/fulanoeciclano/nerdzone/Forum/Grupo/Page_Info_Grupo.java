@@ -1,12 +1,15 @@
 package com.wegeekteste.fulanoeciclano.nerdzone.Forum.Grupo;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.wegeekteste.fulanoeciclano.nerdzone.Activits.ChatActivity;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
@@ -31,6 +34,13 @@ public class Page_Info_Grupo extends AppCompatActivity {
             membros_info=findViewById(R.id.membros_grupo_info);
             botao_entrar_grupo = findViewById(R.id.botao_grupo_info);
 
+
+            botao_entrar_grupo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
         //Recuperar dados do usuario Selecionado;
         Bundle bundle = getIntent().getExtras();
 

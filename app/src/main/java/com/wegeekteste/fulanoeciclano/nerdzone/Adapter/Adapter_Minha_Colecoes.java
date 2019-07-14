@@ -84,7 +84,7 @@ public class Adapter_Minha_Colecoes extends RecyclerView.Adapter<Adapter_Minha_C
 
         DatabaseReference conto_add_colecao= ConfiguracaoFirebase.getFirebaseDatabase()
                 .child("conto-colecao")
-                .child(conto.getUid());
+                .child(conto.getId());
         conto_add_colecao.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

@@ -113,6 +113,7 @@ public class Novo_Conto extends AppCompatActivity implements EventBusClass {
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEvent(String event){
         nome_usuario=event;
+        Log.i("sdsd478",event);
     }
 
     private Conto configurarConto(){

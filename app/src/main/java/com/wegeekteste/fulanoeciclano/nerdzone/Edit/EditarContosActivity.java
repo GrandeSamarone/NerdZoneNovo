@@ -152,13 +152,13 @@ public class EditarContosActivity extends AppCompatActivity {
         dialog = builder.create();
         dialog.show();
         Conto contos = new Conto();
-        contos.setUid(conto.getUid());
+        contos.setId(conto.getId());
         contos.setData(conto.getData());
         contos.setMensagem(mensagem_conto.getText().toString());
         contos.setTitulo(titulo_conto.getText().toString());
         contos.setLikecount(conto.getLikecount());
         contos.setIdauthor(conto.getIdauthor());
-        databaseconto.child(contos.getUid()).setValue(contos).addOnCompleteListener(new OnCompleteListener<Void>() {
+        databaseconto.child(contos.getId()).setValue(contos).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
             }
@@ -168,7 +168,7 @@ public class EditarContosActivity extends AppCompatActivity {
 
             }
         });
-        Meusdatabaseconto.child(usuariologado).child(contos.getUid()).setValue(contos).addOnCompleteListener(new OnCompleteListener<Void>() {
+        Meusdatabaseconto.child(usuariologado).child(contos.getId()).setValue(contos).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 dialog.dismiss();

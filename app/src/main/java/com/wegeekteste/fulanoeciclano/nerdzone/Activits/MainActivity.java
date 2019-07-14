@@ -32,6 +32,7 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.AdapterPagInicial.Adapter
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.AdapterPagInicial.Adapter_FanArtsInicial;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.AdapterPagInicial.EventoAdapterPagInicial;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.AdapterPagInicial.TopicoAdapterPagInicial;
+import com.wegeekteste.fulanoeciclano.nerdzone.Autenticacao.LoginActivity;
 import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Conto.ListaConto;
 import com.wegeekteste.fulanoeciclano.nerdzone.Evento.DetalheEvento;
@@ -201,9 +202,9 @@ public class MainActivity extends AppCompatActivity  {
 
                         for (DocumentChange change : snapshots.getDocumentChanges()) {
                             Conto conto = change.getDocument().toObject(Conto.class);
-                            conto.setUid(change.getDocument().getId());
+                            conto.setId(change.getDocument().getId());
                             Log.i("sdsdsd",change.getDocument().getId());
-                            Log.i("sdsdsd2",conto.getUid());
+                            Log.i("sdsdsd2",conto.getId());
                             switch (change.getType()) {
                                 case ADDED:
                                     ListaContos.add(0, conto);
@@ -218,7 +219,7 @@ public class MainActivity extends AppCompatActivity  {
                                 case MODIFIED:
                                     for (Conto ct : ListaContos) {
 
-                                        if(conto.getUid().equals(ct.getUid())){
+                                        if(conto.getId().equals(ct.getId())){
                                             ListaContos.remove(ct);
                                             break;
                                         }
@@ -234,7 +235,7 @@ public class MainActivity extends AppCompatActivity  {
                                 case REMOVED:
                                     for (Conto ct : ListaContos) {
 
-                                        if(conto.getUid().equals(ct.getUid())){
+                                        if(conto.getId().equals(ct.getId())){
                                             ListaContos.remove(ct);
                                             break;
                                         }

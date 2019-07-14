@@ -28,7 +28,6 @@ import static android.app.UiModeManager.MODE_NIGHT_AUTO;
  */
 
 public class App extends MultiDexApplication {
-    private FirebaseDatabase data;
     private Context c;
     private String identificadorUsuario;
     @Override
@@ -46,7 +45,6 @@ public class App extends MultiDexApplication {
                 .build();
 
         Fresco.initialize(this, imagePipelineConfig);
-        data = ConfiguracaoFirebase.getDatabase();
         EmojiManager.install(new GoogleEmojiProvider());
 
 
@@ -61,8 +59,9 @@ public class App extends MultiDexApplication {
 
 
         //Pegar informaçao de quem está logado
-        identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
-        ConfiguracaoFirebase.getFirebasedoref(identificadorUsuario);
+        //identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
+       //ConfiguracaoFirebase.getFirebaseFirestore();
+        //ConfiguracaoFirebase.getFirebasedoref(identificadorUsuario);
 
     }
 

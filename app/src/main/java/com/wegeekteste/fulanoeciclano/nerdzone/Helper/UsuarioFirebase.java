@@ -20,9 +20,12 @@ public class UsuarioFirebase {
 
     public static String getIdentificadorUsuario(){
         String identificadorUsuario;
+        String email = null;
         FirebaseAuth usuario = ConfiguracaoFirebase.getFirebaseAutenticacao();
-        String email =usuario.getCurrentUser().getEmail();
-             identificadorUsuario= Base64Custom.codificarBase64(email);
+        if(usuario.getCurrentUser().getEmail()!=null){
+            email =usuario.getCurrentUser().getEmail();
+        }
+        identificadorUsuario= Base64Custom.codificarBase64(email);
 
         return identificadorUsuario;
     }

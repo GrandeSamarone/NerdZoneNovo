@@ -99,7 +99,7 @@ public class Detalhe_conto extends AppCompatActivity {
             mensagem.setText(contoselecionado.getMensagem());
             num_like.setText(String.valueOf(contoselecionado.getLikecount()));
             CarregarNomedoAuthor(contoselecionado.getIdauthor());
-            CarregarInfo_botoes(contoselecionado.getUid());
+            CarregarInfo_botoes(contoselecionado.getId());
 
         }
 

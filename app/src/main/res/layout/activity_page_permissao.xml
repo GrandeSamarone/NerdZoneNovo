@@ -33,14 +33,21 @@
             android:textAlignment="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
         <TextView
+            android:layout_marginTop="5dp"
+            android:textAlignment="center"
+            android:text="Criado por"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginTop="5dp"
             android:id="@+id/criador_grupo_info"
             android:textAlignment="center"
             android:text="Criador"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <TextView
+            android:layout_marginTop="5dp"
             android:id="@+id/membros_grupo_info"
             android:textAlignment="center"
             android:text="Membros"
