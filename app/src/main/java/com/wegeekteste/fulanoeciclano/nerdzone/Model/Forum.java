@@ -2,9 +2,15 @@ package com.wegeekteste.fulanoeciclano.nerdzone.Model;
 
 
 
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.StorageReference;
 import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
@@ -15,42 +21,51 @@ import java.util.Map;
 
 // [START post_class]
 @IgnoreExtraProperties
-public class Topico  implements Serializable {
-
+public class Forum implements Serializable {
     public String uid;
     public String idauthor;
+    public String nomeauthor;
     public String titulo;
     public String foto;
-    public String mensagem;
+    public String descricao;
     public String data;
+    public String opcao;
     public int likecount = 0;
     public  int quantcomentario=0;
     public Map<String, Boolean> stars = new HashMap<>();
     String usuariologado = UsuarioFirebase.getIdentificadorUsuario();
-    public Topico() {
-        DatabaseReference eventoref = ConfiguracaoFirebase.getFirebaseDatabase()
-                .child("topico");
-        setUid(eventoref.push().getKey());  }
+    public Forum() { }
 
-  public  void SalvarTopico(DataSnapshot seguidoressnapshot){
+  public  void SalvarForum(){
+      // String IdConto= Base64Custom.codificarBase64("danlelis");
+      FirebaseFirestore db = FirebaseFirestore.getInstance();
+      Map<String, Object> newForum = new HashMap<>();
+      newForum.put("id",getUid());
+      newForum.put("titulo", getTitulo());
+      newForum.put("descricao", getDescricao());
+      newForum.put("id_autor", getIdauthor());
+      newForum.put("foto", getFoto());
+      newForum.put("nomeauthor", getNomeauthor());
+      newForum.put("opcao", getOpcao());
+      newForum.put("data",getData());
 
-      DatabaseReference anuncioref = ConfiguracaoFirebase.getFirebaseDatabase();
-      Map objeto = new HashMap();
-      String combinacaoId="/"+ usuariologado+"/"+getUid();
+// Add a new document with a generated ID
+      db.collection("WeForum")
+              //.document(getIdauthor())
+              //.collection(getOpcao())
+              //.document("sdsdsdsdsdsdwsd")
+              .add(newForum)
+             .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                 @Override
+                 public void onSuccess(DocumentReference documentReference) {
 
-      objeto.put("/meustopicos"+combinacaoId,this);
-      for(DataSnapshot Seguidores:seguidoressnapshot.getChildren()){
+                 }
+             }).addOnFailureListener(new OnFailureListener() {
+          @Override
+          public void onFailure(@NonNull Exception e) {
 
-          String idSeguidores=Seguidores.getKey();
-          HashMap<String,Object> dadosSeguidor = new HashMap<>();
-          dadosSeguidor.put("idtopico",getUid());
-          String IdAtualizacao="/"+ idSeguidores+"/"+getUid();
-
-          objeto.put("/feed-topico"+IdAtualizacao,dadosSeguidor);
-      }
-
-      anuncioref.updateChildren(objeto);
-      salvarTopicoPublico();
+          }
+      });
   }
 
     public void salvarTopicoPublico(){
@@ -133,14 +148,13 @@ public class Topico  implements Serializable {
         this.foto = foto;
     }
 
-    public String getMensagem() {
-        return mensagem;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setMensagem(String mensagem) {
-        this.mensagem = mensagem;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
-
 
     public int getLikecount() {
         return likecount;
@@ -172,6 +186,22 @@ public class Topico  implements Serializable {
 
     public void setData(String data) {
         this.data = data;
+    }
+
+    public String getNomeauthor() {
+        return nomeauthor;
+    }
+
+    public void setNomeauthor(String nomeauthor) {
+        this.nomeauthor = nomeauthor;
+    }
+
+    public String getOpcao() {
+        return opcao;
+    }
+
+    public void setOpcao(String opcao) {
+        this.opcao = opcao;
     }
 }
 // [END post_class]

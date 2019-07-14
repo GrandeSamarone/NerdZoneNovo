@@ -60,19 +60,19 @@ public class Usuario implements Serializable {
 
 // Add a new document with a generated ID
         db.collection("Usuarios")
-                .add(newUsuario)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                .document(getId())
+                .set(newUsuario)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        //    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    public void onSuccess(Void aVoid) {
+
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //  Log.w(TAG, "Error adding document", e);
-                    }
-                });
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
 
 
 

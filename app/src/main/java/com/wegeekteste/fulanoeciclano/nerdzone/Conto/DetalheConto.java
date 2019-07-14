@@ -39,7 +39,7 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Model.Comentario;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Conto;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.ContoLike;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Conto_colecao;
-import com.wegeekteste.fulanoeciclano.nerdzone.Model.Topico;
+import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Usuario;
 import com.wegeekteste.fulanoeciclano.nerdzone.PerfilAmigos.Perfil;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
@@ -66,7 +66,7 @@ public class DetalheConto extends AppCompatActivity {
     private DatabaseReference database,database_topico;
     private FirebaseUser usuario;
     private String usuarioLogado;
-    private Topico topicoselecionado;
+    private Forum topicoselecionado;
     private LinearLayout clickPerfil;
     private ChildEventListener ChildEventListenerdetalhe;
     private ChildEventListener ChildEventListeneruser;

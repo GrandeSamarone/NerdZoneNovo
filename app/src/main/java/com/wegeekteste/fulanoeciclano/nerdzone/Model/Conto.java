@@ -8,6 +8,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.Base64Custom;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
@@ -21,6 +22,7 @@ public class Conto   implements Serializable {
 
     private String uid;
     private String idauthor;
+    private String nomeauthor;
     private String titulo;
     private String mensagem;
     private String data;
@@ -40,26 +42,28 @@ public class Conto   implements Serializable {
         newConto.put("id",getUid());
         newConto.put("titulo", getTitulo());
         newConto.put("descricao", getMensagem());
-        newConto.put("Autor", getIdauthor());
+        newConto.put("id_autor", getIdauthor());
+        newConto.put("nome_autor", getNomeauthor());
         newConto.put("data",getData());
 
 // Add a new document with a generated ID
-        db.collection("Conto")
-                .add(newConto)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        //    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //  Log.w(TAG, "Error adding document", e);
-                    }
-                });
+            db.collection("Conto")
+                    .document(getIdauthor())
+                    .collection("Historias")
+                    //.document("sdsdsdsdsdsdwsd")
+                    .add(newConto)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
 
-    }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            });
+        }
 
     public void salvarContoPublico(){
         DatabaseReference anuncioref = ConfiguracaoFirebase.getFirebaseDatabase()
@@ -168,5 +172,13 @@ public class Conto   implements Serializable {
 
     public void setQuantcolecao(int quantcolecao) {
         this.quantcolecao = quantcolecao;
+    }
+
+    public String getNomeauthor() {
+        return nomeauthor;
+    }
+
+    public void setNomeauthor(String nomeauthor) {
+        this.nomeauthor = nomeauthor;
     }
 }

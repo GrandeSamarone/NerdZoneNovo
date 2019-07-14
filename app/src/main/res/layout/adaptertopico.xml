@@ -66,7 +66,7 @@ android:id="@+id/ico"
                 android:textColor="@color/pretoclaro"
                 android:textSize="16sp"
                 android:maxLines="10"
-                tools:text="topico" />
+                tools:text="forum" />
         </LinearLayout>
 
         <LinearLayout

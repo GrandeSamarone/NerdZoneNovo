@@ -7,7 +7,7 @@
     android:id="@+id/root_view_topico"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
-    tools:context=".Topico.Detalhe_topico"
+    tools:context=".Forum.Detalhe_Forum"
     android:background="@color/background">
 
     <RelativeLayout

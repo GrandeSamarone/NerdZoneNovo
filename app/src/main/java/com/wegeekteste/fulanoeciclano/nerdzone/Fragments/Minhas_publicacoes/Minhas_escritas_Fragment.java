@@ -25,7 +25,7 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Conto;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Evento;
-import com.wegeekteste.fulanoeciclano.nerdzone.Model.Topico;
+import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ public class Minhas_escritas_Fragment extends Fragment implements SwipeRefreshLa
     private String identificadoUsuario;
     private TextView nomeconto, nometopico, errobusca;
     private Evento evento;
-    private List<Topico> lista_Meus_Topicos = new ArrayList<>();
+    private List<Forum> lista_Meus_Forums = new ArrayList<>();
     private List<Conto> lista_meus_contos = new ArrayList<>();
     private Adapter_Meus_Topicos mAdapter;
     private Adapter_meus_Contos adapterConto;
@@ -88,7 +88,7 @@ public class Minhas_escritas_Fragment extends Fragment implements SwipeRefreshLa
         meus_topicosref = database.child("meustopicos").child(identificadorUsuario);
         meus_contos_ref = database.child("meusconto").child(identificadorUsuario);
 
-        mAdapter = new Adapter_Meus_Topicos(lista_Meus_Topicos, getActivity());
+        mAdapter = new Adapter_Meus_Topicos(lista_Meus_Forums, getActivity());
         adapterConto = new Adapter_meus_Contos(lista_meus_contos, getActivity());
 
         recyclerView_meus_contos = view.findViewById(R.id.recycler_meus_contos);
@@ -118,13 +118,13 @@ RecuperarMeus_Topicos();
         //Progress
         linearLayout.setVisibility(View.VISIBLE);
 
-        lista_Meus_Topicos.clear();
+        lista_Meus_Forums.clear();
         childEventListenerMeus_Topico = meus_topicosref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Topico topico = dataSnapshot.getValue(Topico.class);
-                lista_Meus_Topicos.add(topico);
-                if (lista_Meus_Topicos.size() > 0) {
+                Forum forum = dataSnapshot.getValue(Forum.class);
+                lista_Meus_Forums.add(forum);
+                if (lista_Meus_Forums.size() > 0) {
                     nometopico.setVisibility(View.VISIBLE);
                     linearLayout.setVisibility(View.GONE);
                 } else {

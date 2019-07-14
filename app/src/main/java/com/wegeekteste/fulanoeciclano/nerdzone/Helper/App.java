@@ -30,7 +30,7 @@ import static android.app.UiModeManager.MODE_NIGHT_AUTO;
 public class App extends MultiDexApplication {
     private FirebaseDatabase data;
     private Context c;
-
+    private String identificadorUsuario;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -60,7 +60,9 @@ public class App extends MultiDexApplication {
         }
 
 
-
+        //Pegar informaçao de quem está logado
+        identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
+        ConfiguracaoFirebase.getFirebasedoref(identificadorUsuario);
 
     }
 

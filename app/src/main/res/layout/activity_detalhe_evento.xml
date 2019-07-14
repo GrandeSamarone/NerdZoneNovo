@@ -91,7 +91,7 @@
                 android:textColor="@color/pretoescrita"
                 android:textSize="16sp"
                 app:fontFamily="sans-serif-condensed"
-                tools:text="topico" />
+                tools:text="forum" />
 
 
 

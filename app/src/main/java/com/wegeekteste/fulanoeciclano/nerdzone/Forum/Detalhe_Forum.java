@@ -1,4 +1,4 @@
-package com.wegeekteste.fulanoeciclano.nerdzone.Topico;
+package com.wegeekteste.fulanoeciclano.nerdzone.Forum;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -53,7 +53,7 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.CircleProgressDrawable;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Comentario;
-import com.wegeekteste.fulanoeciclano.nerdzone.Model.Topico;
+import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Usuario;
 import com.wegeekteste.fulanoeciclano.nerdzone.PerfilAmigos.Perfil;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
@@ -62,7 +62,7 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class Detalhe_topico extends AppCompatActivity {
+public class Detalhe_Forum extends AppCompatActivity {
 
     private Toolbar toolbar;
     private Adapter_comentario adapter;
@@ -79,7 +79,7 @@ public class Detalhe_topico extends AppCompatActivity {
     private DatabaseReference database,database_topico;
     private FirebaseUser usuario;
     private String usuarioLogado;
-    private Topico topicoselecionado;
+    private Forum topicoselecionado;
     private LinearLayout clickPerfil;
     private ChildEventListener ChildEventListenerdetalhe;
     private ChildEventListener ChildEventListeneruser;
@@ -134,13 +134,13 @@ public class Detalhe_topico extends AppCompatActivity {
             }
         });
         database = ConfiguracaoFirebase.getDatabase().getReference().child("usuarios");
-        topicoselecionado = (Topico)  getIntent().getSerializableExtra("topicoselecionado");
+        topicoselecionado = (Forum)  getIntent().getSerializableExtra("topicoselecionado");
         ComentarioReference = FirebaseDatabase.getInstance().getReference()
                 .child("comentario-topico").child(topicoselecionado.getUid());
         if(topicoselecionado!=null){
 
             titulo.setText(topicoselecionado.getTitulo());
-            mensagem.setText(topicoselecionado.getMensagem());
+            mensagem.setText(topicoselecionado.getDescricao());
             RecuperarIcone_e_nome_author(topicoselecionado.getIdauthor());
             if(topicoselecionado.getFoto()!=null) {
                 Uri capa = Uri.parse(topicoselecionado.getFoto());
@@ -173,7 +173,7 @@ public class Detalhe_topico extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                    String ff = topicoselecionado.getFoto();
-                    Intent it = new Intent(Detalhe_topico.this, AbrirImagem.class);
+                    Intent it = new Intent(Detalhe_Forum.this, AbrirImagem.class);
                     it.putExtra("id_foto",  topicoselecionado.getFoto());
                     it.putExtra("nome_foto",  topicoselecionado.getTitulo());
                     startActivity(it);
@@ -189,7 +189,7 @@ public class Detalhe_topico extends AppCompatActivity {
     private void GifCarregarDados() {
         android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
         builder.setCancelable(false);
-        LayoutInflater layoutInflater = LayoutInflater.from(Detalhe_topico.this);
+        LayoutInflater layoutInflater = LayoutInflater.from(Detalhe_Forum.this);
         final View view = layoutInflater.inflate(R.layout.dialog_carregando_gif_comscroop, null);
         ImageView imageViewgif = view.findViewById(R.id.gifimage);
 
@@ -284,7 +284,7 @@ public class Detalhe_topico extends AppCompatActivity {
                     clickPerfil.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent it = new Intent(Detalhe_topico.this, Perfil.class);
+                            Intent it = new Intent(Detalhe_Forum.this, Perfil.class);
                             it.putExtra("id", user.getId());
                             startActivity(it);
                         }
@@ -293,12 +293,12 @@ public class Detalhe_topico extends AppCompatActivity {
                     clickPerfil.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent it = new Intent(Detalhe_topico.this, MinhaConta.class);
+                            Intent it = new Intent(Detalhe_Forum.this, MinhaConta.class);
                             startActivity(it);
                         }
                     });
                 }
-                Glide.with(Detalhe_topico.this)
+                Glide.with(Detalhe_Forum.this)
                         .load(user.getFoto())
                         .into(icone);
 
@@ -357,12 +357,12 @@ public class Detalhe_topico extends AppCompatActivity {
         icone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent it = new Intent(Detalhe_topico.this, MinhaConta.class);
+                Intent it = new Intent(Detalhe_Forum.this, MinhaConta.class);
                 startActivity(it);
 
             }
         });
-        Glide.with(Detalhe_topico.this)
+        Glide.with(Detalhe_Forum.this)
                 .load(url)
                 .into(icone);
         dialog.dismiss();

@@ -63,8 +63,6 @@ public class ListaConto extends AppCompatActivity  {
 
     private Toolbar toolbar;
     private CircleImageView icone;
-
-    private DatabaseReference database,database_conto;
     private FirebaseUser usuario;
     private MaterialSearchView SeachViewConto;
     private Adapter_Conto adapter_conto;
@@ -72,7 +70,6 @@ public class ListaConto extends AppCompatActivity  {
     private FloatingActionButton botaoMaisconto;
     private RecyclerView recyclerView_lista_conto;
     private ArrayList<Conto> Listaconto = new ArrayList<>();
-    private ChildEventListener valueEventListenerConto;
     private LinearLayout linear_nada_cadastrado;
     private SharedPreferences preferences = null;
     private Dialog dialog;
@@ -93,8 +90,7 @@ public class ListaConto extends AppCompatActivity  {
             preferences.edit().putBoolean("primeiravezconto", false).apply();
             Dialog_Primeiravez();
         }
-
-        //Configuraçoes Basicas
+       //Configuraçoes Basicas
         linear_nada_cadastrado = findViewById(R.id.linear_nada_cadastrado_conto);
         recyclerView_lista_conto = findViewById(R.id.recycleview_conto);
         botaoMaisconto=findViewById(R.id.buton_novo_conto);
@@ -106,8 +102,6 @@ public class ListaConto extends AppCompatActivity  {
                 finish();
             }
         });
-        database = ConfiguracaoFirebase.getDatabase().getReference().child("usuarios");
-        database_conto = ConfiguracaoFirebase.getDatabase().getReference().child("conto");
         //adapter
         adapter_conto = new Adapter_Conto(Listaconto,this);
 
@@ -116,9 +110,6 @@ public class ListaConto extends AppCompatActivity  {
         recyclerView_lista_conto.setLayoutManager(layoutManager);
         recyclerView_lista_conto.setHasFixedSize(true);
         recyclerView_lista_conto.setAdapter(adapter_conto);
-
-
-        CarregarDados_do_Usuario();
         TrocarFundos_status_bar();
 
 
@@ -139,12 +130,8 @@ public class ListaConto extends AppCompatActivity  {
 
 
     private void RecuperarContos(){
-
-
-
-
         db.collection("Conto")
-                .whereEqualTo("descricao", "bb")
+                //.whereEqualTo("descricao", "bb")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
@@ -319,51 +306,6 @@ public class ListaConto extends AppCompatActivity  {
 
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void CarregarDados_do_Usuario(){
-        usuario = UsuarioFirebase.getUsuarioAtual();
-        String email = usuario.getEmail();
-        ChildEventListenerconto=database.orderByChild("tipoconta")
-                .equalTo(email).addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        Usuario perfil = dataSnapshot.getValue(Usuario.class );
-                        assert perfil != null;
-                        String icone = perfil.getFoto();
-                        IconeUsuario(icone);
-                    }
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    }
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    }
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                    }
-                });
-    }
-
-
-    private void IconeUsuario(String url) {
-        //Imagem do icone do usuario
-        icone = findViewById(R.id.icone_user_toolbar);
-        icone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent it = new Intent(ListaConto.this, MinhaConta.class);
-                startActivity(it);
-                finish();
-
-            }
-        });
-        Glide.with(ListaConto.this)
-                .load(url)
-                .into(icone);
     }
 
 

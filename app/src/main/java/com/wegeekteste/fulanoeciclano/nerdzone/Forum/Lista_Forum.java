@@ -1,4 +1,4 @@
-package com.wegeekteste.fulanoeciclano.nerdzone.Topico;
+package com.wegeekteste.fulanoeciclano.nerdzone.Forum;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,7 +20,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -30,23 +28,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.wegeekteste.fulanoeciclano.nerdzone.Activits.MainActivity;
-import com.wegeekteste.fulanoeciclano.nerdzone.Activits.MinhaConta;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_Topico;
-import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
-import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
-import com.wegeekteste.fulanoeciclano.nerdzone.Model.Topico;
-import com.wegeekteste.fulanoeciclano.nerdzone.Model.Usuario;
+import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ListaTopicos extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class Lista_Forum extends AppCompatActivity  {
     private Toolbar toolbar;
     private CircleImageView icone;
-    private SwipeRefreshLayout refresh;
-
     private DatabaseReference database,database_topico;
     private FirebaseUser usuario;
     private MaterialSearchView SeachViewTopico;
@@ -54,7 +46,7 @@ public class ListaTopicos extends AppCompatActivity implements SwipeRefreshLayou
     private ChildEventListener ChildEventListenerperfil;
     private FloatingActionButton botaoMaisTopicos;
     private RecyclerView recyclerView_lista_topico;
-    private ArrayList<Topico> ListaTopico = new ArrayList<>();
+    private ArrayList<Forum> listaForum = new ArrayList<>();
     private ChildEventListener valueEventListenerTopicos;
     private LinearLayout linear_nada_cadastrado;
     private Dialog dialog;
@@ -66,42 +58,33 @@ public class ListaTopicos extends AppCompatActivity implements SwipeRefreshLayou
         setContentView(R.layout.activity_lista_topicos);
 
         toolbar = findViewById(R.id.toolbarsecundario);
-        toolbar.setTitle("Tópicos");
+        toolbar.setTitle("We");
         setSupportActionBar(toolbar);
 
-        refresh = findViewById(R.id.refreshtopico);
-        refresh.setOnRefreshListener(this);
-        refresh.post(new Runnable() {
-            @Override
-            public void run() {
-                RecuperarTopicos();
-                preferences = getSharedPreferences("primeiraveztopico", MODE_PRIVATE);
-                if (preferences.getBoolean("primeiraveztopico", true)) {
-                    preferences.edit().putBoolean("primeiraveztopico", false).apply();
-                    Dialog_Primeiravez();
-                }
 
-            }
-        });
-        refresh.setColorSchemeResources
-                (R.color.colorPrimaryDark, R.color.amareloclaro,
-                        R.color.accent);
        //Configuraçoes Basicas
         linear_nada_cadastrado= findViewById(R.id.linear_nada_cadastrado_lista_topico);
         recyclerView_lista_topico = findViewById(R.id.recycleview_topico);
         botaoMaisTopicos=findViewById(R.id.buton_novo_topico);
+
+        icone=findViewById(R.id.icone_user_toolbar);
+        icone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(Lista_Forum.this,Lista_forum_Geral.class);
+                startActivity(it);
+            }
+        });
         botaoMaisTopicos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent it = new Intent(ListaTopicos.this,Novo_Topico.class);
+                Intent it = new Intent(Lista_Forum.this, Novo_Forum.class);
                 startActivity(it);
                 finish();
             }
         });
-        database = ConfiguracaoFirebase.getDatabase().getReference().child("usuarios");
-        database_topico = ConfiguracaoFirebase.getDatabase().getReference().child("topico");
         //adapter
-        adapter_topico = new Adapter_Topico(ListaTopico,this);
+        adapter_topico = new Adapter_Topico(listaForum,this);
 
         //Adapter
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
@@ -110,9 +93,6 @@ public class ListaTopicos extends AppCompatActivity implements SwipeRefreshLayou
         recyclerView_lista_topico.setAdapter(adapter_topico);
 
 //Aplicar Evento click
-
-
-        CarregarDados_do_Usuario();
         TrocarFundos_status_bar();
 
 
@@ -129,26 +109,21 @@ public class ListaTopicos extends AppCompatActivity implements SwipeRefreshLayou
     }
 
 
-    @Override
-    public void onRefresh() {
 
-        RecuperarTopicos();
-    }
 
     private void RecuperarTopicos(){
 
         linear_nada_cadastrado.setVisibility(View.VISIBLE);
-        ListaTopico.clear();
+        listaForum.clear();
         valueEventListenerTopicos = database_topico.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    Topico topico = dataSnapshot.getValue(Topico.class);
-                    ListaTopico.add(0, topico);
-               if(ListaTopico.size()>0){
+                    Forum forum = dataSnapshot.getValue(Forum.class);
+                    listaForum.add(0, forum);
+               if(listaForum.size()>0){
                    linear_nada_cadastrado.setVisibility(View.GONE);
                }
                     adapter_topico.notifyDataSetChanged();
-                refresh.setRefreshing(false);
 
 
             }
@@ -168,48 +143,6 @@ public class ListaTopicos extends AppCompatActivity implements SwipeRefreshLayou
         });
 
 
-    }
-    private void CarregarDados_do_Usuario(){
-        usuario = UsuarioFirebase.getUsuarioAtual();
-        String email = usuario.getEmail();
-        ChildEventListenerperfil=database.orderByChild("tipoconta")
-                .equalTo(email).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Usuario perfil = dataSnapshot.getValue(Usuario.class );
-                assert perfil != null;
-                String icone = perfil.getFoto();
-                IconeUsuario(icone);
-            }
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            }
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-            }
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-    }
-    private void IconeUsuario(String url) {
-        //Imagem do icone do usuario
-        icone = findViewById(R.id.icone_user_toolbar);
-        icone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent it = new Intent(ListaTopicos.this, MinhaConta.class);
-                startActivity(it);
-                finish();
-
-            }
-        });
-        Glide.with(ListaTopicos.this)
-                .load(url)
-                .into(icone);
     }
 
 

@@ -17,7 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_Topico;
 import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
-import com.wegeekteste.fulanoeciclano.nerdzone.Model.Topico;
+import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Usuario;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
@@ -32,7 +32,7 @@ public class Topicos_MinhaConta_Fragment extends Fragment  {
     private FirebaseAuth mFirebaseAuth;
     private RecyclerView recyclerTopico;
     private Adapter_Topico adapter_topico;
-    private ArrayList<Topico> ListaTopico = new ArrayList<>();
+    private ArrayList<Forum> listaForum = new ArrayList<>();
     private ChildEventListener valueEventListenerTopico;
     private LinearLayoutManager mManager;
     private Usuario user;
@@ -52,7 +52,7 @@ public class Topicos_MinhaConta_Fragment extends Fragment  {
         recyclerTopico = view.findViewById(R.id.lista_topico_minha_conta);
         mDatabasetopico = ConfiguracaoFirebase.getFirebaseDatabase().child("topico");
         //Configuracao Adapter
-        adapter_topico =new Adapter_Topico(ListaTopico,getActivity());
+        adapter_topico =new Adapter_Topico(listaForum,getActivity());
         //Adapter
         RecyclerView.LayoutManager layoutManager =
                 new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
@@ -83,13 +83,13 @@ public class Topicos_MinhaConta_Fragment extends Fragment  {
 
     public void RecuperarTopico(){
         String identificadoUsuario= UsuarioFirebase.getIdentificadorUsuario();
-        ListaTopico.clear();
+        listaForum.clear();
         valueEventListenerTopico=mDatabasetopico.orderByChild("idauthor").equalTo(identificadoUsuario)
                 .addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Topico topico = dataSnapshot.getValue(Topico.class);
-                ListaTopico.add(0,topico);
+                Forum forum = dataSnapshot.getValue(Forum.class);
+                listaForum.add(0, forum);
 
                 adapter_topico.notifyDataSetChanged();
 

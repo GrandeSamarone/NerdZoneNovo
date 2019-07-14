@@ -27,17 +27,22 @@ import com.google.firebase.database.ValueEventListener;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.wegeekteste.fulanoeciclano.nerdzone.Activits.MinhaConta;
 import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
+import com.wegeekteste.fulanoeciclano.nerdzone.EventBus.EventBusClass;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Conto;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Usuario;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class Novo_Conto extends AppCompatActivity {
+public class Novo_Conto extends AppCompatActivity implements EventBusClass {
     private static final String padrao = "Obrigatório";
     private Toolbar toolbar;
     private CircleImageView icone,img_topico;
@@ -50,6 +55,8 @@ public class Novo_Conto extends AppCompatActivity {
     private Conto conto = new Conto();
     private Usuario perfil;
     private Dialog dialog;
+    private String nome_usuario,identificadorUsuario;
+    private EventBus bus = EventBus.getDefault();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,10 +66,12 @@ public class Novo_Conto extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
+        // Event Bus
+      //  bus.register(this);
+
         //Configuraçoes Originais
-        databaseusuario = ConfiguracaoFirebase.getDatabase().getReference().child("usuarios");
-        databasetopico = ConfiguracaoFirebase.getDatabase().getReference().child("conto");
-        SeguidoresRef =ConfiguracaoFirebase.getDatabase().getReference().child("seguidores");
+       identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
+        //ConfiguracaoFirebase.getFirebasedoref(identificadorUsuario);
         titulo_conto = findViewById(R.id.titulo_conto);
         mensagem_conto = findViewById(R.id.desc_conto);
         botaosalvar = findViewById(R.id.botaosalvarconto);
@@ -74,22 +83,51 @@ public class Novo_Conto extends AppCompatActivity {
         });
 
 
-
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.registerEventBus();
+    }
+
+    @Override
+    public void registerEventBus() {
+
+        try {
+            EventBus.getDefault().register(this);
+        }catch (Exception Err){
+        }
+    }
+    @Override
+    public void unregisterEventBus() {
+
+        try {
+            EventBus.getDefault().unregister(this);
+        }catch (Exception e){
+        }
     }
 
 
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onEvent(String event){
+        nome_usuario=event;
+    }
+
     private Conto configurarConto(){
+        //buscar nome do usuario que está postando
+
+
         String titulo = titulo_conto.getText().toString();
         String mensagem = mensagem_conto.getText().toString();
         final Calendar calendartempo = Calendar.getInstance();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd'-'MM'-'y",java.util.Locale.getDefault());// MM'/'dd'/'y;
         String data = simpleDateFormat.format(calendartempo.getTime());
-
-        conto.setIdauthor(perfil.getId());
-
+        conto.setIdauthor(identificadorUsuario);
+         //conto.setUid(identificadorUsuario);
         conto.setTitulo(titulo);
+        conto.setNomeauthor(nome_usuario);
         conto.setMensagem(mensagem);
         conto.setData(data);
 
@@ -119,9 +157,15 @@ public class Novo_Conto extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        CarregarDados_do_Usuario();
+        //CarregarDados_do_Usuario();
         TrocarFundos_status_bar();
-        CarregarSeguidores();
+       // CarregarSeguidores();
+    }
+    @Override
+    protected void onDestroy() {
+        // Unregister
+        bus.unregister(this);
+        super.onDestroy();
     }
 
     private void CarregarDados_do_Usuario(){

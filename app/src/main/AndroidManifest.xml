@@ -17,7 +17,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Teste_firestore.firestore"></activity>
+        <activity android:name=".Forum.Grupo.Page_Info_Grupo"></activity>
+        <activity android:name=".Forum.Lista_forum_Geral" />
+        <activity android:name=".Teste_firestore.firestore" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -89,11 +91,11 @@
             android:name=".PerfilAmigos.Perfil"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activits.teste" />
-        <activity android:name=".Topico.ListaTopicos" />
+        <activity android:name=".Forum.Lista_Forum" />
         <activity android:name=".Edit.Edit_evento_Activity" />
         <activity android:name=".Edit.Edit_Loja_Activity" />
-        <activity android:name=".Topico.Novo_Topico" />
-        <activity android:name=".Topico.Detalhe_topico" />
+        <activity android:name=".Forum.Novo_Forum" />
+        <activity android:name=".Forum.Detalhe_Forum" />
         <activity android:name=".Conto.ListaConto" />
         <activity android:name=".Conto.Novo_Conto" />
         <activity android:name=".Seguidores.MinhaConta.MeusSeguidores" />

@@ -128,9 +128,9 @@ public class Nova_Arts extends AppCompatActivity{
         });
 
         TrocarFundos_status_bar();
-        CarregarSeguidores();
+       // CarregarSeguidores();
         CarregarDadosSpinner();
-        CarregarDados_do_Usuario();
+        //CarregarDados_do_Usuario();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

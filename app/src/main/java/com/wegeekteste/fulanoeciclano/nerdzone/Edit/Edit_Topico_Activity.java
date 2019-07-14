@@ -43,7 +43,7 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Activits.MainActivity;
 import com.wegeekteste.fulanoeciclano.nerdzone.Activits.Minhas_Publicacoes;
 import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
-import com.wegeekteste.fulanoeciclano.nerdzone.Model.Topico;
+import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Usuario;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
@@ -63,7 +63,7 @@ public class Edit_Topico_Activity extends AppCompatActivity {
     private DatabaseReference databaseusuario,databasetopico,SeguidoresRef,Meusdatabasetopico;
     private FirebaseUser usuario;
     private EditText titulo_topico,mensagem_topico;
-    private Topico topico;
+    private Forum forum;
     private Usuario perfil;
     private StorageReference storageReference;
     private Dialog dialog;
@@ -85,7 +85,7 @@ public class Edit_Topico_Activity extends AppCompatActivity {
         //Configuraçoes Originais
         identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
         databaseusuario = ConfiguracaoFirebase.getDatabase().getReference().child("usuarios");
-        databasetopico = ConfiguracaoFirebase.getDatabase().getReference().child("topico");
+        databasetopico = ConfiguracaoFirebase.getDatabase().getReference().child("forum");
         Meusdatabasetopico = ConfiguracaoFirebase.getDatabase().getReference().child("meustopicos");
         SeguidoresRef =ConfiguracaoFirebase.getDatabase().getReference().child("seguidores");
         storageReference = ConfiguracaoFirebase.getFirebaseStorage();
@@ -122,14 +122,14 @@ public class Edit_Topico_Activity extends AppCompatActivity {
      ChildEventListenerTopico = databasetopico.orderByChild("uid").equalTo(ids).addChildEventListener(new ChildEventListener() {
          @Override
          public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-             topico = dataSnapshot.getValue(Topico.class);
-             assert topico != null;
+             forum = dataSnapshot.getValue(Forum.class);
+             assert forum != null;
 
-             titulo_topico.setText(topico.getTitulo());
-             mensagem_topico.setText(topico.getMensagem());
+             titulo_topico.setText(forum.getTitulo());
+             mensagem_topico.setText(forum.getDescricao());
 
              Glide.with(Edit_Topico_Activity.this)
-                     .load(topico.getFoto())
+                     .load(forum.getFoto())
                      .into(img_topico);
          }
 
@@ -174,15 +174,15 @@ public class Edit_Topico_Activity extends AppCompatActivity {
 
             dialog = builder.create();
             dialog.show();
-            Topico topicos = new Topico();
-            topicos.setUid(topico.getUid());
-            topicos.setQuantcomentario(topico.getQuantcomentario());
-            topicos.setFoto(topico.getFoto());
-            topicos.setData(topico.getData());
-            topicos.setMensagem(mensagem_topico.getText().toString());
+            Forum topicos = new Forum();
+            topicos.setUid(forum.getUid());
+            topicos.setQuantcomentario(forum.getQuantcomentario());
+            topicos.setFoto(forum.getFoto());
+            topicos.setData(forum.getData());
+            topicos.setDescricao(mensagem_topico.getText().toString());
             topicos.setTitulo(titulo_topico.getText().toString());
-            topicos.setLikecount(topico.getLikecount());
-            topicos.setIdauthor(topico.getIdauthor());
+            topicos.setLikecount(forum.getLikecount());
+            topicos.setIdauthor(forum.getIdauthor());
             databasetopico.child(topicos.getUid()).setValue(topicos).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -274,7 +274,7 @@ public class Edit_Topico_Activity extends AppCompatActivity {
                             .child("imagens")
                             .child("evento")
                             .child(identificadorUsuario)
-                            .child(topico.getUid());
+                            .child(forum.getUid());
                     //Progress
                     final ProgressDialog progressDialog = new ProgressDialog(this);
                     progressDialog.setTitle("Aguarde..");
@@ -294,7 +294,7 @@ public class Edit_Topico_Activity extends AppCompatActivity {
                                     urlimg = uri.toString();
 
                                     if(urlimg!=null){
-                                        topico.setFoto(urlimg);
+                                        forum.setFoto(urlimg);
                                     }
                                     Glide.with(Edit_Topico_Activity.this)
                                             .load(uri)

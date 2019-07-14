@@ -22,12 +22,12 @@ import com.vanniktech.emoji.EmojiTextView;
 import com.varunest.sparkbutton.SparkButton;
 import com.varunest.sparkbutton.SparkEventListener;
 import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
+import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Detalhe_Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
-import com.wegeekteste.fulanoeciclano.nerdzone.Model.Topico;
+import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.TopicoLike;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Usuario;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
-import com.wegeekteste.fulanoeciclano.nerdzone.Topico.Detalhe_topico;
 
 import java.util.List;
 
@@ -35,14 +35,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Adapter_Topico extends RecyclerView.Adapter<Adapter_Topico.MyViewHolder> {
 
-   private List<Topico> listatopicos;
+   private List<Forum> listatopicos;
     private Context context;
     Usuario usuariologado = UsuarioFirebase.getDadosUsuarioLogado();
-    public Adapter_Topico(List<Topico> topico, Context c){
+    public Adapter_Topico(List<Forum> forum, Context c){
         this.context=c;
-        this.listatopicos = topico;
+        this.listatopicos = forum;
     }
-    public List<Topico> getTopicos(){
+    public List<Forum> getTopicos(){
         return this.listatopicos;
     }
 
@@ -58,15 +58,15 @@ public class Adapter_Topico extends RecyclerView.Adapter<Adapter_Topico.MyViewHo
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        final Topico topico = listatopicos.get(position);
+        final Forum forum = listatopicos.get(position);
 
-        holder.titulo.setText(topico.getTitulo());
-        holder.mensagem.setText(topico.getMensagem());
+        holder.titulo.setText(forum.getTitulo());
+        holder.mensagem.setText(forum.getDescricao());
 
 
         DatabaseReference eventoscurtidas= ConfiguracaoFirebase.getFirebaseDatabase()
                 .child("usuarios")
-                .child(topico.getIdauthor());
+                .child(forum.getIdauthor());
         eventoscurtidas.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -86,7 +86,7 @@ public class Adapter_Topico extends RecyclerView.Adapter<Adapter_Topico.MyViewHo
         });
 
         DatabaseReference database_topico = FirebaseDatabase.getInstance().getReference()
-                .child("comentario-topico").child(topico.getUid());
+                .child("comentario-forum").child(forum.getUid());
         database_topico.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -103,11 +103,11 @@ public class Adapter_Topico extends RecyclerView.Adapter<Adapter_Topico.MyViewHo
 holder.click.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
-        List<Topico> listTopicoAtualizado = getTopicos();
+        List<Forum> listForumAtualizado = getTopicos();
 
-        if (listTopicoAtualizado.size() > 0) {
-            Topico topicoselecionado = listTopicoAtualizado.get(position);
-            Intent it = new Intent(context, Detalhe_topico.class);
+        if (listForumAtualizado.size() > 0) {
+            Forum topicoselecionado = listForumAtualizado.get(position);
+            Intent it = new Intent(context, Detalhe_Forum.class);
             it.putExtra("topicoselecionado", topicoselecionado);
             context.startActivity(it);
 
@@ -118,10 +118,10 @@ holder.click.setOnClickListener(new View.OnClickListener() {
         holder.clicktambem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<Topico> listTopicoAtualizado = getTopicos();
-                if (listTopicoAtualizado.size() > 0) {
-                    Topico topicoselecionado = listTopicoAtualizado.get(position);
-                    Intent it = new Intent(context, Detalhe_topico.class);
+                List<Forum> listForumAtualizado = getTopicos();
+                if (listForumAtualizado.size() > 0) {
+                    Forum topicoselecionado = listForumAtualizado.get(position);
+                    Intent it = new Intent(context, Detalhe_Forum.class);
                     it.putExtra("topicoselecionado", topicoselecionado);
                     context.startActivity(it);
 
@@ -131,8 +131,8 @@ holder.click.setOnClickListener(new View.OnClickListener() {
         });
 
         DatabaseReference topicoscurtidas= ConfiguracaoFirebase.getFirebaseDatabase()
-                .child("topico-likes")
-                .child(topico.getUid());
+                .child("forum-likes")
+                .child(forum.getUid());
         topicoscurtidas.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -150,7 +150,7 @@ holder.click.setOnClickListener(new View.OnClickListener() {
 
                 //Montar objeto postagem curtida
                 TopicoLike like = new TopicoLike();
-               like.setTopico(topico);
+               like.setForum(forum);
                 like.setUsuario(usuariologado);
                 like.setQtdlikes(QtdLikes);
 

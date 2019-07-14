@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
-    tools:context=".Topico.Novo_Topico">
+    tools:context=".Forum.Novo_Forum">
 
 <include layout="@layout/toolbarsecundario"/>
     <android.support.v4.widget.NestedScrollView
@@ -39,8 +39,21 @@
             android:minLines="2"
             />
     </android.support.design.widget.TextInputLayout>
-
-
+<RadioGroup
+    android:id="@+id/groupwe"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+        <RadioButton
+    android:id="@+id/radiogrupo"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:text="Grupo"/>
+        <RadioButton
+            android:id="@+id/radiotopico"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="Topico"/>
+</RadioGroup>
     <android.support.design.widget.TextInputLayout
         android:id="@+id/txtlayout_descricao_topico"
         android:layout_width="match_parent"

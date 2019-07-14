@@ -35,6 +35,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.wegeekteste.fulanoeciclano.nerdzone.Activits.MainActivity;
 import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
@@ -56,18 +57,21 @@ public class LoginActivity extends AppCompatActivity {
     private AlertDialog dialog;
     private SharedPreferences sPreferences = null;
     private String identificadorUsuario;
-    DatabaseReference usuarioLogadoRef,database_perfil;
     Usuario usuarioLogado;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-         //fundo
+        //fundo
         TrocarFundos_status_bar();
 
         //Configuracoes Originais
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
         textoprivacidade = findViewById(R.id.textView);
         textoprivacidade.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,9 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(it);
             }
         });
-        auth = FirebaseAuth.getInstance();
-        user =auth.getCurrentUser();
-        database_perfil = ConfiguracaoFirebase.getDatabase().getReference().child("usuarios");
+
         // Check if user is signed in (non-null) and update UI accordingly.
 
         botaologin = findViewById(R.id.sign_in_button);
@@ -94,19 +96,18 @@ public class LoginActivity extends AppCompatActivity {
         sPreferences = getSharedPreferences("firstRun", MODE_PRIVATE);
 
 
-
         FirebaseUser currentUser = auth.getCurrentUser();
-        if(currentUser==null){
+        if (currentUser == null) {
             // Configure Google Sign In
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken(getString(R.string.default_web_client_id))
                     .requestEmail()
                     .build();
 
-            mGoogleSignInClient = GoogleSignIn.getClient(this,gso);
+            mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        }else{
-            Intent it = new Intent(LoginActivity.this,TelaSplash.class);
+        } else {
+            Intent it = new Intent(LoginActivity.this, TelaSplash.class);
             startActivity(it);
             finish();
         }
@@ -118,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
         LayoutInflater layoutInflater = LayoutInflater.from(LoginActivity.this);
-        final View view  = layoutInflater.inflate(R.layout.dialog_carregando_gif_comscroop,null);
+        final View view = layoutInflater.inflate(R.layout.dialog_carregando_gif_comscroop, null);
         ImageView imageViewgif = view.findViewById(R.id.gifimage);
 
         Glide.with(getApplicationContext())
@@ -128,6 +129,7 @@ public class LoginActivity extends AppCompatActivity {
         builder.setView(view);
         dialog = builder.create();
     }
+
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -135,6 +137,7 @@ public class LoginActivity extends AppCompatActivity {
 
         dialog.show();
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -157,7 +160,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
-    private void TrocarFundos_status_bar(){
+
+    private void TrocarFundos_status_bar() {
         //mudando a cor do statusbar
         if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
             setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true);
@@ -196,12 +200,13 @@ public class LoginActivity extends AppCompatActivity {
         }
         win.setAttributes(winParams);
     }
+
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-      //  Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+        //  Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
         LayoutInflater layoutInflater = LayoutInflater.from(LoginActivity.this);
-        final View view  = layoutInflater.inflate(R.layout.dialog_carregando_gif_comscroop,null);
+        final View view = layoutInflater.inflate(R.layout.dialog_carregando_gif_comscroop, null);
         ImageView imageViewgif = view.findViewById(R.id.gifimage);
 
         Glide.with(getApplicationContext())
@@ -239,10 +244,10 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    public void VerificandoCadastro(){
+    public void VerificandoCadastro() {
         identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
         FirebaseUser user = auth.getCurrentUser();
-        database_perfil.child(identificadorUsuario)
+        /*database_perfil.child(identificadorUsuario)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -252,39 +257,35 @@ public class LoginActivity extends AppCompatActivity {
                             startActivity(its);
                             finish();
 
-                        }else{
-                            dialog.dismiss();
-                            usuario = new Usuario();
-                            usuario.setId(identificadorUsuario);
-                            usuario.setNome(user.getDisplayName());
-                            usuario.setFoto(String.valueOf(user.getPhotoUrl()));
-                            usuario.setCapa("");
-                            usuario.setSeguidores(usuario.getSeguidores());
-                            usuario.setSeguindo(usuario.getSeguindo());
-                            usuario.setContos(usuario.getContos());
-                            usuario.setTopicos(usuario.getTopicos());
-                            usuario.setArts(usuario.getArts());
-                            usuario.setComercio(usuario.getComercio());
-                            usuario.setEvento(usuario.getEvento());
-                            usuario.setTipoconta(user.getEmail());
-                            usuario.setTiposuario("usuario");
-                            //   String  identificadorUsuario = Base64Custom.codificarBase64(usuario.getNome());
-                            usuario.setId(identificadorUsuario);
-                            usuario.salvar();
+                        }*/
+        dialog.dismiss();
+        usuario = new Usuario();
+        usuario.setId(identificadorUsuario);
+        usuario.setNome(user.getDisplayName());
+        usuario.setFoto(String.valueOf(user.getPhotoUrl()));
+        usuario.setCapa("");
+        usuario.setSeguidores(usuario.getSeguidores());
+        usuario.setSeguindo(usuario.getSeguindo());
+        usuario.setContos(usuario.getContos());
+        usuario.setTopicos(usuario.getTopicos());
+        usuario.setArts(usuario.getArts());
+        usuario.setComercio(usuario.getComercio());
+        usuario.setEvento(usuario.getEvento());
+        usuario.setTipoconta(user.getEmail());
+        usuario.setTiposuario("usuario");
+        //   String  identificadorUsuario = Base64Custom.codificarBase64(usuario.getNome());
+        usuario.setId(identificadorUsuario);
+        usuario.salvar();
 
-                            Intent it = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(it);
-                            finish();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
+        Intent it = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(it);
+        finish();
     }
+
+
+
+
+
 
     public void Verificar(){
 

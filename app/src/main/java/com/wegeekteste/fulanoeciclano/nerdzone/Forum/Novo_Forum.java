@@ -1,4 +1,4 @@
-package com.wegeekteste.fulanoeciclano.nerdzone.Topico;
+package com.wegeekteste.fulanoeciclano.nerdzone.Forum;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -23,6 +23,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -31,28 +33,31 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
-import com.wegeekteste.fulanoeciclano.nerdzone.Activits.MinhaConta;
 import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
+import com.wegeekteste.fulanoeciclano.nerdzone.EventBus.EventBusClass;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
-import com.wegeekteste.fulanoeciclano.nerdzone.Model.Topico;
+import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Usuario;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class Novo_Topico extends AppCompatActivity {
+public class Novo_Forum extends AppCompatActivity implements EventBusClass {
 
     private static final String padrao = "Obrigatório";
     private static final int SELECAO_CAMERA = 100;
@@ -61,18 +66,23 @@ public class Novo_Topico extends AppCompatActivity {
     private Toolbar toolbar;
     private CircleImageView icone;
     private ImageView img_topico;
+    private String urlimg,op;
     private Button botaosalvar;
     private DatabaseReference databaseusuario,databasetopico,SeguidoresRef;
     private DataSnapshot seguidoresSnapshot;
     private FirebaseUser usuario;
     private ChildEventListener ChildEventListenerperfil;
     private EditText titulo_topico,mensagem_topico;
-    private Topico topico = new Topico();
+    private Forum forum = new Forum();
     private Usuario perfil;
     private StorageReference storageReference;
     private Dialog dialog;
     private   Uri url;
     private ChildEventListener ChildEventListenerSeguidores;
+    private RadioButton radio_grupo,radio_topico;
+    private String identificadorUsuario;
+    private RadioGroup grupo;
+    private String nome_usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,18 +90,19 @@ public class Novo_Topico extends AppCompatActivity {
         setContentView(R.layout.activity_novo__topico);
 
         toolbar = findViewById(R.id.toolbarsecundario);
-        toolbar.setTitle("Novo Tópico");
+        toolbar.setTitle("Novo We");
         setSupportActionBar(toolbar);
 
 
         //Configuraçoes Originais
-        databaseusuario = ConfiguracaoFirebase.getDatabase().getReference().child("usuarios");
-        databasetopico = ConfiguracaoFirebase.getDatabase().getReference().child("topico");
-        SeguidoresRef =ConfiguracaoFirebase.getDatabase().getReference().child("seguidores");
+        identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
         storageReference = ConfiguracaoFirebase.getFirebaseStorage();
         titulo_topico = findViewById(R.id.nome_topico);
         mensagem_topico = findViewById(R.id.desc_topico);
         botaosalvar = findViewById(R.id.botaosalvartopico);
+        radio_grupo=findViewById(R.id.radiogrupo);
+        radio_topico=findViewById(R.id.radiotopico);
+        grupo=findViewById(R.id.groupwe);
         botaosalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,11 +115,13 @@ public class Novo_Topico extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = CropImage.activity()
                         .setGuidelines(CropImageView.Guidelines.ON)
-                        .getIntent(Novo_Topico.this);
+                        .getIntent(Novo_Forum.this);
                 startActivityForResult(intent, SELECAO_GALERIA);
             }
         });
 
+
+        VerificaRadioButton();
 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -118,79 +131,37 @@ public class Novo_Topico extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        CarregarSeguidores();
-        CarregarDados_do_Usuario();
         TrocarFundos_status_bar();
     }
-
-
-
-
-
-
-
-    private void CarregarDados_do_Usuario(){
-        usuario = UsuarioFirebase.getUsuarioAtual();
-        String email = usuario.getEmail();
-        ChildEventListenerperfil=databaseusuario.orderByChild("tipoconta")
-                .equalTo(email).addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                         perfil = dataSnapshot.getValue(Usuario.class );
-                        assert perfil != null;
-                        String icone = perfil.getFoto();
-
-                        IconeUsuario(icone);
-
-                    }
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    }
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    }
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                    }
-                });
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.registerEventBus();
     }
 
-    private void CarregarSeguidores(){
-        String usuariologado = UsuarioFirebase.getIdentificadorUsuario();
-        //Recuperar Seguidores
-        DatabaseReference seguidoresref =SeguidoresRef.child(usuariologado);
-        seguidoresref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                seguidoresSnapshot=dataSnapshot;
-                Log.i("asdsds", String.valueOf(seguidoresSnapshot));
-            }
+    @Override
+    public void registerEventBus() {
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+        try {
+            EventBus.getDefault().register(this);
+        }catch (Exception Err){
+        }
+    }
+    @Override
+    public void unregisterEventBus() {
 
-            }
-        });
+        try {
+            EventBus.getDefault().unregister(this);
+        }catch (Exception e){
+        }
     }
 
 
-    private void IconeUsuario(String url) {
-        //Imagem do icone do usuario
-        icone = findViewById(R.id.icone_user_toolbar);
-        icone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent it = new Intent(Novo_Topico.this, MinhaConta.class);
-                startActivity(it);
 
-            }
-        });
-        Glide.with(Novo_Topico.this)
-                .load(url)
-                .into(icone);
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onEvent(String event){
+        nome_usuario=event;
+        Log.i("sdsd47",event);
     }
 
 
@@ -220,17 +191,17 @@ public class Novo_Topico extends AppCompatActivity {
                 if(imagem!=null) {
                     //Recuperar dados da imagem  para o  Firebase
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    imagem.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    imagem.compress(Bitmap.CompressFormat.JPEG, 70, baos);
                     byte[] dadosImagem = baos.toByteArray();
-
+                    String nomeImagem = UUID.randomUUID().toString();
                     StorageReference imagemRef = storageReference
                             .child("imagens")
-                            .child("topico")
-                            .child(perfil.getId())
-                            .child(topico.getUid());
+                            .child("forum")
+                            .child(identificadorUsuario)
+                            .child(nomeImagem);
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setCancelable(false);
-                    LayoutInflater layoutInflater = LayoutInflater.from(Novo_Topico.this);
+                    LayoutInflater layoutInflater = LayoutInflater.from(Novo_Forum.this);
                     final View view = layoutInflater.inflate(R.layout.dialog_carregando_gif_analisando, null);
                     ImageView imageViewgif = view.findViewById(R.id.gifimage);
 
@@ -252,7 +223,7 @@ public class Novo_Topico extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     dialog.dismiss();
-
+                                         urlimg=uri.toString();
                                     Glide.with(getApplicationContext())
                                             .load(uri)
                                             .into(img_topico);
@@ -261,7 +232,7 @@ public class Novo_Topico extends AppCompatActivity {
                                 @Override
                                 public void onFailure(@NonNull Exception exception) {
                                     dialog.dismiss();
-                                    Toast.makeText(Novo_Topico.this, "Erro ao carregar a imagem", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Novo_Forum.this, "Erro ao carregar a imagem", Toast.LENGTH_SHORT).show();
 
                                 }
                             });
@@ -276,48 +247,60 @@ public class Novo_Topico extends AppCompatActivity {
         }
     }
 
-    private Topico configurarTopico(){
+    private Forum configurarTopico(){
         String titulo = titulo_topico.getText().toString();
         String mensagem = mensagem_topico.getText().toString();
         final Calendar calendartempo = Calendar.getInstance();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd'-'MM'-'y",java.util.Locale.getDefault());// MM'/'dd'/'y;
         String data = simpleDateFormat.format(calendartempo.getTime());
 
-        topico.setIdauthor(perfil.getId());
-        topico.setTitulo(titulo);
-        topico.setMensagem(mensagem);
-        topico.setData(data);
+        forum.setIdauthor(identificadorUsuario);
+        forum.setNomeauthor(nome_usuario);
+        forum.setTitulo(titulo);
+        forum.setFoto(urlimg);
+        forum.setDescricao(mensagem);
+        forum.setData(data);
+        forum.setOpcao(op);
         if(url!=null) {
-            topico.setFoto(String.valueOf(url));
+            forum.setFoto(String.valueOf(url));
         }else{
 
         }
-        return  topico;
+        return forum;
 
     }
     public void validarDadosTopico() {
-        topico = configurarTopico();
-
-        if (TextUtils.isEmpty(topico.getTitulo())) {
+        forum = configurarTopico();
+        if (TextUtils.isEmpty(forum.getTitulo())) {
             titulo_topico.setError(padrao);
             return;
         }
-        if (TextUtils.isEmpty(topico.getMensagem())) {
+        if (TextUtils.isEmpty(forum.getDescricao())) {
             mensagem_topico.setError(padrao);
             return;
         }
-        topico.SalvarTopico(seguidoresSnapshot);
-        int qtdTopicos = perfil.getTopicos() + 1;
-        perfil.setTopicos(qtdTopicos);
-        perfil.atualizarQtdTopicos();
-        Toast.makeText(Novo_Topico.this, "Tópico Criado Com Sucesso!", Toast.LENGTH_SHORT).show();
-        Intent it = new Intent(Novo_Topico.this, ListaTopicos.class);
+        forum.SalvarForum();
+        //int qtdTopicos = perfil.getTopicos() + 1;
+        //perfil.setTopicos(qtdTopicos);
+        //perfil.atualizarQtdTopicos();
+        Toast.makeText(Novo_Forum.this, "Tópico Criado Com Sucesso!", Toast.LENGTH_SHORT).show();
+        Intent it = new Intent(Novo_Forum.this, Lista_Forum.class);
         startActivity(it);
         finish();
+    }
 
-
-
-
+    public void VerificaRadioButton(){
+        //radio group
+        grupo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if(checkedId== R.id.radiogrupo){
+                   op="grupo";
+                }else if(checkedId==R.id.radiotopico){
+                   op="topico";
+                }
+            }
+        });
     }
 
 
@@ -326,7 +309,7 @@ public class Novo_Topico extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                startActivity(new Intent(this, ListaTopicos.class));
+                startActivity(new Intent(this, Lista_Forum.class));
                 finish();
         }
               /*

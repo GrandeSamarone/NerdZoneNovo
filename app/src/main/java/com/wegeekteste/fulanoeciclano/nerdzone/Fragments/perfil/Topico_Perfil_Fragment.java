@@ -17,7 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_Topico;
 import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.Main;
-import com.wegeekteste.fulanoeciclano.nerdzone.Model.Topico;
+import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Usuario;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
@@ -37,7 +37,7 @@ public class Topico_Perfil_Fragment extends Fragment  implements Main {
     private FirebaseAuth mFirebaseAuth;
     private RecyclerView recyclerTopico;
     private Adapter_Topico adapter_topico;
-    private ArrayList<Topico> ListaTopico = new ArrayList<>();
+    private ArrayList<Forum> listaForum = new ArrayList<>();
     private ChildEventListener valueEventListenerTopico;
     private LinearLayoutManager mManager;
     private Usuario user;
@@ -55,7 +55,7 @@ public class Topico_Perfil_Fragment extends Fragment  implements Main {
         recyclerTopico = view.findViewById(R.id.lista_topico_perfil);
         mDatabasetopico = ConfiguracaoFirebase.getFirebaseDatabase().child("topico");
         //Configuracao Adapter
-        adapter_topico =new Adapter_Topico(ListaTopico,getActivity());
+        adapter_topico =new Adapter_Topico(listaForum,getActivity());
         //Adapter
         RecyclerView.LayoutManager layoutManager =
                 new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
@@ -122,13 +122,13 @@ public class Topico_Perfil_Fragment extends Fragment  implements Main {
     }
 
     public void RecuperarTopico(String id){
-        ListaTopico.clear();
+        listaForum.clear();
         valueEventListenerTopico=mDatabasetopico.orderByChild("idauthor").equalTo(id)
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        Topico topico = dataSnapshot.getValue(Topico.class);
-                        ListaTopico.add(0,topico);
+                        Forum forum = dataSnapshot.getValue(Forum.class);
+                        listaForum.add(0, forum);
 
                         adapter_topico.notifyDataSetChanged();
 

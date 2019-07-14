@@ -11,10 +11,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.varunest.sparkbutton.SparkButton;
 import com.varunest.sparkbutton.SparkEventListener;
 import com.wegeekteste.fulanoeciclano.nerdzone.Activits.MinhaConta;
@@ -31,12 +36,14 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static android.content.ContentValues.TAG;
+
 public class Adapter_Conto extends RecyclerView.Adapter<Adapter_Conto.MyviewHolder> {
 
     private List<Conto> listaconto;
     private Context context;
-    Usuario usuariologado = UsuarioFirebase.getDadosUsuarioLogado();
     String identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
+    private FirebaseFirestore db;
     public Adapter_Conto(List<Conto> conto,Context c){
         this.listaconto=conto;
         this.context=c;
@@ -56,51 +63,31 @@ public class Adapter_Conto extends RecyclerView.Adapter<Adapter_Conto.MyviewHold
     public void onBindViewHolder(@NonNull MyviewHolder holder, int position) {
         final Conto conto = listaconto.get(position);
 
-        holder.conto.setText(conto.getMensagem());
+        holder.conto_Mensagem.setText(conto.getMensagem());
         holder.nome_conto.setText(conto.getTitulo());
-
-        DatabaseReference eventoscurtidas= ConfiguracaoFirebase.getFirebaseDatabase()
-                .child("usuarios")
-                .child("bWFybG9zdHJpbmlkYWRAZ21haWwuY29t");
-        eventoscurtidas.addListenerForSingleValueEvent(new ValueEventListener() {
+        holder.author.setText(conto.getNomeauthor());
+//           Log.i("sdsdsd",conto.getNomeauthor());
+       /* db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("Usuarios").document(conto.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Usuario  user = dataSnapshot.getValue(Usuario.class);
-
-            holder.author.setText(user.getNome());
-            Log.i("sdsd",user.getId()+"id "+identificadorUsuario);
-            if(!user.getId().equals(identificadorUsuario)) {
-
-                holder.author.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent it = new Intent(context, Perfil.class);
-                        it.putExtra("id", user.getId());
-                        context.startActivity(it);
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                       Usuario user = document.toObject(Usuario.class);
+                        holder.author.setText(user.getNome());
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        Log.d(TAG, "No such document");
                     }
-                });
-            }else{
-                holder.author.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent it = new Intent(context, MinhaConta.class);
-                        it.putExtra("id", user.getId());
-                        context.startActivity(it);
-                    }
-                });
-            }
-            /*Glide.with(context)
-                        .load(user.getFoto())
-                        .into(holder.imgperfil );*/
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
             }
         });
 
+*/
 
 
     }
@@ -112,13 +99,13 @@ public class Adapter_Conto extends RecyclerView.Adapter<Adapter_Conto.MyviewHold
 
     public class MyviewHolder extends RecyclerView.ViewHolder {
 
-        private TextView conto,nome_conto,n_curtida,txt_add_colecao,author;
+        private TextView conto_Mensagem,nome_conto,n_curtida,txt_add_colecao,author;
         private CircleImageView imgperfil;
         private SparkButton botaocurtir,botao_add_colecao;
         public MyviewHolder(View itemView) {
             super(itemView);
             author= itemView.findViewById(R.id.conto_author);
-            conto = itemView.findViewById(R.id.conto_mensagem);
+            conto_Mensagem = itemView.findViewById(R.id.conto_mensagem);
             txt_add_colecao = itemView.findViewById(R.id.txt_add_colecao);
             n_curtida = itemView.findViewById(R.id.conto_num_curit);
             nome_conto = itemView.findViewById(R.id.conto_titulo);

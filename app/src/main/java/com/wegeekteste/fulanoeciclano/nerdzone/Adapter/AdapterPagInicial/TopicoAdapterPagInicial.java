@@ -16,7 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
-import com.wegeekteste.fulanoeciclano.nerdzone.Model.Topico;
+import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Usuario;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
@@ -27,18 +27,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class TopicoAdapterPagInicial  extends RecyclerView.Adapter<TopicoAdapterPagInicial.MyviewHolder> {
 
     private Context context;
-    private List<Topico> topicos;
+    private List<Forum> forums;
     private DatabaseReference database;
     private ChildEventListener ChildEventListenerperfil;
 
-    public TopicoAdapterPagInicial(List<Topico> listatopicos, Context c){
+    public TopicoAdapterPagInicial(List<Forum> listatopicos, Context c){
 
         this.context=c;
-        this.topicos=listatopicos;
+        this.forums =listatopicos;
     }
 
-    public List<Topico> getTopicos(){
-        return this.topicos;
+    public List<Forum> getForums(){
+        return this.forums;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class TopicoAdapterPagInicial  extends RecyclerView.Adapter<TopicoAdapter
     @Override
     public void onBindViewHolder(MyviewHolder holder, int position) {
 
-        final Topico top = topicos.get(position);
+        final Forum top = forums.get(position);
         holder.topiconome.setText(top.getTitulo());
 
         database = ConfiguracaoFirebase.getDatabase().getReference().child("usuarios");
@@ -91,7 +91,7 @@ public class TopicoAdapterPagInicial  extends RecyclerView.Adapter<TopicoAdapter
 
     @Override
     public int getItemCount() {
-        return topicos.size();
+        return forums.size();
     }
 
 
