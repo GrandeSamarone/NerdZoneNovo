@@ -86,7 +86,7 @@ public class Adapter_Topico extends RecyclerView.Adapter<Adapter_Topico.MyViewHo
         });
 
         DatabaseReference database_topico = FirebaseDatabase.getInstance().getReference()
-                .child("comentario-forum").child(forum.getUid());
+                .child("comentario-forum").child(forum.getId());
         database_topico.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -132,7 +132,7 @@ holder.click.setOnClickListener(new View.OnClickListener() {
 
         DatabaseReference topicoscurtidas= ConfiguracaoFirebase.getFirebaseDatabase()
                 .child("forum-likes")
-                .child(forum.getUid());
+                .child(forum.getId());
         topicoscurtidas.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

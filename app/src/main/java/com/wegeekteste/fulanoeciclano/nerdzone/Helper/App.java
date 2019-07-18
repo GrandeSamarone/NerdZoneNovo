@@ -33,6 +33,7 @@ public class App extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         FirebaseApp.initializeApp(this);
         MultiDex.install(this);
         DiskCacheConfig diskCacheConfig = DiskCacheConfig.newBuilder(getApplicationContext())
@@ -62,6 +63,9 @@ public class App extends MultiDexApplication {
         //identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
        //ConfiguracaoFirebase.getFirebaseFirestore();
         //ConfiguracaoFirebase.getFirebasedoref(identificadorUsuario);
+
+
+
 
     }
 

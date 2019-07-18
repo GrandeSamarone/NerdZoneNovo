@@ -42,9 +42,11 @@ public class Usuario implements Serializable {
     }
     public void salvar(){
 
+        String identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> newUsuario = new HashMap<>();
-        newUsuario.put("id",getId());
+        newUsuario.put("id",identificadorUsuario);
         newUsuario.put("nome", getNome());
         newUsuario.put("frase", getFrase());
         newUsuario.put("foto", getFoto());
@@ -60,7 +62,7 @@ public class Usuario implements Serializable {
 
 // Add a new document with a generated ID
         db.collection("Usuarios")
-                .document(getId())
+                .document(identificadorUsuario)
                 .set(newUsuario)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

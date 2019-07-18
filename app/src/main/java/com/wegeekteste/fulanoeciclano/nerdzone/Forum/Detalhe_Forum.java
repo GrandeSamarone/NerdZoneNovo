@@ -1,44 +1,35 @@
 package com.wegeekteste.fulanoeciclano.nerdzone.Forum;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.generic.GenericDraweeHierarchy;
-import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
-import com.facebook.drawee.generic.RoundingParams;
-import com.facebook.drawee.interfaces.DraweeController;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.vanniktech.emoji.EmojiEditText;
 import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
@@ -46,139 +37,97 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
-import com.wegeekteste.fulanoeciclano.nerdzone.Abrir_Imagem.AbrirImagem;
-import com.wegeekteste.fulanoeciclano.nerdzone.Activits.MinhaConta;
+import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_chat_grupo;
+import com.wegeekteste.fulanoeciclano.nerdzone.Helper.TrocarFundo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_comentario;
-import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
-import com.wegeekteste.fulanoeciclano.nerdzone.Helper.CircleProgressDrawable;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
+import com.wegeekteste.fulanoeciclano.nerdzone.Model.Chat_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Comentario;
+import com.wegeekteste.fulanoeciclano.nerdzone.Model.Conto;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Usuario;
-import com.wegeekteste.fulanoeciclano.nerdzone.PerfilAmigos.Perfil;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class Detalhe_Forum extends AppCompatActivity {
+public class Detalhe_Forum extends TrocarFundo implements View.OnClickListener {
 
     private Toolbar toolbar;
-    private Adapter_comentario adapter;
-    private ArrayList<Comentario> listcomentario = new ArrayList<>();
+    private Adapter_chat_grupo adapter;
+    private Chat_Grupo chat=new Chat_Grupo();
+    private ArrayList<Chat_Grupo> list_conversa_grupo = new ArrayList<>();
     private RecyclerView recyclerView_comentarios;
     private CircleImageView icone;
-    private SimpleDraweeView foto;
-    private TextView nome_autor,titulo,mensagem,titulotoolbar;
+    private TextView titulo;
     private EmojiEditText edit_chat_emoji;
     private  android.support.v7.widget.AppCompatButton botao_env_msg;
     private EmojiPopup emojiPopup;
     private ImageView botaoicone;
     private View root;
-    private DatabaseReference database,database_topico;
-    private FirebaseUser usuario;
     private String usuarioLogado;
-    private Forum topicoselecionado;
-    private LinearLayout clickPerfil;
-    private ChildEventListener ChildEventListenerdetalhe;
-    private ChildEventListener ChildEventListeneruser;
-    private DatabaseReference ComentarioReference;
-    private AlertDialog dialog;
-
+    private String Id_Forum_selecionado;
+    private Forum forum_selecionado;
+    private FirebaseFirestore db;
+    private Task<DocumentReference> ref;
+    private String identificadorUsuario;
+    private SharedPreferences Foto_usuario;
+    private SharedPreferences nome_usuario;
+    private  ListenerRegistration registration;
+    private static  final String ARQUIVO_PREFERENCIA ="arquivoreferencia";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fresco.initialize(this);
         setContentView(R.layout.activity_detalhetopico);
         toolbar = findViewById(R.id.toolbartopico);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
         //Configuracoes Iniciais
-        icone = findViewById(R.id.icon_topico_detalhe_author);
-        foto = findViewById(R.id.foto_topico);
-        nome_autor = findViewById(R.id.nome_topico__detalhe_autor);
+        db = FirebaseFirestore.getInstance();
+        identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
+        icone = findViewById(R.id.icone_chat_toolbar);
         titulo = findViewById(R.id.detalhe_topico_titulo);
-        mensagem = findViewById(R.id.detalhe_topico_mensagem);
-       clickPerfil = findViewById(R.id.nome_foto_click);
        edit_chat_emoji=findViewById(R.id.caixa_de_texto_comentario_topico);
        botao_env_msg=findViewById(R.id.button_postar_comentario_topico);
+        botao_env_msg.setOnClickListener(this);
        botaoicone=findViewById(R.id.botao_post_icone_topico);
+        botaoicone.setOnClickListener(this);
         usuarioLogado =  UsuarioFirebase.getIdentificadorUsuario();
+
        //RecycleView
         recyclerView_comentarios = findViewById(R.id.recycler_comentario_topico);
-        //configurar adapter
-        adapter = new Adapter_comentario(listcomentario, getApplicationContext());
-        //configurando recycleview
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView_comentarios.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        layoutManager.setStackFromEnd(true);
         recyclerView_comentarios.setLayoutManager(layoutManager);
-        //recyclerViewcomentarios.setHasFixedSize(true);
-        recyclerView_comentarios.setAdapter(adapter);
+
 
         //emotion
         root=findViewById(R.id.root_view_topico);
         emojiPopup = EmojiPopup.Builder.fromRootView(root).build(edit_chat_emoji);
         setUpEmojiPopup();
-        botaoicone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                emojiPopup.toggle();
 
+        forum_selecionado = (Forum)  getIntent().getSerializableExtra("forum_selecionado");
+        Id_Forum_selecionado = getIntent().getStringExtra("id_forum_selecionado");
+        if(forum_selecionado!=null) {
+            Log.i("373773", forum_selecionado.getFoto());
+            titulo.setText(forum_selecionado.getTitulo());
+            //  mensagem.setText(topicoselecionado.getDescricao());
+            // RecuperarIcone_e_nome_author(topicoselecionado.getIdauthor());
+            if (forum_selecionado.getFoto() != null) {
+                Uri url = Uri.parse(forum_selecionado.getFoto());
+                Glide.with(this)
+                        .load(url)
+                        .into(icone);
             }
-        });
-        botao_env_msg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                    SalvarComentario();
-            }
-        });
-        database = ConfiguracaoFirebase.getDatabase().getReference().child("usuarios");
-        topicoselecionado = (Forum)  getIntent().getSerializableExtra("topicoselecionado");
-        ComentarioReference = FirebaseDatabase.getInstance().getReference()
-                .child("comentario-topico").child(topicoselecionado.getUid());
-        if(topicoselecionado!=null){
-
-            titulo.setText(topicoselecionado.getTitulo());
-            mensagem.setText(topicoselecionado.getDescricao());
-            RecuperarIcone_e_nome_author(topicoselecionado.getIdauthor());
-            if(topicoselecionado.getFoto()!=null) {
-                Uri capa = Uri.parse(topicoselecionado.getFoto());
-                if (capa != null) {
-                    foto.setVisibility(View.VISIBLE);
-                    ImageRequest request = ImageRequestBuilder.newBuilderWithSource(capa)
-                            .setLocalThumbnailPreviewsEnabled(true)
-                            .setProgressiveRenderingEnabled(true)
-                            .build();
-
-                    DraweeController controller = Fresco.newDraweeControllerBuilder()
-                            .setImageRequest(request)
-                            .build();
-                   foto.setController(controller);
-                    RoundingParams roundingParams = RoundingParams.fromCornersRadius(7f);
-                    GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(getResources());
-                    GenericDraweeHierarchy hierarchy = builder
-                            .setRoundingParams(roundingParams)
-                            .setProgressBarImage(new CircleProgressDrawable())
-                            //  .setPlaceholderImage(context.getResources().getDrawable(R.drawable.carregando))
-                            .build();
-                    foto.setHierarchy(hierarchy);
-                    dialog.dismiss();
-                }
-            }else{
-                foto.setVisibility(View.GONE);
-            }
-
-            foto.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                   String ff = topicoselecionado.getFoto();
-                    Intent it = new Intent(Detalhe_Forum.this, AbrirImagem.class);
-                    it.putExtra("id_foto",  topicoselecionado.getFoto());
-                    it.putExtra("nome_foto",  topicoselecionado.getTitulo());
-                    startActivity(it);
-                }
-            });
         }
 
 
@@ -186,44 +135,66 @@ public class Detalhe_Forum extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private void GifCarregarDados() {
-        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-        builder.setCancelable(false);
-        LayoutInflater layoutInflater = LayoutInflater.from(Detalhe_Forum.this);
-        final View view = layoutInflater.inflate(R.layout.dialog_carregando_gif_comscroop, null);
-        ImageView imageViewgif = view.findViewById(R.id.gifimage);
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.botao_post_icone_topico:
+                emojiPopup.toggle();
+                break;
+            case R.id.button_postar_comentario_topico:
+               SalvarComentario();
 
-        Glide.with(getApplicationContext())
-                .asGif()
-                .load(R.drawable.gif_self)
-                .into(imageViewgif);
-        builder.setView(view);
-        dialog = builder.create();
-        dialog.show();
+                break;
+        }
 
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        GifCarregarDados();
-        CarregarDados_do_Usuario();
-        TrocarFundos_status_bar();
-        CarregarDados_Comentario_Evento();
+
+        Recuperar_Mensagens();
+
+
+        // Preferences pega o nome do usuario;
+        nome_usuario = getSharedPreferences(ARQUIVO_PREFERENCIA, MODE_PRIVATE);
+        Foto_usuario  = getSharedPreferences(ARQUIVO_PREFERENCIA, MODE_PRIVATE);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        registration.remove();
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (registration!= null) {
+            registration.remove();
+            registration = null;
+        }
     }
 
 
-
     public void SalvarComentario(){
+        //SharedPreferencies pegando a variavel e os dados
+        String nome = nome_usuario.getString("nome","");
+        String foto =Foto_usuario.getString("foto_usuario","");
         String textoComentario = edit_chat_emoji.getText().toString();
+
+
         if(textoComentario!=null && !textoComentario.equals(""))
         {
-            Comentario comentario = new Comentario();
-            comentario.setId_postagem(topicoselecionado.getUid());
-            comentario.setId_author(usuarioLogado);
-            comentario.setText(textoComentario);
-            comentario.salvar_Topico();
-
+            chat.setId_grupo(Id_Forum_selecionado);
+            chat.setId_usuario(identificadorUsuario);
+            Log.i("sdoskdosdk77",identificadorUsuario);
+            chat.setNome_usuario(nome);
+            chat.setFoto_usuario(foto);
+            chat.setId_grupo(Id_Forum_selecionado);
+           // chat.setTempo(data_time);
+            chat.setMensagem(textoComentario);
+            chat.Salvar_msg();
         }else{
             Toast.makeText(this, "Insira um comentário antes da salvar!",
                     Toast.LENGTH_LONG).show();
@@ -231,86 +202,36 @@ public class Detalhe_Forum extends AppCompatActivity {
         //Limpar comentario
         edit_chat_emoji.setText("");
     }
+     public void Recuperar_Mensagens(){
+         list_conversa_grupo.clear();
+
+                Query query=  db
+                 .collection("WeForum").document(Id_Forum_selecionado)
+                 .collection("mensagens").orderBy("tempo", Query.Direction.ASCENDING);
+         registration = query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                              @Override
+                              public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                                  List<DocumentChange> documentChanges = queryDocumentSnapshots.getDocumentChanges();
+                                  if (documentChanges != null) {
+                                      for (DocumentChange doc: documentChanges) {
+                                          if (doc.getType() == DocumentChange.Type.ADDED) {
+                                              Chat_Grupo coment=doc.getDocument().toObject(Chat_Grupo.class);
+                                              list_conversa_grupo.add(coment);
+                                            //  adapter.notifyDataSetChanged();
+                                          }
+
+                                         adapter = new Adapter_chat_grupo(getApplicationContext(),list_conversa_grupo);
+                                          recyclerView_comentarios.setAdapter(adapter);
+                                      }
+                                  }
+                              }
+                          });
+
+     }
 
 
-    private void CarregarDados_Comentario_Evento(){
-
-        listcomentario.clear();
-        ChildEventListeneruser=ComentarioReference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Comentario comentario = dataSnapshot.getValue(Comentario.class);
-                int initialSize  = listcomentario.size();
-                listcomentario.add(comentario);
-
-                recyclerView_comentarios.scrollToPosition(listcomentario.size()-1);
-                adapter.notifyItemRangeChanged(initialSize,listcomentario.size()-1);
-                dialog.dismiss();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.i("sdsd", String.valueOf(dataSnapshot.getChildrenCount()));
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
 
 
-    private void RecuperarIcone_e_nome_author(String id ) {
-        database.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Usuario  user = dataSnapshot.getValue(Usuario.class);
-               nome_autor.setText(user.getNome());
-                String identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
-
-                if(!user.getId().equals(identificadorUsuario)) {
-
-                    clickPerfil.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent it = new Intent(Detalhe_Forum.this, Perfil.class);
-                            it.putExtra("id", user.getId());
-                            startActivity(it);
-                        }
-                    });
-                }else{
-                    clickPerfil.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent it = new Intent(Detalhe_Forum.this, MinhaConta.class);
-                            startActivity(it);
-                        }
-                    });
-                }
-                Glide.with(Detalhe_Forum.this)
-                        .load(user.getFoto())
-                        .into(icone);
-
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
 
 
     public boolean  onOptionsItemSelected(MenuItem item) {
@@ -319,96 +240,16 @@ public class Detalhe_Forum extends AppCompatActivity {
 
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
 
-                    finish();
+                startActivity(new Intent(Detalhe_Forum.this, Lista_forum_Geral.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 
         }
 
         return super.onOptionsItemSelected(item);
     }
-    private void CarregarDados_do_Usuario(){
-        usuario = UsuarioFirebase.getUsuarioAtual();
-        String email = usuario.getEmail();
-        ChildEventListenerdetalhe=database.orderByChild("tipoconta")
-                .equalTo(email).addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        Usuario perfil = dataSnapshot.getValue(Usuario.class );
-                        assert perfil != null;
-                        String icone = perfil.getFoto();
-                        IconeUsuario(icone);
-                    }
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    }
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    }
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                    }
-                });
-    }
-    private void IconeUsuario(String url) {
-        //Imagem do icone do usuario
-       /* icone = findViewById(R.id.icone_user_toolbar);
-        icone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent it = new Intent(Detalhe_Forum.this, MinhaConta.class);
-                startActivity(it);
-
-            }
-        });
-        Glide.with(Detalhe_Forum.this)
-                .load(url)
-                .into(icone);
-        dialog.dismiss();
-        */
-    }
 
 
-    private void TrocarFundos_status_bar(){
-        //mudando a cor do statusbar
-        if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
-            setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true);
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            SystemBarTintManager systemBarTintManager = new SystemBarTintManager(this);
-            systemBarTintManager.setStatusBarTintEnabled(true);
-            systemBarTintManager.setStatusBarTintResource(R.drawable.gradiente_toolbarstatusbar);
-        }
-        if (Build.VERSION.SDK_INT >= 19) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            SystemBarTintManager systemBarTintManager = new SystemBarTintManager(this);
-            systemBarTintManager.setStatusBarTintEnabled(true);
-            systemBarTintManager.setStatusBarTintResource(R.drawable.gradiente_toolbarstatusbar);
-            //  systemBarTintManager.setStatusBarTintDrawable(Mydrawable);
-        }
-        //make fully Android Transparent Status bar
-        if (Build.VERSION.SDK_INT >= 21) {
-            setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true);
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
-            getWindow().setNavigationBarColor(Color.parseColor("#1565c0"));
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            SystemBarTintManager systemBarTintManager = new SystemBarTintManager(this);
-            systemBarTintManager.setStatusBarTintEnabled(true);
-            systemBarTintManager.setNavigationBarTintEnabled(true);
-            systemBarTintManager.setStatusBarTintResource(R.drawable.gradiente_toolbarstatusbar);
-        }
-    }
 
-    public static void setWindowFlag(Activity activity, final int bits, boolean on) {
-        Window win = activity.getWindow();
-        WindowManager.LayoutParams winParams = win.getAttributes();
-        if (on) {
-            winParams.flags |= bits;
-        } else {
-            winParams.flags &= ~bits;
-        }
-        win.setAttributes(winParams);
-    }
 
 
     private void setUpEmojiPopup() {
@@ -451,4 +292,6 @@ public class Detalhe_Forum extends AppCompatActivity {
                 })
                 .build(edit_chat_emoji);
     }
+
+
 }

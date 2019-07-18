@@ -22,7 +22,7 @@ import java.util.Map;
 // [START post_class]
 @IgnoreExtraProperties
 public class Forum implements Serializable {
-    public String uid;
+    public String id;
     public String idauthor;
     public String nomeauthor;
     public String titulo;
@@ -34,13 +34,15 @@ public class Forum implements Serializable {
     public  int quantcomentario=0;
     public Map<String, Boolean> stars = new HashMap<>();
     String usuariologado = UsuarioFirebase.getIdentificadorUsuario();
-    public Forum() { }
+    public Forum() {
+
+    }
 
   public  void SalvarForum(){
       // String IdConto= Base64Custom.codificarBase64("danlelis");
       FirebaseFirestore db = FirebaseFirestore.getInstance();
       Map<String, Object> newForum = new HashMap<>();
-      newForum.put("id",getUid());
+      newForum.put("id",getId());
       newForum.put("titulo", getTitulo());
       newForum.put("descricao", getDescricao());
       newForum.put("id_autor", getIdauthor());
@@ -71,7 +73,7 @@ public class Forum implements Serializable {
     public void salvarTopicoPublico(){
         DatabaseReference anuncioref = ConfiguracaoFirebase.getFirebaseDatabase()
                 .child("topico");
-        anuncioref.child(getUid()).setValue(this);
+        anuncioref.child(getId()).setValue(this);
     }
 
     public void remover(){
@@ -79,7 +81,7 @@ public class Forum implements Serializable {
         DatabaseReference anuncioref = ConfiguracaoFirebase.getFirebaseDatabase()
                 .child("meustopicos")
                 .child(identificadorUsuario)
-                .child(getUid());
+                .child(getId());
 
         anuncioref.removeValue();
 
@@ -91,7 +93,7 @@ public class Forum implements Serializable {
     public void removerTopicoPublico(){
         DatabaseReference anuncioref = ConfiguracaoFirebase.getFirebaseDatabase()
                 .child("topico")
-                .child(getUid());
+                .child(getId());
 
         anuncioref.removeValue();
 
@@ -99,7 +101,7 @@ public class Forum implements Serializable {
     public void removerTopicoComentario(){
         DatabaseReference anuncioref = ConfiguracaoFirebase.getFirebaseDatabase()
                 .child("comentario-topico")
-                .child(getUid());
+                .child(getId());
 
         anuncioref.removeValue();
 
@@ -111,17 +113,17 @@ public class Forum implements Serializable {
                 .child("imagens")
                 .child("topico")
                 .child(identificadorUsuario)
-                .child(getUid());
+                .child(getId());
 
         storageReference.delete();
     }
 
-    public String getUid() {
-        return uid;
+    public String getId() {
+        return id;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getIdauthor() {

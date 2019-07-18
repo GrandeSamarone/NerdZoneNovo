@@ -22,8 +22,8 @@
                     android:theme="@style/Theme.AppCompat">
 
                 </android.support.v7.widget.Toolbar>
-                <RelativeLayout
-
+                <LinearLayout
+              android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <de.hdodenhof.circleimageview.CircleImageView
@@ -35,13 +35,15 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginTop="10dp"/>
                     <TextView
+                        android:textSize="25dp"
                         android:id="@+id/detalhe_topico_titulo"
                         android:layout_marginLeft="4dp"
+                        android:text="Wegeek"
                         android:layout_marginTop="16dp"
                         android:layout_toRightOf="@+id/icone_user_toolbar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
-                </RelativeLayout>
+                </LinearLayout>
 
                 <FrameLayout android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -60,55 +62,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <LinearLayout
-                android:visibility="gone"
-                android:id="@+id/conteudo"
-                android:layout_below="@+id/cabecalho"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-
-                <TextView
-                    android:layout_margin="8dp"
-                    android:id="@+id/detalhe_topico_mensagem"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/pretoescrita"
-                    android:textSize="16sp"
-                    app:fontFamily="sans-serif-condensed"
-                    tools:text="forum" />
-
-                <com.facebook.drawee.view.SimpleDraweeView
-                    android:layout_marginLeft="8dp"
-                    android:id="@+id/foto_topico"
-                    android:visibility="gone"
-                    android:layout_width="80sp"
-                    android:layout_height="80sp" />
-
-                <LinearLayout
-                    android:id="@+id/nome_foto_click"
-                    android:padding="8dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/icon_topico_detalhe_author"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@drawable/fundo_user"/>
-                    <com.vanniktech.emoji.EmojiTextView
-                        android:id="@+id/nome_topico__detalhe_autor"
-                        android:layout_marginLeft="8dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="nome"
-                        android:textColor="@color/cinzaescuro"/>
-
-
-                </LinearLayout>
-            </LinearLayout>
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_comentario_topico"
                 android:layout_width="match_parent"

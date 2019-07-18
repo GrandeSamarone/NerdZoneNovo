@@ -175,7 +175,7 @@ public class Edit_Topico_Activity extends AppCompatActivity {
             dialog = builder.create();
             dialog.show();
             Forum topicos = new Forum();
-            topicos.setUid(forum.getUid());
+            topicos.setId(forum.getId());
             topicos.setQuantcomentario(forum.getQuantcomentario());
             topicos.setFoto(forum.getFoto());
             topicos.setData(forum.getData());
@@ -183,7 +183,7 @@ public class Edit_Topico_Activity extends AppCompatActivity {
             topicos.setTitulo(titulo_topico.getText().toString());
             topicos.setLikecount(forum.getLikecount());
             topicos.setIdauthor(forum.getIdauthor());
-            databasetopico.child(topicos.getUid()).setValue(topicos).addOnCompleteListener(new OnCompleteListener<Void>() {
+            databasetopico.child(topicos.getId()).setValue(topicos).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                 }
@@ -193,7 +193,7 @@ public class Edit_Topico_Activity extends AppCompatActivity {
 
                 }
             });
-            Meusdatabasetopico.child(usuariologado).child(topicos.getUid()).setValue(topicos).addOnCompleteListener(new OnCompleteListener<Void>() {
+            Meusdatabasetopico.child(usuariologado).child(topicos.getId()).setValue(topicos).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     dialog.dismiss();
@@ -274,7 +274,7 @@ public class Edit_Topico_Activity extends AppCompatActivity {
                             .child("imagens")
                             .child("evento")
                             .child(identificadorUsuario)
-                            .child(forum.getUid());
+                            .child(forum.getId());
                     //Progress
                     final ProgressDialog progressDialog = new ProgressDialog(this);
                     progressDialog.setTitle("Aguarde..");

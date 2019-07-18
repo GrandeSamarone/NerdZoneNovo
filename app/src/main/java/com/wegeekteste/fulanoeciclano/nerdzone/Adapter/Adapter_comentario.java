@@ -52,73 +52,8 @@ public class Adapter_comentario extends RecyclerView.Adapter<Adapter_comentario.
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         Comentario comentario = comentarios.get(position);
-      Criador=comentario.getId_author();
 
         holder.mensagem.setText(comentario.getText());
-
-        DatabaseReference eventoscurtidas= ConfiguracaoFirebase.getFirebaseDatabase()
-                .child("usuarios")
-                .child(comentario.getId_author());
-        eventoscurtidas.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Usuario user = dataSnapshot.getValue(Usuario.class);
-                holder.nome.setText(user.getNome());
-
-                Glide.with(context)
-                        .load(user.getFoto())
-                        .into(holder.foto );
-
-
-                if(!usuarioLogado.equals(user.getId())){
-                   holder.nome.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            Intent it = new Intent(context, Perfil.class);
-                            it.putExtra("id",user.getId());
-                            it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            context.startActivity(it);
-                        }
-                    });
-                    holder.foto.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent it = new Intent(context, Perfil.class);
-                            it.putExtra("id",user.getId());
-                            it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            context.startActivity(it);
-                        }
-                    });
-                }else {
-                   holder.nome.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            Intent it = new Intent(context, MinhaConta.class);
-                            it.putExtra("id",user.getId());
-                            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            context.startActivity(it);
-                        }
-                    });
-                    holder.foto.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent it = new Intent(context, MinhaConta.class);
-                            it.putExtra("id",user.getId());
-                            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            context.startActivity(it);
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
 
 
     }

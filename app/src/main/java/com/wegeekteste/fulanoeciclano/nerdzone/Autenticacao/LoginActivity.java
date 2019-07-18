@@ -65,6 +65,7 @@ public class LoginActivity extends AppCompatActivity {
     private String identificadorUsuario;
     Usuario usuarioLogado;
     private FirebaseFirestore db;
+    private FirebaseUser currentUser;
     private CollectionReference citiesRef;
 
     @SuppressLint("RestrictedApi")
@@ -81,7 +82,6 @@ public class LoginActivity extends AppCompatActivity {
         citiesRef=db.collection("Usuarios");
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-        FirebaseUser currentUser = auth.getCurrentUser();
         Dialog();
         textoprivacidade = findViewById(R.id.textView);
         textoprivacidade.setOnClickListener(new View.OnClickListener() {
@@ -101,8 +101,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-       //verificiando se o cliente já fez o login
-        if (currentUser == null) {
+
             // Configure Google Sign In
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken(getString(R.string.default_web_client_id))
@@ -111,15 +110,28 @@ public class LoginActivity extends AppCompatActivity {
 
             mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        } else {
-            //Toast.makeText(this, "Ta entrando aqui", Toast.LENGTH_SHORT).show();
-            Intent it = new Intent(LoginActivity.this, TelaSplash.class);
-            startActivity(it);
-            finish();
-        }
+
     }
 
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        currentUser = auth.getCurrentUser();
+        Conferir(currentUser);
+    }
+
+    private void Conferir(FirebaseUser currentUser) {
+
+        if (currentUser != null) {
+            Toast.makeText(this, currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
+               Intent it = new Intent(LoginActivity.this,TelaSplash.class);
+               startActivity(it);
+               finish();
+    }else{
+            Toast.makeText(this, "entrou aqui", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -164,6 +176,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
                             //Veirica se a conta existe no Database
+                            FirebaseUser user = auth.getCurrentUser();
                             VerificandoCadastro();
 
                         } else {
@@ -182,37 +195,37 @@ public class LoginActivity extends AppCompatActivity {
     }
     
         public void VerificandoCadastro () {
-            identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
+            //identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
             FirebaseUser user = auth.getCurrentUser();
-            Query query = citiesRef.whereEqualTo("id", identificadorUsuario);
+            /*Query query = citiesRef.whereEqualTo("id", user.getUid());
             if (!query.equals(null)) {
                 dialog.dismiss();
                 Intent its = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(its);
                 finish();
-            }
-            dialog.dismiss();
-            usuario = new Usuario();
-            usuario.setId(identificadorUsuario);
-            usuario.setNome(user.getDisplayName());
-            usuario.setFoto(String.valueOf(user.getPhotoUrl()));
-            usuario.setCapa("");
-            usuario.setSeguidores(usuario.getSeguidores());
-            usuario.setSeguindo(usuario.getSeguindo());
-            usuario.setContos(usuario.getContos());
-            usuario.setTopicos(usuario.getTopicos());
-            usuario.setArts(usuario.getArts());
-            usuario.setComercio(usuario.getComercio());
-            usuario.setEvento(usuario.getEvento());
-            usuario.setTipoconta(user.getEmail());
-            usuario.setTiposuario("usuario");
-            //   String  identificadorUsuario = Base64Custom.codificarBase64(usuario.getNome());
-            usuario.setId(identificadorUsuario);
-            usuario.salvar();
+            } */
+                dialog.dismiss();
+                usuario = new Usuario();
+                usuario.setId(user.getUid());
+                usuario.setNome(user.getDisplayName());
+                usuario.setFoto(String.valueOf(user.getPhotoUrl()));
+                usuario.setCapa("");
+                usuario.setSeguidores(usuario.getSeguidores());
+                usuario.setSeguindo(usuario.getSeguindo());
+                usuario.setContos(usuario.getContos());
+                usuario.setTopicos(usuario.getTopicos());
+                usuario.setArts(usuario.getArts());
+                usuario.setComercio(usuario.getComercio());
+                usuario.setEvento(usuario.getEvento());
+                usuario.setTipoconta(user.getEmail());
+                usuario.setTiposuario("usuario");
+                //   String  identificadorUsuario = Base64Custom.codificarBase64(usuario.getNome());
+                usuario.salvar();
 
-            Intent it = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(it);
-            finish();
+                Intent it = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(it);
+                finish();
+
         }
 
     private void Dialog(){

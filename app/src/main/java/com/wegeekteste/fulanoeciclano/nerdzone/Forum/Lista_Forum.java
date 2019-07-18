@@ -132,7 +132,7 @@ public class Lista_Forum extends AppCompatActivity  {
 
                         for (DocumentChange change : snapshots.getDocumentChanges()) {
                             Forum forum_grupo = change.getDocument().toObject(Forum.class);
-                            forum_grupo.setUid(change.getDocument().getId());
+                            forum_grupo.setId(change.getDocument().getId());
                             //  Log.i("sdsdsd",change.getDocument().getId());
                             // Log.i("sdsdsd2",conto.getUid());
                             switch (change.getType()) {
@@ -149,7 +149,7 @@ public class Lista_Forum extends AppCompatActivity  {
                                 case MODIFIED:
                                     for (Forum ct : listaForum) {
 
-                                        if(forum_grupo.getUid().equals(ct.getUid())){
+                                        if(forum_grupo.getId().equals(ct.getId())){
                                             listaForum.remove(ct);
                                             break;
                                         }
@@ -165,7 +165,7 @@ public class Lista_Forum extends AppCompatActivity  {
                                 case REMOVED:
                                     for (Forum ct : listaForum) {
 
-                                        if(forum_grupo.getUid().equals(ct.getUid())){
+                                        if(forum_grupo.getId().equals(ct.getId())){
                                             listaForum.remove(ct);
                                             break;
                                         }

@@ -2,6 +2,7 @@ package com.wegeekteste.fulanoeciclano.nerdzone.Forum;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -45,6 +47,7 @@ public class Lista_forum_Geral extends AppCompatActivity {
     private RecyclerView recicle_Grupo_geral,recicle_Topico_geral;
     private ArrayList<Forum> ListaG = new ArrayList<>();
     private ArrayList<Forum> ListaT = new ArrayList<>();
+    private String id_Forum;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,8 +58,10 @@ public class Lista_forum_Geral extends AppCompatActivity {
         toolbar =findViewById(R.id.toolbarsecundario_sem_foto);
         toolbar.setTitle("Lista Geral");
         setSupportActionBar(toolbar);
-       //Configuracoes_Originais
+
+        //Configuracoes_Originais
         db = FirebaseFirestore.getInstance();
+
         recicle_Grupo_geral=findViewById(R.id.RecycleViewGrupo_geral);
         recicle_Topico_geral=findViewById(R.id.RecycleViewTOpico_Geral);
         adapter_forum = new Adapter_Forum(ListaG,this);
@@ -74,10 +79,12 @@ public class Lista_forum_Geral extends AppCompatActivity {
                 List<Forum> listaAtualizada = adapter_forum.getForuns();
 
                 if(listaAtualizada.size()>0){
+                    String id_grupo_selecionado = adapter_forum.getForuns().get(position).getId();
                     Forum forumselecionado = listaAtualizada.get(position);
                     Intent it = new Intent(Lista_forum_Geral.this, Page_Info_Grupo.class);
                       it.putExtra("grupo_info",forumselecionado);
-                        startActivity(it);
+                      it.putExtra("grupo_id",id_grupo_selecionado);
+                      startActivity(it);
 
                 }
             }
@@ -150,8 +157,9 @@ public class Lista_forum_Geral extends AppCompatActivity {
                         }
 
                         for (DocumentChange change : snapshots.getDocumentChanges()) {
+                            Log.i("sdsdsd",change.getDocument().getId());
                             Forum forum_grupo = change.getDocument().toObject(Forum.class);
-                            forum_grupo.setUid(change.getDocument().getId());
+                            forum_grupo.setId(change.getDocument().getId());
                           //  Log.i("sdsdsd",change.getDocument().getId());
                            // Log.i("sdsdsd2",conto.getUid());
                             switch (change.getType()) {
@@ -168,7 +176,7 @@ public class Lista_forum_Geral extends AppCompatActivity {
                                 case MODIFIED:
                                     for (Forum ct : ListaG) {
 
-                                        if(forum_grupo.getUid().equals(ct.getUid())){
+                                        if(forum_grupo.getId().equals(ct.getId())){
                                             ListaG.remove(ct);
                                             break;
                                         }
@@ -184,7 +192,7 @@ public class Lista_forum_Geral extends AppCompatActivity {
                                 case REMOVED:
                                     for (Forum ct : ListaG) {
 
-                                        if(forum_grupo.getUid().equals(ct.getUid())){
+                                        if(forum_grupo.getId().equals(ct.getId())){
                                             ListaG.remove(ct);
                                             break;
                                         }
@@ -212,7 +220,7 @@ public class Lista_forum_Geral extends AppCompatActivity {
 
                         for (DocumentChange change : snapshots.getDocumentChanges()) {
                             Forum forum_grupo = change.getDocument().toObject(Forum.class);
-                            forum_grupo.setUid(change.getDocument().getId());
+                            forum_grupo.setId(change.getDocument().getId());
                             //  Log.i("sdsdsd",change.getDocument().getId());
                             // Log.i("sdsdsd2",conto.getUid());
                             switch (change.getType()) {
@@ -229,7 +237,7 @@ public class Lista_forum_Geral extends AppCompatActivity {
                                 case MODIFIED:
                                     for (Forum ct : ListaT) {
 
-                                        if(forum_grupo.getUid().equals(ct.getUid())){
+                                        if(forum_grupo.getId().equals(ct.getId())){
                                             ListaT.remove(ct);
                                             break;
                                         }
@@ -245,7 +253,7 @@ public class Lista_forum_Geral extends AppCompatActivity {
                                 case REMOVED:
                                     for (Forum ct : ListaT) {
 
-                                        if(forum_grupo.getUid().equals(ct.getUid())){
+                                        if(forum_grupo.getId().equals(ct.getId())){
                                             ListaT.remove(ct);
                                             break;
                                         }

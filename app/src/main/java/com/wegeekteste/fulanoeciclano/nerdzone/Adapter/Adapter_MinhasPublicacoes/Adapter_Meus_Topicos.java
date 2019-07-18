@@ -64,7 +64,7 @@ public class Adapter_Meus_Topicos extends RecyclerView.Adapter<Adapter_Meus_Topi
 
 
         DatabaseReference database_topico = FirebaseDatabase.getInstance().getReference()
-                .child("comentario-forum").child(forum.getUid());
+                .child("comentario-forum").child(forum.getId());
         database_topico.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -96,7 +96,7 @@ public class Adapter_Meus_Topicos extends RecyclerView.Adapter<Adapter_Meus_Topi
 
         DatabaseReference topicoscurtidas= ConfiguracaoFirebase.getFirebaseDatabase()
                 .child("forum-likes")
-                .child(forum.getUid());
+                .child(forum.getId());
         topicoscurtidas.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -172,7 +172,7 @@ holder.comentario_img.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Intent it = new Intent(context, Edit_Topico_Activity.class);
-            it.putExtra("id_topico", forum.getUid());
+            it.putExtra("id_topico", forum.getId());
             context.startActivity(it);
         }
     });

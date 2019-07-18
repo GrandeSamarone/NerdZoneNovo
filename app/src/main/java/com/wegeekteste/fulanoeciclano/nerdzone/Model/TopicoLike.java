@@ -24,7 +24,7 @@ public class TopicoLike {
 
         DatabaseReference pLikeRef=firebaseRef
                 .child("forum-likes")
-                .child(forum.getUid())
+                .child(forum.getId())
                 .child(usuario.getId());
         pLikeRef.setValue(dadosusuario);
 
@@ -37,7 +37,7 @@ public class TopicoLike {
         DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebaseDatabase();
         DatabaseReference pLikeRef=firebaseRef
                 .child("forum-likes")
-                .child(forum.getUid())
+                .child(forum.getId())
                 .child("qtdlikes");
 
         setQtdlikes(getQtdlikes()+valor);
@@ -50,7 +50,7 @@ public class TopicoLike {
         DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebaseDatabase();
         DatabaseReference pLikeRef=firebaseRef
                 .child("forum-likes")
-                .child(forum.getUid())
+                .child(forum.getId())
                 .child(usuario.getId());
         pLikeRef.removeValue();
         //Atualizar quantidade de like
@@ -66,7 +66,7 @@ public class TopicoLike {
         DatabaseReference firebaseRefs = ConfiguracaoFirebase.getFirebaseDatabase();
         DatabaseReference pLikeQuantRef=firebaseRefs
                 .child("forum")
-                .child(forum.getUid())
+                .child(forum.getId())
                 .child("likecount");
 
         pLikeQuantRef.setValue(getQtdlikes());
@@ -77,7 +77,7 @@ public class TopicoLike {
         DatabaseReference pLikeQuantRef=firebaseRefs
                 .child("meustopicos")
                 .child(forum.getIdauthor())
-                .child(forum.getUid())
+                .child(forum.getId())
                 .child("likecount");
 
         pLikeQuantRef.setValue(getQtdlikes());

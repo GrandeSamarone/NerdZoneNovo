@@ -49,7 +49,6 @@ public class Adapter_Forum extends RecyclerView.Adapter<Adapter_Forum.MyViewHold
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         Forum forum = foruns.get(position);
-
         if (forum.getTitulo() != null) {
             holder.titulo.setText(forum.getTitulo());
         }
