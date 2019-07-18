@@ -28,7 +28,6 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.TopicoLike;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Usuario;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
-import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Detalhe_Forum;
 
 import java.util.List;
 
@@ -85,9 +84,7 @@ public class Adapter_Meus_Topicos extends RecyclerView.Adapter<Adapter_Meus_Topi
 
                 if (listForumAtualizado.size() > 0) {
                     Forum topicoselecionado = listForumAtualizado.get(position);
-                    Intent it = new Intent(context, Detalhe_Forum.class);
-                    it.putExtra("topicoselecionado", topicoselecionado);
-                    context.startActivity(it);
+
 
 
                 }

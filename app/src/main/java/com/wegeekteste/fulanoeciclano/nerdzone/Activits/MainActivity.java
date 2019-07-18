@@ -49,7 +49,6 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Usuario;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 import com.wegeekteste.fulanoeciclano.nerdzone.Teste_firestore.firestore;
-import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Detalhe_Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Lista_Forum;
 
 import java.util.ArrayList;
@@ -301,9 +300,7 @@ private void SharedPreference(){
 
                 if (listForumAtualizado.size() > 0) {
                     Forum topicoselecionado = listForumAtualizado.get(position);
-                    Intent it = new Intent(MainActivity.this, Detalhe_Forum.class);
-                    it.putExtra("topicoselecionado", topicoselecionado);
-                    startActivity(it);
+
 
                 }
             }

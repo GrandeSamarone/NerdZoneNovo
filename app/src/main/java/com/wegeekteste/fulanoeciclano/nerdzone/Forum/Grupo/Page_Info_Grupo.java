@@ -10,9 +10,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.wegeekteste.fulanoeciclano.nerdzone.Activits.ChatActivity;
-import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Detalhe_Forum;
-import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Lista_forum_Geral;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
@@ -42,19 +39,21 @@ public class Page_Info_Grupo extends AppCompatActivity {
             botao_entrar_grupo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent it = new Intent(Page_Info_Grupo.this, Detalhe_Forum.class);
+                    Intent it = new Intent(Page_Info_Grupo.this, Page_Chat_grupo.class);
                     it.putExtra("forum_selecionado",forum);
                     it.putExtra("id_forum_selecionado",id_grupo_selecionado);
                     startActivity(it);
+
                 }
             });
         //Recuperar dados do usuario Selecionado;
         Bundle bundle = getIntent().getExtras();
-           if(bundle.containsKey("grupo_id")){
-               id_grupo_selecionado= String.valueOf(bundle.getSerializable("grupo_id"));
-               Log.i("sdsd444",id_grupo_selecionado);
-           }
-           if(bundle!=null){
+        if (bundle != null && bundle.containsKey("grupo_id")) {
+            id_grupo_selecionado= String.valueOf(bundle.getSerializable("grupo_id"));
+            Log.i("sdfsd7", String.valueOf(bundle.containsKey("grupo_id")));
+
+        }
+        if(bundle!=null){
          if(bundle.containsKey("grupo_info")){
            forum= (Forum) bundle.getSerializable("grupo_info");
              nome_info.setText(forum.getTitulo());

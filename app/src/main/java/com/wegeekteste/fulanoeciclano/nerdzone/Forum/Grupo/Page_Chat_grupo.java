@@ -1,4 +1,4 @@
-package com.wegeekteste.fulanoeciclano.nerdzone.Forum;
+package com.wegeekteste.fulanoeciclano.nerdzone.Forum.Grupo;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,7 +23,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -38,32 +37,26 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_chat_grupo;
+import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Lista_forum_Geral;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.TrocarFundo;
-import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_comentario;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Chat_Grupo;
-import com.wegeekteste.fulanoeciclano.nerdzone.Model.Comentario;
-import com.wegeekteste.fulanoeciclano.nerdzone.Model.Conto;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
-import com.wegeekteste.fulanoeciclano.nerdzone.Model.Usuario;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class Detalhe_Forum extends TrocarFundo implements View.OnClickListener {
+public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener {
 
     private Toolbar toolbar;
     private Adapter_chat_grupo adapter;
     private Chat_Grupo chat=new Chat_Grupo();
     private ArrayList<Chat_Grupo> list_conversa_grupo = new ArrayList<>();
-    private RecyclerView recyclerView_comentarios;
+    private RecyclerView recyclerView_comentarios,recycler_chat_online;
     private CircleImageView icone;
     private TextView titulo;
     private EmojiEditText edit_chat_emoji;
@@ -95,14 +88,15 @@ public class Detalhe_Forum extends TrocarFundo implements View.OnClickListener {
         identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
         icone = findViewById(R.id.icone_chat_toolbar);
         titulo = findViewById(R.id.detalhe_topico_titulo);
-       edit_chat_emoji=findViewById(R.id.caixa_de_texto_comentario_topico);
-       botao_env_msg=findViewById(R.id.button_postar_comentario_topico);
+        edit_chat_emoji=findViewById(R.id.caixa_de_texto_comentario_topico);
+        botao_env_msg=findViewById(R.id.button_postar_comentario_topico);
         botao_env_msg.setOnClickListener(this);
-       botaoicone=findViewById(R.id.botao_post_icone_topico);
+        botaoicone=findViewById(R.id.botao_post_icone_topico);
         botaoicone.setOnClickListener(this);
         usuarioLogado =  UsuarioFirebase.getIdentificadorUsuario();
 
-       //RecycleView
+        //RecycleView
+        recycler_chat_online=findViewById(R.id.recycler_chat_online);
         recyclerView_comentarios = findViewById(R.id.recycler_comentario_topico);
         recyclerView_comentarios.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
@@ -142,7 +136,7 @@ public class Detalhe_Forum extends TrocarFundo implements View.OnClickListener {
                 emojiPopup.toggle();
                 break;
             case R.id.button_postar_comentario_topico:
-               SalvarComentario();
+                SalvarComentario();
 
                 break;
         }
@@ -162,9 +156,28 @@ public class Detalhe_Forum extends TrocarFundo implements View.OnClickListener {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        Status("online");
+
+     /*   String nome = nome_usuario.getString("nome","");
+        String foto =Foto_usuario.getString("foto_usuario","");
+        HashMap<String, Object> membrosMap = new HashMap<>();
+        membrosMap.put("status", "offline");
+          membrosMap.put("id_usuario", identificadorUsuario);
+        membrosMap.put("foto_usuario", foto);
+        membrosMap.put("nome_usuario", nome);
+
+        db.collection("WeForum").document(Id_Forum_selecionado)
+                .collection("Membros").document(identificadorUsuario).set(membrosMap);
+*/
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         registration.remove();
+        Status("offline");
     }
     @Override
     protected void onStop() {
@@ -176,6 +189,20 @@ public class Detalhe_Forum extends TrocarFundo implements View.OnClickListener {
         }
     }
 
+
+private void Status(String status){
+    String nome = nome_usuario.getString("nome","");
+    String foto =Foto_usuario.getString("foto_usuario","");
+    HashMap<String, Object> membrosMap = new HashMap<>();
+    membrosMap.put("status", status);
+  //  membrosMap.put("id_usuario", identificadorUsuario);
+    //membrosMap.put("foto_usuario", foto);
+    //membrosMap.put("nome_usuario", nome);
+
+    db.collection("WeForum").document(Id_Forum_selecionado)
+            .collection("Membros").document(identificadorUsuario).set(membrosMap);
+
+}
 
     public void SalvarComentario(){
         //SharedPreferencies pegando a variavel e os dados
@@ -192,7 +219,7 @@ public class Detalhe_Forum extends TrocarFundo implements View.OnClickListener {
             chat.setNome_usuario(nome);
             chat.setFoto_usuario(foto);
             chat.setId_grupo(Id_Forum_selecionado);
-           // chat.setTempo(data_time);
+            // chat.setTempo(data_time);
             chat.setMensagem(textoComentario);
             chat.Salvar_msg();
         }else{
@@ -202,32 +229,32 @@ public class Detalhe_Forum extends TrocarFundo implements View.OnClickListener {
         //Limpar comentario
         edit_chat_emoji.setText("");
     }
-     public void Recuperar_Mensagens(){
-         list_conversa_grupo.clear();
+    public void Recuperar_Mensagens(){
+        list_conversa_grupo.clear();
 
-                Query query=  db
-                 .collection("WeForum").document(Id_Forum_selecionado)
-                 .collection("mensagens").orderBy("tempo", Query.Direction.ASCENDING);
-         registration = query.addSnapshotListener(new EventListener<QuerySnapshot>() {
-                              @Override
-                              public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                                  List<DocumentChange> documentChanges = queryDocumentSnapshots.getDocumentChanges();
-                                  if (documentChanges != null) {
-                                      for (DocumentChange doc: documentChanges) {
-                                          if (doc.getType() == DocumentChange.Type.ADDED) {
-                                              Chat_Grupo coment=doc.getDocument().toObject(Chat_Grupo.class);
-                                              list_conversa_grupo.add(coment);
-                                            //  adapter.notifyDataSetChanged();
-                                          }
+        Query query=  db
+                .collection("WeForum").document(Id_Forum_selecionado)
+                .collection("mensagens").orderBy("tempo", Query.Direction.ASCENDING);
+        registration = query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                List<DocumentChange> documentChanges = queryDocumentSnapshots.getDocumentChanges();
+                if (documentChanges != null) {
+                    for (DocumentChange doc: documentChanges) {
+                        if (doc.getType() == DocumentChange.Type.ADDED) {
+                            Chat_Grupo coment=doc.getDocument().toObject(Chat_Grupo.class);
+                            list_conversa_grupo.add(coment);
+                            //  adapter.notifyDataSetChanged();
+                        }
 
-                                         adapter = new Adapter_chat_grupo(getApplicationContext(),list_conversa_grupo);
-                                          recyclerView_comentarios.setAdapter(adapter);
-                                      }
-                                  }
-                              }
-                          });
+                        adapter = new Adapter_chat_grupo(getApplicationContext(),list_conversa_grupo);
+                        recyclerView_comentarios.setAdapter(adapter);
+                    }
+                }
+            }
+        });
 
-     }
+    }
 
 
 
@@ -240,7 +267,7 @@ public class Detalhe_Forum extends TrocarFundo implements View.OnClickListener {
 
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
 
-                startActivity(new Intent(Detalhe_Forum.this, Lista_forum_Geral.class)
+                startActivity(new Intent(Page_Chat_grupo.this, Lista_forum_Geral.class)
                         .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 
         }

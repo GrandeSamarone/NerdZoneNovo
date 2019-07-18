@@ -15,6 +15,7 @@ public class Chat_Grupo {
     private String foto_usuario;
     private String id_grupo;
     private String mensagem;
+    private String status;
     private @ServerTimestamp Date tempo;
     private boolean isseen;
 
@@ -35,6 +36,7 @@ public class Chat_Grupo {
         data.put("tempo", FieldValue.serverTimestamp());
         data.put("nome_usuario",getNome_usuario());
         data.put("foto_usuario",getFoto_usuario());
+        data.put("status",getStatus());
         data.put("id_usuario",getId_usuario());
         data.put("id_grupo",getId_grupo());
               db
@@ -97,5 +99,13 @@ public class Chat_Grupo {
 
     public void setFoto_usuario(String foto_usuario) {
         this.foto_usuario = foto_usuario;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -22,7 +22,7 @@ import com.vanniktech.emoji.EmojiTextView;
 import com.varunest.sparkbutton.SparkButton;
 import com.varunest.sparkbutton.SparkEventListener;
 import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
-import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Detalhe_Forum;
+
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.TopicoLike;
@@ -107,9 +107,7 @@ holder.click.setOnClickListener(new View.OnClickListener() {
 
         if (listForumAtualizado.size() > 0) {
             Forum topicoselecionado = listForumAtualizado.get(position);
-            Intent it = new Intent(context, Detalhe_Forum.class);
-            it.putExtra("topicoselecionado", topicoselecionado);
-            context.startActivity(it);
+
 
 
         }
@@ -121,9 +119,7 @@ holder.click.setOnClickListener(new View.OnClickListener() {
                 List<Forum> listForumAtualizado = getTopicos();
                 if (listForumAtualizado.size() > 0) {
                     Forum topicoselecionado = listForumAtualizado.get(position);
-                    Intent it = new Intent(context, Detalhe_Forum.class);
-                    it.putExtra("topicoselecionado", topicoselecionado);
-                    context.startActivity(it);
+
 
                 }
             }

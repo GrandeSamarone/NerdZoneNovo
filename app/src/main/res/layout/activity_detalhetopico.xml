@@ -7,7 +7,6 @@
     android:id="@+id/root_view_topico"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
-    tools:context=".Forum.Detalhe_Forum"
     android:background="@color/background">
 
             <RelativeLayout
@@ -62,6 +61,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_chat_online"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:divider="@android:color/transparent"
+                android:transcriptMode="alwaysScroll"
+                android:layout_marginTop="8dp"
+                android:layout_below="@+id/conteudo"
+                tools:listitem="@layout/adapter_commentario" />
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_comentario_topico"
                 android:layout_width="match_parent"

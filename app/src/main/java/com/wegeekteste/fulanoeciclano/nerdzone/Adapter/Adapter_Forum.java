@@ -30,7 +30,6 @@ public class Adapter_Forum extends RecyclerView.Adapter<Adapter_Forum.MyViewHold
 
     private List<Forum> foruns;
     private Context context;
-    private FirebaseDatabase databases=FirebaseDatabase.getInstance();
     public Adapter_Forum(List<Forum> forum, Context context){
         this.foruns = forum;
         this.context=context;
