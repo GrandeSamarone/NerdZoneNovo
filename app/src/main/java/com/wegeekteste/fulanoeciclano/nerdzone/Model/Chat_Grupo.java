@@ -41,7 +41,7 @@ public class Chat_Grupo {
         data.put("id_grupo",getId_grupo());
               db
                 .collection("WeForum").document(getId_grupo())
-                .collection("mensagens").add(data);
+                .collection("Mensagens").add(data);
     };
 
     public String getId_usuario() {

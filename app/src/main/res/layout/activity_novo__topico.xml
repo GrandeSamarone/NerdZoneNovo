@@ -7,7 +7,6 @@
     android:orientation="vertical"
     android:fitsSystemWindows="true"
     tools:context=".Forum.Novo_Forum">
-
 <include layout="@layout/toolbarsecundario"/>
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -48,6 +47,21 @@
     android:layout_width="match_parent"
     android:layout_height="40dp"
     android:text="Grupo"/>
+    <RadioButton
+        android:id="@+id/radiogrupo_Free"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Grupo_Free"/>
+    <RadioButton
+        android:id="@+id/radiogrupo_permissao"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Grupo_Permissao"/>
+    <RadioButton
+        android:id="@+id/radiogrupo_privado"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Grupo_Privado"/>
         <RadioButton
             android:id="@+id/radiotopico"
             android:layout_width="match_parent"
