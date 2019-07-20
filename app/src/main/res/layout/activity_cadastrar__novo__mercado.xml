@@ -107,7 +107,7 @@
             android:layout_weight="1"/>
     </LinearLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/txtlayout_subtitulo"
             android:layout_gravity="center_vertical"
             android:layout_width="match_parent"
@@ -115,7 +115,7 @@
             app:counterEnabled="true"
             app:counterMaxLength="40"
           >
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/nome_mercado"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -126,16 +126,16 @@
             android:textAlignment="center"
             android:inputType="textMultiLine"
             />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:counterEnabled="true"
         app:counterMaxLength="40"
         >
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/fraserapida_mercado"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -146,9 +146,9 @@
             android:textAlignment="center"
             android:inputType="textMultiLine"
             />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtlayout_descricao"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -156,7 +156,7 @@
         app:counterMaxLength="400"
 
         >
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/desc_mercado"
             android:maxLength="400"
             android:layout_width="match_parent"
@@ -166,7 +166,7 @@
             android:textAlignment="center"
             android:inputType="textMultiLine"
             />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
 <TextView
     android:layout_width="match_parent"
@@ -184,13 +184,13 @@
         android:inputType="textPersonName"
         android:hint="R$ 20,50"/>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtlayout_endereco"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
         >
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/desc_endereco"
             android:padding="10dp"
             android:layout_width="match_parent"
@@ -200,7 +200,7 @@
             android:background="@drawable/bg_edit_text"
             android:textAlignment="center"
             />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
     <Button
         android:id="@+id/botaosalvarmercado"
         android:layout_width="match_parent"

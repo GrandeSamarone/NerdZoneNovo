@@ -5,8 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,7 +62,7 @@ public class Perfil extends AppCompatActivity implements Main, View.OnClickListe
     private String id_do_usuario;
     private String id_usuariologado;
     private Usuario usuarioLogado,usuarioselecionado;
-    private android.support.v7.app.AlertDialog dialog;
+    private androidx.appcompat.app.AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,7 +203,7 @@ public class Perfil extends AppCompatActivity implements Main, View.OnClickListe
         }
     }
     private void CarregarDados_do_Usuario(){
-        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setCancelable(false);
         LayoutInflater layoutInflater = LayoutInflater.from(Perfil.this);
         final View view  = layoutInflater.inflate(R.layout.dialog_carregando_gif_comscroop,null);

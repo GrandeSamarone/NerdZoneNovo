@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/txtlayout_subtitulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,13 +40,13 @@
 
             android:layout_marginLeft="32dp">
 
-            <android.support.v7.widget.AppCompatEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/legenda_arts"
                 android:maxLength="300"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Diga mais sobre sua art" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
         <Button
             android:id="@+id/botao_adicionar_art"
             android:layout_width="match_parent"

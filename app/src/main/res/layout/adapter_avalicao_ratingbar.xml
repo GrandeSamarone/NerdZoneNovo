@@ -92,7 +92,7 @@
                                 android:text="5" />
                         </LinearLayout>
 
-                        <android.support.constraint.ConstraintLayout
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/constrain_layout_5"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -105,7 +105,7 @@
                                 android:layout_height="40dp"
                                 android:orientation="horizontal"
                                 />
-                        </android.support.constraint.ConstraintLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </LinearLayout>
 
@@ -140,7 +140,7 @@
                         <!--android:gravity="center"-->
                         <!--android:text="4" />-->
 
-                        <android.support.constraint.ConstraintLayout
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/constrain_layout_4"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -154,7 +154,7 @@
                                 android:layout_height="40dp"
                                 android:orientation="horizontal"
                                 app:layout_constraintWidth_percent="0.65" />
-                        </android.support.constraint.ConstraintLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </LinearLayout>
 
@@ -189,7 +189,7 @@
                                 android:text="3" />
                         </LinearLayout>
 
-                        <android.support.constraint.ConstraintLayout
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/constrain_layout_3"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -203,7 +203,7 @@
                                 android:layout_height="40dp"
                                 app:layout_constraintWidth_percent="0.65"
                                 android:orientation="horizontal" />
-                        </android.support.constraint.ConstraintLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </LinearLayout>
 
@@ -237,7 +237,7 @@
                                 android:text="2" />
                         </LinearLayout>
 
-                        <android.support.constraint.ConstraintLayout
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/constrain_layout_2"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -251,7 +251,7 @@
                                 android:layout_height="40dp"
                                 android:orientation="horizontal"
                                 app:layout_constraintWidth_percent="0.65" />
-                        </android.support.constraint.ConstraintLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </LinearLayout>
 
@@ -286,7 +286,7 @@
                         </LinearLayout>
 
 
-                        <android.support.constraint.ConstraintLayout
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/constrain_layout_1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -299,7 +299,7 @@
                                 android:layout_height="40dp"
                                 android:orientation="horizontal"
                                 app:layout_constraintWidth_percent="0.65" />
-                        </android.support.constraint.ConstraintLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

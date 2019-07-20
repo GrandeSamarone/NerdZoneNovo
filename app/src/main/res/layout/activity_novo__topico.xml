@@ -8,7 +8,7 @@
     android:fitsSystemWindows="true"
     tools:context=".Forum.Novo_Forum">
 <include layout="@layout/toolbarsecundario"/>
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     <LinearLayout
@@ -17,7 +17,7 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtlayout_titulo_topico"
         android:layout_gravity="center_vertical"
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
         app:counterEnabled="true"
         app:counterMaxLength="100"
         >
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/nome_topico"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
             android:inputType="textMultiLine"
             android:minLines="2"
             />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 <RadioGroup
     android:id="@+id/groupwe"
     android:layout_width="match_parent"
@@ -68,14 +68,14 @@
             android:layout_height="40dp"
             android:text="Topico"/>
 </RadioGroup>
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtlayout_descricao_topico"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:counterEnabled="true"
         app:counterMaxLength="400"
         >
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/desc_topico"
             android:maxLength="400"
             android:layout_width="match_parent"
@@ -87,7 +87,7 @@
             android:minLines="5"
             android:inputType="textMultiLine"
             />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 <LinearLayout
     android:layout_marginTop="8dp"
     android:layout_width="match_parent"
@@ -118,6 +118,6 @@
         android:text="CRIAR TÓPICO"
         android:theme="@style/botaopadrao"/>
 </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

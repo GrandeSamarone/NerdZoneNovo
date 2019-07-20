@@ -85,13 +85,13 @@
             </HorizontalScrollView>
 
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txtlayout_subtitulo"
                 android:layout_gravity="center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 >
-                <android.support.v7.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/nome_digital_empreendedora_fem"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -101,9 +101,9 @@
                     android:textAlignment="center"
                     android:inputType="textMultiLine"
                     />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txtlayout_descricao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -111,7 +111,7 @@
                 app:counterMaxLength="400"
 
                 >
-                <android.support.v7.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/desc_digital_empreendedora_fem"
                     android:maxLength="400"
                     android:layout_width="match_parent"
@@ -121,7 +121,7 @@
                     android:textAlignment="center"
                     android:inputType="textMultiLine"
                     />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
             <EditText

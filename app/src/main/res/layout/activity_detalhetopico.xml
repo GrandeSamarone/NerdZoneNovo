@@ -13,14 +13,14 @@
                 android:id="@+id/cabecalho"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <android.support.v7.widget.Toolbar
+                <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbartopico"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:background="@drawable/gradiente_toolbar"
                     android:theme="@style/Theme.AppCompat">
 
-                </android.support.v7.widget.Toolbar>
+                </androidx.appcompat.widget.Toolbar>
                 <LinearLayout
               android:orientation="horizontal"
                     android:layout_width="match_parent"
@@ -61,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:visibility="gone"
                 android:id="@+id/recycler_chat_online"
                 android:layout_width="match_parent"
@@ -71,7 +71,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_below="@+id/conteudo"
                 tools:listitem="@layout/adapter_commentario" />
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_comentario_topico"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -129,7 +129,7 @@
                 app:srcCompat="@drawable/ic_emotion_chat" />
         </LinearLayout>
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_postar_comentario_topico"
             android:layout_width="40dp"
             android:layout_height="40dp"

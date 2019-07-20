@@ -9,7 +9,7 @@
     tools:context=".Forum.Novo_Forum">
 
     <include layout="@layout/toolbarsecundario"/>
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
@@ -18,7 +18,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txtlayout_titulo_firestore"
                 android:layout_gravity="center_vertical"
                 android:layout_width="match_parent"
@@ -26,7 +26,7 @@
                 app:counterEnabled="true"
                 app:counterMaxLength="40"
                 >
-                <android.support.v7.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/titulo_firestore"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -38,15 +38,15 @@
                     android:inputType="textMultiLine"
                     android:minLines="2"
                     />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txtlayout_descricao_firestore"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 >
-                <android.support.v7.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/desc_firestore"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
                     android:minLines="5"
                     android:inputType="textMultiLine"
                     />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:layout_marginTop="16dp"
@@ -67,6 +67,6 @@
                 android:text="POSTAR"
                 android:theme="@style/botaopadrao"/>
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

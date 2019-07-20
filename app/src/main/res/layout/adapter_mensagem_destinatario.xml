@@ -8,7 +8,7 @@
 
     xmlns:fresco="http://schemas.android.com/apk/res-auto">
 
-    <android.support.constraint.ConstraintLayout xmlns:fresco="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:fresco="http://schemas.android.com/tools"
         android:id="@+id/teste"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
             android:textIsSelectable="true"
             app:emojiSize="@dimen/emoji_size_only_emojis" />
 
-              </android.support.constraint.ConstraintLayout>
+              </androidx.constraintlayout.widget.ConstraintLayout>
     <TextView
         android:layout_marginLeft="16dp"
         android:id="@+id/tempodochat"

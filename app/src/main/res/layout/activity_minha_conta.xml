@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -11,14 +11,14 @@
     tools:context="com.example.fulanoeciclano.nerdzone.Activits.MinhaConta">
 
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
     android:id="@+id/appbarlayoutperfil"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:fitsSystemWindows="true"
     android:background="@color/branco">
 
-    <android.support.design.widget.CollapsingToolbarLayout
+    <com.google.android.material.appbar.CollapsingToolbarLayout
         android:id="@+id/collapseLayoutPerfil"
         android:layout_width="match_parent"
         android:layout_height="210dp"
@@ -41,13 +41,13 @@
                 android:layout_height="210dp"
                 android:background="@drawable/gradientefundobranco" />
 
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbarlayout"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"/>
-    </android.support.design.widget.CollapsingToolbarLayout>
-</android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.CollapsingToolbarLayout>
+</com.google.android.material.appbar.AppBarLayout>
     <!-- Back button -->
     <LinearLayout
         android:id="@+id/perfil_button_back_perfil"
@@ -79,7 +79,7 @@
             android:layout_height="match_parent"
             android:padding="4dp"
           />
-          <android.support.design.widget.FloatingActionButton
+          <com.google.android.material.floatingactionbutton.FloatingActionButton
               android:id="@+id/fabminhaconta"
               app:fabCustomSize="30dp"
               app:backgroundTint="@color/colorPrimary"
@@ -247,7 +247,7 @@
                 app:stl_indicatorThickness="3dp"
                 app:stl_underlineThickness="1dp"
                 />
-            <android.support.v4.view.ViewPager
+            <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewPagerperfil"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -258,7 +258,7 @@
     </RelativeLayout>
 
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_atualizar_cadastro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -270,4 +270,4 @@
         app:backgroundTint="@color/colorPrimary"
         app:fabSize="normal"
         android:layout_marginRight="24dp" />
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

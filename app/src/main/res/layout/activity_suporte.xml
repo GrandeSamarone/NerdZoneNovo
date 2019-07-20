@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:text="Aqui você pode enviar uma mensagem para esclarecer suas dúvidas  e solicitar informações, assim que pressionar o botao ENVIAR, abrirá uma tela, escolha seu App de email como exemplo o GMAIL e conclua o envio."
         />
-    <android.support.v7.widget.AppCompatSpinner
+    <androidx.appcompat.widget.AppCompatSpinner
         android:layout_marginTop="8dp"
         android:layout_marginRight="32dp"
         android:layout_marginLeft="32dp"
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"/>
 
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtlayout_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
         android:layout_marginRight="32dp"
         android:layout_marginLeft="32dp">
 
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/desc_suporte"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
             android:lines="6"
             android:hint="Detalhes"
             android:inputType="textMultiLine"/>
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
     <Button
 
        android:layout_marginTop="16dp"

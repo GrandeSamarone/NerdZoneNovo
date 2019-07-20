@@ -25,7 +25,7 @@
         app:stl_indicatorThickness="3dp"
         app:stl_underlineThickness="1dp"
         />
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPagerFeed"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

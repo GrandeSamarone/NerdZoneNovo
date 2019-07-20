@@ -3,12 +3,12 @@ package com.wegeekteste.fulanoeciclano.nerdzone.Evento;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -69,7 +69,7 @@ public class DetalheEvento extends AppCompatActivity {
     private TextView mensagem_evento,quant_visu_evento;
     private EmojiEditText edit_chat_emoji;
     private ImageView botao_icone;
-    private  android.support.v7.widget.AppCompatButton botao_env_msg;
+    private  androidx.appcompat.widget.AppCompatButton botao_env_msg;
     private DatabaseReference mDatabase;
     private static RecyclerView recyclerViewcomentarios;
     private String usuarioLogado;
@@ -150,7 +150,7 @@ public class DetalheEvento extends AppCompatActivity {
     }
 
     private void CarregarDados_do_Evento(){
-        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setCancelable(false);
         LayoutInflater layoutInflater = LayoutInflater.from(DetalheEvento.this);
         final View view  = layoutInflater.inflate(R.layout.dialog_carregando_gif_comscroop,null);

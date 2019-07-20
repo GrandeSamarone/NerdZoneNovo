@@ -27,7 +27,7 @@
                 android:layout_height="220dp"
                 />
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txtlayout_titulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
                 app:counterEnabled="true"
                 app:counterMaxLength="40">
 
-                <android.support.v7.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/titulo_evento"
                     android:maxLength="40"
                     android:layout_width="match_parent"
@@ -46,10 +46,10 @@
                     android:inputType="textWebEmailAddress"
                     />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txtlayout_subtitulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
                 app:counterMaxLength="30"
                 android:layout_marginLeft="32dp">
 
-                <android.support.v7.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/subtitulo_evento"
                     android:maxLength="30"
                     android:layout_width="match_parent"
@@ -67,18 +67,18 @@
                     android:hint="#exempla"
                     android:inputType="textWebEmailAddress"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.v7.widget.AppCompatSpinner
+            <androidx.appcompat.widget.AppCompatSpinner
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="32dp"
                 android:layout_marginLeft="32dp"
                 android:id="@+id/spnilocalidade"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-            </android.support.v7.widget.AppCompatSpinner>
+            </androidx.appcompat.widget.AppCompatSpinner>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txtlayout_desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -86,14 +86,14 @@
                 android:layout_marginRight="32dp"
                 android:layout_marginLeft="32dp">
 
-                <android.support.v7.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/desc_evento"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Detalhes"
                     android:inputType="textMultiLine"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:id="@+id/li"

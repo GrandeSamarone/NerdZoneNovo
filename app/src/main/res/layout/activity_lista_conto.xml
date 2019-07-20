@@ -13,7 +13,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycleview_conto"
                 android:clipToPadding="false"
                 android:layout_width="match_parent"
@@ -67,7 +67,7 @@
                     android:text="@string/erro_evento_busca_comercio"
                     android:gravity="center"/>
             </LinearLayout>
-            <android.support.design.widget.FloatingActionButton
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/buton_novo_conto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

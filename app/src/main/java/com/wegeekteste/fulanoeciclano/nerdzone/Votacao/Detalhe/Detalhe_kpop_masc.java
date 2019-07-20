@@ -6,10 +6,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -95,7 +95,7 @@ public class Detalhe_kpop_masc extends AppCompatActivity {
         categoriaselecionado = (Categoria_kpop_masc) getIntent().getSerializableExtra("categoria_selecionada");
 
         if(categoriaselecionado!=null){
-            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
             builder.setCancelable(false);
             LayoutInflater layoutInflater = LayoutInflater.from(Detalhe_kpop_masc.this);
             final View view  = layoutInflater.inflate(R.layout.dialog_carregando_gif_comscroop,null);
