@@ -36,6 +36,7 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Conto.ListaConto;
 import com.wegeekteste.fulanoeciclano.nerdzone.Evento.DetalheEvento;
 import com.wegeekteste.fulanoeciclano.nerdzone.FanArts.Lista_Arts;
+import com.wegeekteste.fulanoeciclano.nerdzone.HQ.Pag_producao_hq;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.RecyclerItemClickListener;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.TrocarFundo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
@@ -397,7 +398,7 @@ private void SharedPreference(){
         maiseventoTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent it = new Intent(MainActivity.this, firestore.class);
+                Intent it = new Intent(MainActivity.this, Pag_producao_hq.class);
                 startActivity(it);
             }
         });
