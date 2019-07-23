@@ -11,11 +11,12 @@
         android:id="@+id/carregar_img_hq"
         android:layout_gravity="center"
         android:layout_width="80dp"
-        android:layout_height="40dp"
+        android:layout_height="46dp"
         android:text="carregar"/>
 
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="30dp"
         android:id="@+id/rec_hq"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
