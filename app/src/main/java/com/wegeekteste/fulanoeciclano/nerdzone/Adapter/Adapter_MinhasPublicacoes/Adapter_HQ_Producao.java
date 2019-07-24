@@ -12,8 +12,16 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.generic.GenericDraweeHierarchy;
+import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
+import com.wegeekteste.fulanoeciclano.nerdzone.Helper.CircleProgressDrawable;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.HQ_Model;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Membro_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
@@ -24,16 +32,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Producao.MyViewHolder> implements DraggableItemAdapter<Adapter_HQ_Producao.MyViewHolder> {
 
-    private List<HQ_Model> listHQs;
+    private List<String> listHQs;
     private Context context;
 
 
-    public Adapter_HQ_Producao(List<HQ_Model> listar,Context c){
+    public Adapter_HQ_Producao(List<String> listar,Context c){
         this.context=c;
         this.listHQs=listar;
     }
 
-    public List<HQ_Model> getListHQs(){
+    public List<String> getListHQs(){
         return this.listHQs;
     }
 
@@ -43,23 +51,36 @@ public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Produc
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.membro_grupo_online, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_fanarts_pag_inicial, parent, false);
         return new MyViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 //           HQ_Model hq= listHQs.get(position);
-        if(listHQs.get(position).getImg_id()!=null) {
-            Log.i("744o", listHQs.get(position).getImg_id());
-            Uri uri = Uri.parse(listHQs.get(position).getImg_id());
-            Glide.with(context)
-                    .load(uri)
-                    .into(holder.img);
-        }else{
-            Log.i("744o","null");
-        }
 
+       // Log.i("744o", listHQs.get(position));
+       // Uri uri = Uri.parse("file:///" + listHQs.get(position));
+        if (listHQs.get(position) != null) {
+            Uri uri = Uri.parse("file:///" + listHQs.get(position));
+            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
+                    .setLocalThumbnailPreviewsEnabled(true)
+                    .setProgressiveRenderingEnabled(true)
+                    .build();
+
+            DraweeController controller = Fresco.newDraweeControllerBuilder()
+                    .setImageRequest(request)
+                    .build();
+            holder.img.setController(controller);
+
+            GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(context.getResources());
+            GenericDraweeHierarchy hierarchy = builder
+                    .setProgressBarImage(new CircleProgressDrawable())
+                    //  .setPlaceholderImage(context.getResources().getDrawable(R.drawable.carregando))
+                    .build();
+            holder.img.setHierarchy(hierarchy);
+
+        }
     }
 
     @Override
@@ -99,11 +120,11 @@ public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Produc
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-     CircleImageView img;
+        SimpleDraweeView img;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-           img=itemView.findViewById(R.id.Foto_membro_grupo);
+           img=itemView.findViewById(R.id.iconefanart);
         }
     }
 }
