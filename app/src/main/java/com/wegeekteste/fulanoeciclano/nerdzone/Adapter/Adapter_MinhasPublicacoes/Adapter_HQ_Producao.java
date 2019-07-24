@@ -21,6 +21,7 @@ import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
+import com.h6ah4i.android.widget.advrecyclerview.utils.AbstractDraggableItemViewHolder;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.CircleProgressDrawable;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.HQ_Model;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Membro_Grupo;
@@ -32,16 +33,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Producao.MyViewHolder> implements DraggableItemAdapter<Adapter_HQ_Producao.MyViewHolder> {
 
-    private List<String> listHQs;
+    private List<HQ_Model> listHQs;
     private Context context;
 
 
-    public Adapter_HQ_Producao(List<String> listar,Context c){
+    public Adapter_HQ_Producao(List<HQ_Model> listar,Context c){
+        setHasStableIds(true);
         this.context=c;
         this.listHQs=listar;
     }
 
-    public List<String> getListHQs(){
+    public List<HQ_Model> getListHQs(){
         return this.listHQs;
     }
 
@@ -57,12 +59,13 @@ public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Produc
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-//           HQ_Model hq= listHQs.get(position);
+                    HQ_Model hq= listHQs.get(position);
 
        // Log.i("744o", listHQs.get(position));
        // Uri uri = Uri.parse("file:///" + listHQs.get(position));
         if (listHQs.get(position) != null) {
-            Uri uri = Uri.parse("file:///" + listHQs.get(position));
+           // Uri uri = Uri.parse("file:///" + listHQs.get(position));
+            Uri uri = Uri.parse("file:///" + hq.getImg_name());
             ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
                     .setLocalThumbnailPreviewsEnabled(true)
                     .setProgressiveRenderingEnabled(true)
@@ -83,6 +86,8 @@ public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Produc
         }
     }
 
+
+
     @Override
     public int getItemCount() {
         return listHQs.size();
@@ -101,7 +106,8 @@ public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Produc
 
     @Override
     public void onMoveItem(int fromPosition, int toPosition) {
-
+        HQ_Model hq= listHQs.remove(fromPosition);
+        listHQs.add(toPosition, hq);
     }
 
     @Override
@@ -119,7 +125,7 @@ public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Produc
 
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends AbstractDraggableItemViewHolder {
         SimpleDraweeView img;
 
         public MyViewHolder(@NonNull View itemView) {
