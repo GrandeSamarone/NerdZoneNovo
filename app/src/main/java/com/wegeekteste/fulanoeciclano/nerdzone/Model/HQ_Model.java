@@ -2,6 +2,7 @@ package com.wegeekteste.fulanoeciclano.nerdzone.Model;
 
 public class HQ_Model {
 
+
     private String img_name;
     private String   img_id;
 

@@ -28,26 +28,22 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Model.Membro_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
 import java.util.List;
+import java.util.Set;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Producao.MyViewHolder> implements DraggableItemAdapter<Adapter_HQ_Producao.MyViewHolder> {
 
-    private List<HQ_Model> listHQs;
+    private Set<String> listHQs;
     private Context context;
 
 
-    public Adapter_HQ_Producao(List<HQ_Model> listar,Context c){
+    public Adapter_HQ_Producao(Set<String> lista,Context c){
         setHasStableIds(true);
+        this.listHQs=lista;
         this.context=c;
-        this.listHQs=listar;
+
     }
-
-    public List<HQ_Model> getListHQs(){
-        return this.listHQs;
-    }
-
-
 
 
     @NonNull
@@ -59,13 +55,11 @@ public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Produc
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-                    HQ_Model hq= listHQs.get(position);
+        // HQ_Model hq= listHQs.get(position);
 
-       // Log.i("744o", listHQs.get(position));
-       // Uri uri = Uri.parse("file:///" + listHQs.get(position));
-        if (listHQs.get(position) != null) {
-           // Uri uri = Uri.parse("file:///" + listHQs.get(position));
-            Uri uri = Uri.parse("file:///" + hq.getImg_name());
+        for (int i = 0; i < listHQs.size(); i++) {
+            Uri uri = Uri.parse("file:///" +listHQs.toString() );
+            Log.i("555656",);
             ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
                     .setLocalThumbnailPreviewsEnabled(true)
                     .setProgressiveRenderingEnabled(true)
@@ -83,6 +77,7 @@ public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Produc
                     .build();
             holder.img.setHierarchy(hierarchy);
 
+
         }
     }
 
@@ -90,12 +85,12 @@ public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Produc
 
     @Override
     public int getItemCount() {
-        return listHQs.size();
+        return listHQs == null ? 0 : listHQs.size();
     }
 
     @Override
     public boolean onCheckCanStartDrag(@NonNull MyViewHolder holder, int position, int x, int y) {
-        return false;
+        return true;
     }
 
     @Nullable
@@ -106,23 +101,23 @@ public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Produc
 
     @Override
     public void onMoveItem(int fromPosition, int toPosition) {
-        HQ_Model hq= listHQs.remove(fromPosition);
-        listHQs.add(toPosition, hq);
+       // String hq= listHQs.remove(fromPosition);
+        //listHQs.add(toPosition, hq);
     }
 
     @Override
     public boolean onCheckCanDrop(int draggingPosition, int dropPosition) {
-        return false;
+        return true;
     }
 
     @Override
     public void onItemDragStarted(int position) {
-
+        notifyDataSetChanged();
     }
 
     @Override
     public void onItemDragFinished(int fromPosition, int toPosition, boolean result) {
-
+        notifyDataSetChanged();
     }
 
     public class MyViewHolder extends AbstractDraggableItemViewHolder {
