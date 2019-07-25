@@ -69,6 +69,8 @@ dependencies {
     //Advanced Recycleview
     implementation 'com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:1.0.0'
 
+    //Gson
+    //implementation 'com.google.code.gson:gson:2.8.5'
     //firebase
     // implementation "com.google.firebase:firebase-firestore:11.8.0"
     //noinspection GradleCompatible

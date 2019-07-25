@@ -34,11 +34,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Producao.MyViewHolder> implements DraggableItemAdapter<Adapter_HQ_Producao.MyViewHolder> {
 
-    private Set<String> listHQs;
+    private List<String> listHQs;
     private Context context;
 
 
-    public Adapter_HQ_Producao(Set<String> lista,Context c){
+    public Adapter_HQ_Producao(List<String> lista,Context c){
         setHasStableIds(true);
         this.listHQs=lista;
         this.context=c;
@@ -58,8 +58,9 @@ public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Produc
         // HQ_Model hq= listHQs.get(position);
 
         for (int i = 0; i < listHQs.size(); i++) {
-            Uri uri = Uri.parse("file:///" +listHQs.toString() );
-            Log.i("555656",);
+            Log.i("lsditre7890", String.valueOf(listHQs.size()));
+            Uri uri = Uri.parse("file:///" +listHQs.get(i));
+            Log.i("lsditre789", String.valueOf(uri));
             ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
                     .setLocalThumbnailPreviewsEnabled(true)
                     .setProgressiveRenderingEnabled(true)
@@ -101,8 +102,8 @@ public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Produc
 
     @Override
     public void onMoveItem(int fromPosition, int toPosition) {
-       // String hq= listHQs.remove(fromPosition);
-        //listHQs.add(toPosition, hq);
+        String hq= listHQs.remove(fromPosition);
+        listHQs.add(toPosition, hq);
     }
 
     @Override
