@@ -43,7 +43,7 @@ public class Pag_producao_hq extends AppCompatActivity {
     private RecyclerView recyclerView_hq;
     private  int reqCode =  12 ;
     private RecyclerView.Adapter adapter;
-    private ArrayList<HQ_Model> HQ_model;
+    private ArrayList<HQ_Model> hq_model;
     private ArrayList<String> list= new ArrayList<>();
     private static  final String ARQUIVO_PREFERENCIA_listaImagem ="Lista_imagem";
     @Override
@@ -58,16 +58,24 @@ public class Pag_producao_hq extends AppCompatActivity {
         SharedPreferences sharedPreferences_img = getSharedPreferences(ARQUIVO_PREFERENCIA_listaImagem, MODE_PRIVATE);
         String string_img=sharedPreferences_img.getString("list","");
         String[] item_img=string_img.split(",");
+        hq_model=new ArrayList<>();
         List<String> list_img=new ArrayList<String>();
         for(int i=0; i<item_img.length;i++){
             list_img.add(item_img[i]);
+            hq_model.add(new HQ_Model(i,item_img[i]));
+            Log.i("listitem2", "id "+hq_model.get(i).getImg_id()+"caminho "+hq_model.get(i).getImg_name());
         }
         for(int i=0;i<list_img.size();i++){
             Log.i("listitem",list_img.get(i));
         }
 
-        adapter = dragMgr.createWrappedAdapter(new Adapter_HQ_Producao(list_img, getApplicationContext()));
+        adapter = dragMgr.createWrappedAdapter(new Adapter_HQ_Producao(hq_model, getApplicationContext()));
         recyclerView_hq.setAdapter(adapter);
+        recyclerView_hq.setLayoutManager(new LinearLayoutManager(this));
+        //  RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext (), 3 );
+        //recyclerView_hq.setLayoutManager (layoutManager);
+       // recyclerView_hq.setHasFixedSize ( true );
+        //  dragMgr.attachRecyclerView(recyclerView_hq);
         dragMgr.attachRecyclerView(recyclerView_hq);
         botao_carregar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,13 +88,9 @@ public class Pag_producao_hq extends AppCompatActivity {
         dragMgr.setInitiateOnLongPress(true);
 
 
-        // recyclerView_hq.setAdapter(dragMgr.createWrappedAdapter(new MyAdapter()));
 
-        recyclerView_hq.setLayoutManager(new LinearLayoutManager(this));
-        //  RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext (), 3 );
-        //recyclerView_hq.setLayoutManager (layoutManager);
-        recyclerView_hq.setHasFixedSize ( true );
-        //  dragMgr.attachRecyclerView(recyclerView_hq);
+
+
 
 
     }
@@ -110,7 +114,7 @@ public class Pag_producao_hq extends AppCompatActivity {
         //HQ_Model hqModel= new HQ_Model();
         //list of photos of seleced
         list = (ArrayList) data.getSerializableExtra(GalleryActivity.PHOTOS);
-
+         Log.i("sspsdp4", String.valueOf(list));
         StringBuilder stringBuilder = new StringBuilder();
         for (String s : list) {
             stringBuilder.append(s);
@@ -124,10 +128,7 @@ public class Pag_producao_hq extends AppCompatActivity {
        // CarregarImage();
 
     }
-    private void  CarregarImage(){
 
-
-    }
 
 
 

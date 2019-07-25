@@ -1,6 +1,7 @@
 package com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_MinhasPublicacoes;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,22 +28,28 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Model.HQ_Model;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Membro_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Producao.MyViewHolder> implements DraggableItemAdapter<Adapter_HQ_Producao.MyViewHolder> {
+import static android.content.Context.MODE_PRIVATE;
 
-    private List<String> listHQs;
+public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Producao.MyViewHolder> implements DraggableItemAdapter<Adapter_HQ_Producao.MyViewHolder> {
+    private static  final String ARQUIVO_PREFERENCIA_listaImagem ="Lista_imagem";
+    private List<HQ_Model> listHQs;
     private Context context;
 
-
-    public Adapter_HQ_Producao(List<String> lista,Context c){
+    public Adapter_HQ_Producao(List<HQ_Model> lista,Context c){
         setHasStableIds(true);
         this.listHQs=lista;
         this.context=c;
 
+    }
+    @Override
+    public long getItemId(int position) {
+        return listHQs.get(position).getImg_id(); // need to return stable (= not change even after reordered) value
     }
 
 
@@ -55,11 +62,9 @@ public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Produc
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        // HQ_Model hq= listHQs.get(position);
-
-        for (int i = 0; i < listHQs.size(); i++) {
-            Log.i("lsditre7890", String.valueOf(listHQs.size()));
-            Uri uri = Uri.parse("file:///" +listHQs.get(i));
+         HQ_Model hq= listHQs.get(position);
+            Log.i("lsditre7890", String.valueOf(hq.getImg_name()));
+            Uri uri = Uri.parse("file:///" +hq.getImg_name());
             Log.i("lsditre789", String.valueOf(uri));
             ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
                     .setLocalThumbnailPreviewsEnabled(true)
@@ -79,7 +84,7 @@ public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Produc
             holder.img.setHierarchy(hierarchy);
 
 
-        }
+
     }
 
 
@@ -102,7 +107,7 @@ public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Produc
 
     @Override
     public void onMoveItem(int fromPosition, int toPosition) {
-        String hq= listHQs.remove(fromPosition);
+        HQ_Model hq= listHQs.remove(fromPosition);
         listHQs.add(toPosition, hq);
     }
 
