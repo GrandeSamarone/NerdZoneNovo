@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -71,9 +72,9 @@ public class Pag_producao_hq extends AppCompatActivity {
 
         adapter = dragMgr.createWrappedAdapter(new Adapter_HQ_Producao(hq_model, getApplicationContext()));
         recyclerView_hq.setAdapter(adapter);
-        recyclerView_hq.setLayoutManager(new LinearLayoutManager(this));
-        //  RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext (), 3 );
-        //recyclerView_hq.setLayoutManager (layoutManager);
+        //recyclerView_hq.setLayoutManager(new LinearLayoutManager(this));
+          RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext (), 3 );
+        recyclerView_hq.setLayoutManager (layoutManager);
        // recyclerView_hq.setHasFixedSize ( true );
         //  dragMgr.attachRecyclerView(recyclerView_hq);
         dragMgr.attachRecyclerView(recyclerView_hq);
