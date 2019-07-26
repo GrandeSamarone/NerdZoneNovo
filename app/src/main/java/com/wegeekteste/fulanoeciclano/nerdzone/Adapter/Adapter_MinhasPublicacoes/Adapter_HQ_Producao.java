@@ -68,7 +68,7 @@ public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Produc
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
          HQ_Model hq= listHQs.get(position);
-            Log.i("lsditre7890", String.valueOf(hq.getImg_name()));
+            Log.i("lsditre7890", String.valueOf(listHQs.size()));
             Uri uri = Uri.parse("file:///" +hq.getImg_name());
             ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
                     .setLocalThumbnailPreviewsEnabled(true)
@@ -114,8 +114,19 @@ public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Produc
             holder.container.setBackgroundResource(bgResId);
         }
 
+        holder.img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RemoverItem(hq);
+            }
+        });
     }
 
+    private void RemoverItem(HQ_Model hq_model) {
+        int currPosition = listHQs.indexOf(hq_model);
+        listHQs.remove(currPosition);
+        notifyItemRemoved(currPosition);
+    }
 
 
     @Override

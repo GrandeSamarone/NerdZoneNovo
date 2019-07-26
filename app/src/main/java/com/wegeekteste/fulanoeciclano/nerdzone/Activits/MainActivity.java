@@ -152,7 +152,7 @@ public class MainActivity extends TrocarFundo {
         }
         //Toolbar
         toolbar =findViewById(R.id.toolbarmain);
-        // toolbar.setTitle(R.string.app_name);
+         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
         //preferences

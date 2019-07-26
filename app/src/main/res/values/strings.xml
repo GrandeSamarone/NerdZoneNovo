@@ -41,7 +41,7 @@
     <string name="title_activity_detalhe_evento">DetalheEvento</string>
     <string name="analizando_informa_es_aguarde">Analisando informações,aguarde.</string>
     <string name="carregando_informa_es">Carregando...</string>
-    <string name="mais_comercio">MAIS</string>
+    <string name="mais_comercio">MAIS ></string>
     <string name="drawer_topico">Tópicos</string>
     <string name="drawer_galeria">FanArts</string>
     <string name="name_evento">Eventos</string>

@@ -11,12 +11,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager;
 import com.tangxiaolv.telegramgallery.GalleryActivity;
 import com.tangxiaolv.telegramgallery.GalleryConfig;
@@ -38,7 +40,6 @@ import java.util.Set;
 
 public class Pag_producao_hq extends AppCompatActivity {
 
-
     private Button botao_carregar;
     private RecyclerViewDragDropManager dragMgr;
     private RecyclerView recyclerView_hq;
@@ -55,13 +56,13 @@ public class Pag_producao_hq extends AppCompatActivity {
         botao_carregar= findViewById(R.id.carregar_img_hq);
         recyclerView_hq = findViewById(R.id.rec_hq);
 
+
         botao_carregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Carregar_HQ();
             }
         });
-
 
 
 
@@ -76,7 +77,7 @@ public class Pag_producao_hq extends AppCompatActivity {
     private void Carregar_HQ() {
         //open album
         GalleryConfig config = new GalleryConfig.Build()
-                .limitPickPhoto(10)
+                .limitPickPhoto(50)
                 .singlePhoto(false)
                 .hintOfPick("this is pick hint")
                 .filterMimeTypes(new String[]{})
@@ -87,18 +88,19 @@ public class Pag_producao_hq extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //Recebe as imagens da galeria
-        list = (ArrayList) data.getSerializableExtra(GalleryActivity.PHOTOS);
-         Log.i("sspsdp4", String.valueOf(list));
-        StringBuilder stringBuilder = new StringBuilder();
-        for (String s : list) {
-            stringBuilder.append(s);
-            stringBuilder.append(",");
-        }
-        SharedPreferences sharedPreferences = getSharedPreferences(ARQUIVO_PREFERENCIA_listaImagem, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("list", stringBuilder.toString());
-        editor.commit();
-
+         if(data!=null) {
+             list = (ArrayList) data.getSerializableExtra(GalleryActivity.PHOTOS);
+             Log.i("sspsdp4", String.valueOf(list));
+             StringBuilder stringBuilder = new StringBuilder();
+             for (String s : list) {
+                 stringBuilder.append(s);
+                 stringBuilder.append(",");
+             }
+             SharedPreferences sharedPreferences = getSharedPreferences(ARQUIVO_PREFERENCIA_listaImagem, MODE_PRIVATE);
+             SharedPreferences.Editor editor = sharedPreferences.edit();
+             editor.putString("list", stringBuilder.toString());
+             editor.commit();
+         }
 
     }
 
@@ -129,6 +131,9 @@ private void MostrarHQ(){
     dragMgr.attachRecyclerView(recyclerView_hq);
     dragMgr.setInitiateOnMove(false);
     dragMgr.setInitiateOnLongPress(true);
+
+
+
     }
 
 

@@ -266,7 +266,7 @@
             android:orientation="horizontal">
 <LinearLayout
     android:layout_marginRight="32dp"
-    android:background="@drawable/ovalamarelo"
+
     android:layout_width="48dp"
     android:layout_height="48dp">
    <TextView
@@ -280,7 +280,7 @@
 </LinearLayout>
             <LinearLayout
                 android:layout_marginRight="32dp"
-                android:background="@drawable/ovallaranja"
+
                 android:layout_width="48dp"
                 android:layout_height="48dp">
                 <TextView
