@@ -4,7 +4,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-
+android:background="@color/brancofraco"
     >
     <FrameLayout
         android:layout_width="match_parent"
@@ -98,6 +98,7 @@
                         android:layout_marginLeft="8dp"
                         android:text="Comércio"
                         android:fontFamily="@font/fontgeek"
+
                        android:layout_toRightOf="@+id/img_comercio_presente"
                         />
                     <ImageView
@@ -135,7 +136,10 @@
                     android:layout_marginRight="-5dp"
                     android:elevation="6dp"
                     >
-
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/fundoevento"/>
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/RecycleViewMercado"
                         android:layout_width="match_parent"
@@ -146,34 +150,48 @@
                         tools:listitem="@layout/adapterevento" />
                 </androidx.cardview.widget.CardView>
 
-                <LinearLayout
+
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+
                     >
                     <TextView
+                        android:id="@+id/txt_hq"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/preto"
                         android:textSize="18sp"
-                        android:paddingTop="8dp"
-                        android:paddingLeft="16dp"
-                        android:text="Tópicos"
-                        android:layout_weight="0"
-
+                        android:textColor="@color/pretoescrita"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:text="HQ"
+                        android:fontFamily="@font/fontgeek"
+                        android:layout_toRightOf="@+id/img_comic_hq"
                         />
+                    <ImageView
+                        android:id="@+id/img_comic_hq"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_width="40px"
+                        android:layout_height="40px"
+                        android:src="@drawable/ic_comic_book"
+                        android:layout_alignParentLeft="true"
+                        />
+
                     <TextView
-                        android:id="@+id/maistopicos"
-                        android:layout_width="match_parent"
+                        android:fontFamily="@font/fontgeek"
+                        android:id="@+id/maisHQ"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/primary"
-                        android:text="MAIS"
+                        android:textSize="16sp"
+                        android:textColor="@color/cinzabalao"
+                        android:text="@string/mais_comercio"
                         android:gravity="right"
-                        android:layout_weight="1"
                         android:paddingRight="16dp"
                         android:paddingTop="8dp"
                         />
-                </LinearLayout>
+                </RelativeLayout>
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="155dp"
@@ -186,43 +204,59 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/fundotopico"/>
+                        android:background="@drawable/fundoevento"/>
                     <androidx.recyclerview.widget.RecyclerView
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="4dp"
                         android:clipToPadding="false"
-                        android:id="@+id/RecycleViewTopicos"
+                        android:id="@+id/RecycleViewHq"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         tools:listitem="@layout/adapterevento"/>
                 </androidx.cardview.widget.CardView>
 
-                <LinearLayout
+
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+
                     >
                     <TextView
+                        android:id="@+id/txt_forum"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/preto"
                         android:textSize="18sp"
-                        android:paddingTop="8dp"
-                        android:paddingLeft="16dp"
-                        android:text="Contos"
-
+                        android:textColor="@color/pretoescrita"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:text="Fórum"
+                        android:fontFamily="@font/fontgeek"
+                        android:layout_toRightOf="@+id/img_ic_forum"
                         />
+                    <ImageView
+                        android:id="@+id/img_ic_forum"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_width="40px"
+                        android:layout_height="40px"
+                        android:src="@drawable/ic_forum"
+                        android:layout_alignParentLeft="true"
+                        />
+
                     <TextView
-                        android:layout_width="match_parent"
+                        android:fontFamily="@font/fontgeek"
+                        android:id="@+id/maisForum"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/primary"
-                        android:text="MAIS"
-                        android:id="@+id/maisconto"
+                        android:textSize="16sp"
+                        android:textColor="@color/cinzabalao"
+                        android:text="@string/mais_comercio"
                         android:gravity="right"
                         android:paddingRight="16dp"
                         android:paddingTop="8dp"
                         />
-                </LinearLayout>
+                </RelativeLayout>
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="155dp"
@@ -234,48 +268,124 @@
                     >
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="fitXY"
-                        android:background="@drawable/fundoconto"/>
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/fundoevento"/>
                     <androidx.recyclerview.widget.RecyclerView
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="4dp"
                         android:clipToPadding="false"
-                        android:id="@+id/RecycleViewConto"
+                        android:id="@+id/RecycleViewForum"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        tools:listitem="@layout/adapterevento"/>
+                </androidx.cardview.widget.CardView>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    >
+                    <TextView
+                        android:id="@+id/txt_historias"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:textColor="@color/pretoescrita"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:text="História"
+                        android:fontFamily="@font/fontgeek"
+                        android:layout_toRightOf="@+id/img_ic_historias"
                         />
+                    <ImageView
+                        android:id="@+id/img_ic_historias"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_width="40px"
+                        android:layout_height="40px"
+                        android:src="@drawable/ic_book"
+                        android:layout_alignParentLeft="true"
+                        />
+
+                    <TextView
+                        android:fontFamily="@font/fontgeek"
+                        android:id="@+id/maishistorias"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textColor="@color/cinzabalao"
+                        android:text="@string/mais_comercio"
+                        android:gravity="right"
+                        android:paddingRight="16dp"
+                        android:paddingTop="8dp"
+                        />
+                </RelativeLayout>
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="155dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginLeft="-5dp"
+                    android:layout_marginRight="-5dp"
+                    android:elevation="6dp"
+                    >
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/fundoevento"/>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:clipToPadding="false"
+                        android:id="@+id/RecycleViewhistoria"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:listitem="@layout/adapterevento"/>
                 </androidx.cardview.widget.CardView>
 
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+
                     >
                     <TextView
+                        android:id="@+id/txt_galeria"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/preto"
                         android:textSize="18sp"
-                        android:paddingTop="8dp"
-                        android:paddingLeft="16dp"
-                        android:text="FanArts"
-                        android:layout_weight="0"
-
+                        android:textColor="@color/pretoescrita"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:text="Galeria"
+                        android:fontFamily="@font/fontgeek"
+                        android:layout_toRightOf="@+id/img_ic_galeria"
                         />
+                    <ImageView
+                        android:id="@+id/img_ic_galeria"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_width="40px"
+                        android:layout_height="40px"
+                        android:src="@drawable/ic_gallery"
+                        android:layout_alignParentLeft="true"
+                        />
+
                     <TextView
-                        android:id="@+id/maisfanart"
-                        android:layout_width="match_parent"
+                        android:fontFamily="@font/fontgeek"
+                        android:id="@+id/maisgaleria"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/primary"
-                        android:text="MAIS"
+                        android:textSize="16sp"
+                        android:textColor="@color/cinzabalao"
+                        android:text="@string/mais_comercio"
                         android:gravity="right"
-                        android:layout_weight="1"
                         android:paddingRight="16dp"
                         android:paddingTop="8dp"
                         />
-                </LinearLayout>
+                </RelativeLayout>
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="155dp"
@@ -288,12 +398,12 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/fundofanarts"/>
+                        android:background="@drawable/fundoevento"/>
                     <androidx.recyclerview.widget.RecyclerView
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="4dp"
                         android:clipToPadding="false"
-                        android:id="@+id/RecycleViewFanArts"
+                        android:id="@+id/RecycleViewgaleria"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         tools:listitem="@layout/adapterevento"/>

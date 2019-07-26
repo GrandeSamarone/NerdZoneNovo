@@ -98,11 +98,11 @@ public class MainActivity extends TrocarFundo {
         identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
         Log.i("sd22",identificadorUsuario);
         //todas configuraões do recycleview
-        recyclerViewListaConto = findViewById(R.id.RecycleViewConto);
+        recyclerViewListaConto = findViewById(R.id.RecycleViewhistoria);
         recyclerViewListaGibiMercado = findViewById(R.id.RecycleViewMercado);
         recyclerVieweventos = findViewById(R.id.RecycleViewEventos);
-        recyclerViewListaTopico = findViewById(R.id.RecycleViewTopicos);
-        recyclerViewArts = findViewById(R.id.RecycleViewFanArts);
+        recyclerViewListaTopico = findViewById(R.id.RecycleViewForum);
+        recyclerViewArts = findViewById(R.id.RecycleViewgaleria);
 
 
 
@@ -410,7 +410,7 @@ private void SharedPreference(){
                 startActivity(it);
             }
         });
-        maistopicoTxt = findViewById(R.id.maistopicos);
+        maistopicoTxt = findViewById(R.id.maisForum);
         maistopicoTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -418,7 +418,7 @@ private void SharedPreference(){
                 startActivity(it);
             }
         });
-        maiscontoTxt = findViewById(R.id.maisconto);
+        maiscontoTxt = findViewById(R.id.maishistorias);
         maiscontoTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -426,7 +426,7 @@ private void SharedPreference(){
                 startActivity(it);
             }
         });
-        maisfanartsTxt = findViewById(R.id.maisfanart);
+        maisfanartsTxt = findViewById(R.id.maisgaleria);
         maisfanartsTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
