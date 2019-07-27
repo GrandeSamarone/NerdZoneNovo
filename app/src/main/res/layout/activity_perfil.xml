@@ -70,7 +70,7 @@
 
             android:layout_marginTop="70dp"
             android:id="@+id/layoutdaimagemperfilusuario"
-            app:layout_anchor="@id/collapseLayoutPerfil"
+
             app:layout_anchorGravity="bottom|end"
             android:orientation="vertical"
             android:gravity="center|bottom"

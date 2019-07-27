@@ -18,10 +18,10 @@
     <string name="title_activity_minha_conta">MinhaConta</string>
 
 
-    <string name="title_shop">Voltar</string>
+    <string name="title_shop">Home</string>
     <string name="title_gifts">Zoom</string>
     <string name="title_cart">Anterior</string>
-    <string name="title_profile">Próximo</string>
+    <string name="title_profile">Perfil</string>
     <string name="text_icone_heroi">HERÓIS</string>
     <string name="text_icon_galeria">GALERIA</string>
     <string name="text_icon_camera">CÂMERA</string>

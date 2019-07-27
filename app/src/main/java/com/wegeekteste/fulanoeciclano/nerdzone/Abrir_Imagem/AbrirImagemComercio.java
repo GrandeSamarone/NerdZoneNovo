@@ -100,7 +100,7 @@ public class AbrirImagemComercio extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
             switch (item.getItemId()) {
-                case R.id.navigation_finish:
+                case R.id.navigation_home:
                     finish();
                     return true;
                 case R.id.navigation_zoom:
@@ -111,7 +111,7 @@ public class AbrirImagemComercio extends AppCompatActivity {
                     viewPager.setCurrentItem(voltar(-1),true);
 
                     return true;
-                case R.id.navigation_prox:
+                case R.id.navigation_perfil:
 
                     viewPager.setCurrentItem(prox(+1),true);
                     if(viewPager.getCurrentItem()+1==imageUrls.length){

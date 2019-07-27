@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -12,14 +13,25 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import androidx.annotation.NonNull;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -48,6 +60,7 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.MinhaConta.Art_MinhaConta_Fragment;
 import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.MinhaConta.Contos_MinhaConta_Fragment;
 import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.MinhaConta.Topicos_MinhaConta_Fragment;
+import com.wegeekteste.fulanoeciclano.nerdzone.Helper.BottomNavigationBehavior;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.Main;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.Permissoes;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
@@ -69,7 +82,7 @@ import java.io.ByteArrayOutputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MinhaConta extends AppCompatActivity implements Main, View.OnClickListener {
+public class MinhaConta extends AppCompatActivity implements  View.OnClickListener {
 
     private String[] permissoesNecessarias = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -85,7 +98,6 @@ public class MinhaConta extends AppCompatActivity implements Main, View.OnClickL
     private static final int MINHA_CONTA=12;
     private CircleImageView circleImageViewperfil;
     private SimpleDraweeView capa_perfil;
-    private ImageView botaoEdit;
     private LinearLayout btn_voltar,topicoclick,contoclick,fanatsclick,seguidor_click;
     private StorageReference storageReference;
     private String identificadorUsuario;
@@ -99,115 +111,84 @@ public class MinhaConta extends AppCompatActivity implements Main, View.OnClickL
     private ViewPager mViewPager;
     private DatabaseReference database;
     private com.google.firebase.database.ChildEventListener ChildEventListener;
-
+    private SharedPreferences nome_usuario,foto_usuario;
+    private static  final String ARQUIVO_PREFERENCIA ="arquivoreferencia";
+    private BottomNavigationView navigation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fresco.initialize(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window w = getWindow(); // in Activity's onCreate() for instance
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
         setContentView(R.layout.activity_minha_conta);
 
 
         //configuracoes iniciais
-        botaoEdit = findViewById(R.id.botao_edit);
-        botaoEdit.setOnClickListener(this);
        identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
         usuario = UsuarioFirebase.getUsuarioAtual();
         database = ConfiguracaoFirebase.getDatabase().getReference().child("usuarios");
         storageReference = ConfiguracaoFirebase.getFirebaseStorage();
-        n_topicos=findViewById(R.id.num_topicos);
-        n_seguidores=findViewById(R.id.num_total_seguidores);
-        n_contos=findViewById(R.id.num_contos);
-        n_fanats=findViewById(R.id.num_fantars);
         circleImageViewperfil=findViewById(R.id.circleImageViewFotoPerfil);
-        nome= findViewById(R.id.nomeusuario_perfil);
-        fraserapida = findViewById(R.id.fraserapida_perfil);
-        botaotrocarfoto = findViewById(R.id.fabminhaconta);
-        botaotrocarfoto.setOnClickListener(this);
-        capa_perfil= findViewById(R.id.capameuperfil);
-        capa_perfil.setOnClickListener(this);
-        btn_voltar=findViewById(R.id.perfil_button_back_perfil);
-        btn_voltar.setOnClickListener(this);
-        topicoclick=findViewById(R.id.topico_click);
-        topicoclick.setOnClickListener(this);
-        contoclick=findViewById(R.id.contos_click);
-        contoclick.setOnClickListener(this);
-        fanatsclick=findViewById(R.id.fanats_click);
-        fanatsclick.setOnClickListener(this);
-        seguidor_click=findViewById(R.id.seguidores_click);
-        seguidor_click.setOnClickListener(this);
+        nome= findViewById(R.id.nameuser);
+      //  fraserapida = findViewById(R.id.fraserapida_perfil);
+       // capa_perfil= findViewById(R.id.capameuperfil);
+       // capa_perfil.setOnClickListener(this);
         usuarioLogado=UsuarioFirebase.getDadosUsuarioLogado();
         user = new Usuario();
+
+        //Navegacao Inferior
+        navigation = findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navigation.getMenu().findItem(R.id.navigation_perfil).setChecked(true);
+
+       //navigation.setItemIconTintList(null);
+       // navigation.getMenu().findItem(R.id.navigation_perfil).setIcon(R.drawable.favicon);
+
+
 
         //validar permissoes
         Permissoes.validarPermissoes(permissoesNecessarias,this,1);
 
-
-
-
-
-        //Configurar Abas
-        final FragmentPagerItemAdapter adapter= new FragmentPagerItemAdapter(
-                getSupportFragmentManager(),
-                FragmentPagerItems.with(this)
-
-                        .add("TÓPICOS",Topicos_MinhaConta_Fragment.class )
-                        // .add("Noticia",Noticia_Fragment.class)
-                        .add("CONTOS", Contos_MinhaConta_Fragment.class)
-                        .add("WEARTS", Art_MinhaConta_Fragment.class)
-
-                        .create()
-
-        );
-        SmartTabLayout ViewPageTab = findViewById(R.id.SmartTabLayoutperfil);
-        mViewPager = findViewById(R.id.viewPagerperfil);
-        mViewPager.setAdapter(adapter);
-        ViewPageTab.setViewPager(mViewPager);
-
-
-
     }
 
-    //Botao Voltar
-    public boolean onOptionsItemSelected(MenuItem item) {
-        //Botão adicional na ToolBar voltar
-        switch (item.getItemId()) {
-            case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                startActivity(new Intent(this, MainActivity.class));  //O efeito ao ser pressionado do botão (no caso abre a activity)
-               finish();
-                break;
-            default:break;
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Fragment fragment;
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    Intent it = new Intent(MinhaConta.this,MainActivity.class);
+                    startActivity(it);
+                    return true;
+                case R.id.navigation:
+                    return true;
+                case R.id.navigation_perfil:
+
+                    return true;
+                case R.id.navigation_voltar:
+
+                    return true;
+            }
+            return false;
         }
-        return true;
-    }
+    };
+
 
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.capameuperfil:
+            /*case R.id.capameuperfil:
                 Intent intent = CropImage.activity()
                         .setGuidelines(CropImageView.Guidelines.ON)
                         .getIntent(this);
                 startActivityForResult(intent,SELECAO_CAPA );
                 break;
-            case R.id.fabminhaconta:
-                Escolher_Foto_Perfil();
-                break;
-            case R.id.perfil_button_back_perfil:
-              //  startActivity(new Intent(this, MainActivity.class));  //O efeito ao ser pressionado do botão (no caso abre a activity)
-                finish();
-                break;
-            case R.id.topico_click:
-                mViewPager.setCurrentItem(0);
-                break;
-            case R.id.contos_click:
-                mViewPager.setCurrentItem(1);
-                break;
-            case R.id.fanats_click:
-                mViewPager.setCurrentItem(2);
-                break;
-            case  R.id.botao_edit:
-                EditNome();
+*/
         }
     }
     @Override
@@ -216,144 +197,36 @@ public class MinhaConta extends AppCompatActivity implements Main, View.OnClickL
 
         RecuperarIcone();
         CarregarDados_do_Usuario();
+        // Preferences pega o nome do usuario;
 
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        database.removeEventListener(ChildEventListener);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        this.unregisterEventBus();
 
     }
+
+
 
     @Override
     protected void onResume() {
         super.onResume();
-        this.registerEventBus();
-    }
-
-    @Override
-    public void registerEventBus() {
-
-        try {
-            EventBus.getDefault().register(this);
-        }catch (Exception Err){
-
-
-        }
 
     }
 
-    @Override
-    public void unregisterEventBus() {
-        try {
-            EventBus.getDefault().unregister(this);
-        }catch (Exception e){
-
-        }
-
-    }
 
     private void CarregarDados_do_Usuario(){
-//Progress
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Aguarde");
-        progressDialog.setMessage("Carregando..");
-        progressDialog.show();
-        progressDialog.setCancelable(false);
-        String email = usuario.getEmail();
-        ChildEventListener=database.orderByChild("tipoconta").equalTo(email).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-               perfil = dataSnapshot.getValue(Usuario.class );
-                assert perfil != null;
+        nome_usuario = getSharedPreferences(ARQUIVO_PREFERENCIA, MODE_PRIVATE);
+        Log.i("oskdoskd99",nome_usuario.getString("nome",""));
+        nome.setText(nome_usuario.getString("nome",""));
 
-                Uri  capa = Uri.parse(perfil.getCapa());
-                if(capa==null){
-                    capa_perfil.setBackgroundResource(R.drawable.fundo_da_capa_add_evento);
-                }else {
-                    DraweeController controllerOne = Fresco.newDraweeControllerBuilder()
-                            .setUri(capa)
-                            .setAutoPlayAnimations(true)
-                            .build();
-                    capa_perfil.setController(controllerOne);
-                }
+        foto_usuario = getSharedPreferences(ARQUIVO_PREFERENCIA, MODE_PRIVATE);
+        String foto =foto_usuario.getString("foto_usuario","");
+        Glide.with(MinhaConta.this)
+                .load(foto)
+                .into(circleImageViewperfil);
 
-
-                String icone = perfil.getFoto();
-                if (!MinhaConta.this.isFinishing()) {
-                    Glide.with(MinhaConta.this)
-                            .load(icone)
-                            .into(circleImageViewperfil);
-                }
-                nome.setText(perfil.getNome());
-                fraserapida.setText(perfil.getFrase());
-                n_topicos.setText(String.valueOf(perfil.getTopicos()));
-                n_contos.setText(String.valueOf(perfil.getContos()));
-                n_fanats.setText(String.valueOf(perfil.getArts()));
-                n_seguidores.setText(String.valueOf(perfil.getSeguidores()));
-                progressDialog.dismiss();
-                //Meus Seguidores
-          seguidor_click.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                  Intent it = new Intent(MinhaConta.this, MeusSeguidores.class);
-                  it.putExtra("id",perfil.getId());
-                  startActivity(it);
-              }
-          });
-                //eventoBUS
-                EventBus.getDefault().postSticky(perfil.getId());
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                perfil = dataSnapshot.getValue(Usuario.class );
-                assert perfil != null;
-
-                String capa = perfil.getCapa();
-                if(capa==null){
-                    capa_perfil.setBackgroundResource(R.drawable.fundo_da_capa_add_evento);
-                }else {
-                    Glide.with(getApplicationContext())
-                            .load(capa)
-                            .into(capa_perfil);
-                }
-                String icone = perfil.getFoto();
-                Glide.with(getApplicationContext())
-                        .load(icone)
-                        .into(circleImageViewperfil );
-
-                nome.setText(perfil.getNome());
-                fraserapida.setText(perfil.getFrase());
-                n_topicos.setText(String.valueOf(perfil.getTopicos()));
-                n_contos.setText(String.valueOf(perfil.getContos()));
-                n_fanats.setText(String.valueOf(perfil.getArts()));
-                n_seguidores.setText(String.valueOf(perfil.getSeguidores()));
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
     //Recebendo Icone
     private void RecuperarIcone() {

@@ -33,7 +33,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation 'com.google.android.material:material:1.0.0-rc01'
-   // implementation 'com.google.android.material:material:1.0.0'
+    // implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
@@ -116,6 +116,7 @@ dependencies {
 
     // Editor de texto
     implementation 'com.github.irshulx:laser-native-editor:2.3.1'
+
 
     //carregando
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
