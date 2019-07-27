@@ -55,7 +55,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.relex.photodraweeview.PhotoDraweeView;
 
-import static com.wegeekteste.fulanoeciclano.nerdzone.Activits.MainActivity.setWindowFlag;
+
 
 public class ChatActivity extends AppCompatActivity  {
 
@@ -163,7 +163,6 @@ public class ChatActivity extends AppCompatActivity  {
             }
         });
         CarregarDados_do_Usuario_Mensagem();
-        TrocarFundos_status_bar();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -404,34 +403,6 @@ public class ChatActivity extends AppCompatActivity  {
 
     }
 
-    //Nao muito uteis
-    private void TrocarFundos_status_bar(){
-        //mudando a cor do statusbar
-        if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
-            setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true);
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            SystemBarTintManager systemBarTintManager = new SystemBarTintManager(this);
-            systemBarTintManager.setStatusBarTintEnabled(true);
-            systemBarTintManager.setStatusBarTintResource(R.drawable.gradiente_toolbarstatusbar);
-        }
-        if (Build.VERSION.SDK_INT >= 19) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            SystemBarTintManager systemBarTintManager = new SystemBarTintManager(this);
-            systemBarTintManager.setStatusBarTintEnabled(true);
-            systemBarTintManager.setStatusBarTintResource(R.drawable.gradiente_toolbarstatusbar);
-            //  systemBarTintManager.setStatusBarTintDrawable(Mydrawable);
-        }
-        //make fully Android Transparent Status bar
-        if (Build.VERSION.SDK_INT >= 21) {
-            setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true);
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
-            getWindow().setNavigationBarColor(Color.parseColor("#1565c0"));
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            SystemBarTintManager systemBarTintManager = new SystemBarTintManager(this);
-            systemBarTintManager.setStatusBarTintEnabled(true);
-            systemBarTintManager.setNavigationBarTintEnabled(true);
-            systemBarTintManager.setStatusBarTintResource(R.drawable.gradiente_toolbarstatusbar);
-        }
-    }
+
 }
 

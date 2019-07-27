@@ -1,57 +1,34 @@
 package com.wegeekteste.fulanoeciclano.nerdzone.Activits;
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.viewpager.widget.ViewPager;
 
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import com.ogaclejapan.smarttablayout.SmartTabLayout;
-import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
-import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
-import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.TelaInicial.MainActivityFragment;
+import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.MinhaConta.Minha_Conta_Fragment;
+import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.MainActivityFragment;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.BottomNavigationBehavior;
-import com.wegeekteste.fulanoeciclano.nerdzone.Helper.RecyclerItemClickListener;
-import com.wegeekteste.fulanoeciclano.nerdzone.Helper.TrocarFundo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Usuario;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
-import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Lista_Forum;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
-public class MainActivity extends TrocarFundo {
-    private Toolbar toolbar;
+public class MainActivity extends AppCompatActivity {
+
     SharedPreferences sPreferences = null;
     private FirebaseFirestore db;
     private String identificadorUsuario;
@@ -62,6 +39,7 @@ public class MainActivity extends TrocarFundo {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
 
@@ -71,16 +49,6 @@ public class MainActivity extends TrocarFundo {
         identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
         Log.i("sd22", identificadorUsuario);
 
-
-
-        //Configurar abas
-        final FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
-                getSupportFragmentManager(),
-                FragmentPagerItems.with(this)
-                        .add("Conversas", MainActivityFragment.class)
-                        .add("Contatos", MainActivityFragment.class)
-                        .create()
-        );
 
         //Fragmentos
         loadFragment(new MainActivityFragment());
@@ -100,17 +68,12 @@ public class MainActivity extends TrocarFundo {
             sPreferences.edit().putBoolean("primeiravez_Main_Activit", false).apply();
 
         }
-        //Toolbar
-        toolbar = findViewById(R.id.toolbarmain);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
+
 
         //preferences
         SharedPreference();
         //Trocando Fundo statusbar
         //TrocarFundos_status_bar();
-
-        new TrocarFundo();
     }
 
     //Recebe Fragment
@@ -136,7 +99,8 @@ public class MainActivity extends TrocarFundo {
                 case R.id.navigation:
                     return true;
                 case R.id.navigation_perfil:
-
+                    fragment = new Minha_Conta_Fragment();
+                    loadFragment(fragment);
                     return true;
                 case R.id.navigation_voltar:
 

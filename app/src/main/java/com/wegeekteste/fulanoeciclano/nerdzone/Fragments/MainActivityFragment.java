@@ -1,16 +1,21 @@
-package com.wegeekteste.fulanoeciclano.nerdzone.Fragments.TelaInicial;
+package com.wegeekteste.fulanoeciclano.nerdzone.Fragments;
 
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +24,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +40,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.wegeekteste.fulanoeciclano.nerdzone.Activits.MainActivity;
 import com.wegeekteste.fulanoeciclano.nerdzone.Activits.MinhaConta;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.AdapterPagInicial.AdapterMercado;
@@ -45,6 +53,7 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Conto.ListaConto;
 import com.wegeekteste.fulanoeciclano.nerdzone.Evento.DetalheEvento;
 import com.wegeekteste.fulanoeciclano.nerdzone.FanArts.Lista_Arts;
 import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Lista_Forum;
+import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.MinhaConta.Minha_Conta_Fragment;
 import com.wegeekteste.fulanoeciclano.nerdzone.HQ.Pag_producao_hq;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.BottomNavigationBehavior;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.RecyclerItemClickListener;
@@ -68,7 +77,7 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends Fragment  {
 
 
     private RecyclerView recyclerViewListaGibiMercado;
@@ -96,7 +105,7 @@ public class MainActivityFragment extends Fragment {
     private DocumentReference docRef;
     private BottomNavigationView navigation;
     private static final String ARQUIVO_PREFERENCIA = "arquivoreferencia";
-
+    private  Fragment fragment;
     public MainActivityFragment() {
         // Required empty public constructor
     }
@@ -109,11 +118,18 @@ public class MainActivityFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main_activity, container, false);
 
 
+        //Toolbar
+        toolbar = getActivity().findViewById(R.id.toolbarmain);
+        getActivity().setTitle("");
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+
+
         //Configuraçoes Originais
         db = FirebaseFirestore.getInstance();
         storageReference = ConfiguracaoFirebase.getFirebaseStorage();
        // botoes_Mais();
         RecuperarConto();
+       TrocarFundo();
         identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
         Log.i("sd22", identificadorUsuario);
         //todas configuraões do recycleview
@@ -163,16 +179,22 @@ public class MainActivityFragment extends Fragment {
         recyclerViewArts.setAdapter(adapterArte);
 
 
+
+        //botaoMais
+        maiseventoTxt = view.findViewById(R.id.maisevento);
+        maiscomercioTxt = view.findViewById(R.id.maiscomercio);
+        maistopicoTxt = view.findViewById(R.id.maisForum);
+        maiscontoTxt = view.findViewById(R.id.maishistorias);
+        maisfanartsTxt = view.findViewById(R.id.maisgaleria);
+        botoes_Mais();
         return view;
     }
 
-
     @Override
-    public void onStop() {
-        super.onStop();
-
+    public void onPause() {
+        super.onPause();
+       TrocarFundo();
     }
-
 
     //recupera e nao deixa duplicar
     public void RecuperarEvento() {
@@ -349,9 +371,15 @@ public class MainActivityFragment extends Fragment {
         }));
     }
 
-
+    //Recebe Fragment
+    private void loadFragment(Fragment fragment) {
+        // load fragment
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frameContaner_Principal, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
     private void botoes_Mais() {
-        maiseventoTxt = getActivity().findViewById(R.id.maisevento);
         maiseventoTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -359,8 +387,6 @@ public class MainActivityFragment extends Fragment {
                 startActivity(it);
             }
         });
-
-        maiscomercioTxt = getActivity().findViewById(R.id.maiscomercio);
         maiscomercioTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -368,7 +394,6 @@ public class MainActivityFragment extends Fragment {
                 startActivity(it);
             }
         });
-        maistopicoTxt = getActivity().findViewById(R.id.maisForum);
         maistopicoTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -376,7 +401,6 @@ public class MainActivityFragment extends Fragment {
                 startActivity(it);
             }
         });
-        maiscontoTxt = getActivity().findViewById(R.id.maishistorias);
         maiscontoTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -384,15 +408,59 @@ public class MainActivityFragment extends Fragment {
                 startActivity(it);
             }
         });
-        maisfanartsTxt = getActivity().findViewById(R.id.maisgaleria);
         maisfanartsTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent it = new Intent(getContext(), Lista_Arts.class);
-                startActivity(it);
+                fragment = new Minha_Conta_Fragment();
+                loadFragment(fragment);
             }
         });
 
     }
 
+
+
+    public void TrocarFundo(){
+        //mudando a cor doo statusbar
+        if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
+            setWindowFlag(  getActivity(), WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true);
+            getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            SystemBarTintManager systemBarTintManager = new SystemBarTintManager(  getActivity());
+            systemBarTintManager.setStatusBarTintEnabled(true);
+            systemBarTintManager.setStatusBarTintResource(R.drawable.gradiente_toolbarstatusbar);
+        }
+        if (Build.VERSION.SDK_INT >= 19) {
+            getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            SystemBarTintManager systemBarTintManager = new SystemBarTintManager(  getActivity());
+            systemBarTintManager.setStatusBarTintEnabled(true);
+            systemBarTintManager.setStatusBarTintResource(R.drawable.gradiente_toolbarstatusbar);
+            //  systemBarTintManager.setStatusBarTintDrawable(Mydrawable);
+        }
+        //make fully Android Transparent Status bar
+        if (Build.VERSION.SDK_INT >= 21) {
+            setWindowFlag(getActivity(), WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true);
+            getActivity().getWindow().setStatusBarColor(Color.TRANSPARENT);
+            getActivity().getWindow().setNavigationBarColor(Color.parseColor("#1565c0"));
+            getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            SystemBarTintManager systemBarTintManager = new SystemBarTintManager(  getActivity());
+            systemBarTintManager.setStatusBarTintEnabled(true);
+            systemBarTintManager.setNavigationBarTintEnabled(true);
+            systemBarTintManager.setStatusBarTintResource(R.drawable.gradiente_toolbarstatusbar);
+        }
+
+
+
+    }
+    public static void setWindowFlag(Activity activity, final int bits, boolean on) {
+        Window win = activity.getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        win.setAttributes(winParams);
+    }
+
 }
+

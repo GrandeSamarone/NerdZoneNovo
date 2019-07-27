@@ -1,13 +1,19 @@
-<androidx.coordinatorlayout.widget.CoordinatorLayout android:layout_width="match_parent"
+<RelativeLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/brancofraco"
-    tools:context=".Fragments.TelaInicial.MainActivityFragment"
+    tools:context=".Fragments.MainActivityFragment"
     >
+    <include
+        android:id="@+id/toolba_principal"
+        layout="@layout/toolbarprincipal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <FrameLayout
+        android:layout_below="@+id/toolba_principal"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <androidx.core.widget.NestedScrollView
@@ -414,4 +420,4 @@
     </FrameLayout>
 
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>
