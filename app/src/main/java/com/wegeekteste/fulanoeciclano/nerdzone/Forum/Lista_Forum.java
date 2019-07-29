@@ -5,12 +5,14 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
@@ -20,6 +22,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -40,7 +44,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Lista_Forum extends AppCompatActivity  {
     private Toolbar toolbar;
-    private CircleImageView icone;
+    private ImageView icone;
     private MaterialSearchView SeachViewTopico;
     private Adapter_Forum adapter_Meus_forum;
     private FloatingActionButton botaoMaisTopicos;
@@ -56,8 +60,21 @@ public class Lista_Forum extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_topicos);
 
+
+        icone=findViewById(R.id.icone_toolbar_secundario);
+        icone.setImageResource(R.drawable.ic_add_black_24dp);
         toolbar = findViewById(R.id.toolbarsecundario);
-        toolbar.setTitle("We");
+        toolbar.setTitle("");
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/fontgeek.ttf");
+       /// Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.fontgeek);
+       // toolbar.setTitle("Forum");
+        //toolbar.setTy
+        TextView toolbarTitle = findViewById(R.id.app_toolbar_title_secundario);
+        toolbarTitle.setText(R.string.text_lista_forum);
+        toolbarTitle.setTextColor(getResources().getColor(R.color.branco));
+       toolbarTitle.setTypeface(typeface);
+
+
         setSupportActionBar(toolbar);
 
 
@@ -67,7 +84,6 @@ public class Lista_Forum extends AppCompatActivity  {
         recyclerView_lista_Meus_Forum = findViewById(R.id.recycleview_topico);
         botaoMaisTopicos=findViewById(R.id.buton_novo_topico);
 
-        icone=findViewById(R.id.icone_user_toolbar);
         icone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

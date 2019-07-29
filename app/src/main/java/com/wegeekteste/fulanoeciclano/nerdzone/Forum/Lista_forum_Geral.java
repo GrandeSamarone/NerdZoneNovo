@@ -23,13 +23,14 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Grupo.Page_Info_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.RecyclerItemClickListener;
+import com.wegeekteste.fulanoeciclano.nerdzone.Helper.TrocarFundo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Lista_forum_Geral extends AppCompatActivity {
+public class Lista_forum_Geral extends TrocarFundo {
 
 
     private Toolbar toolbar;
