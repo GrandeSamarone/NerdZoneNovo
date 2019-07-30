@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/refreshMinhasColecoes"
-    android:background="@color/background"
+    android:background="@color/background_geral"
     tools:context="com.example.fulanoeciclano.nerdzone.Mercado.MercadoActivity">
 
     <LinearLayout

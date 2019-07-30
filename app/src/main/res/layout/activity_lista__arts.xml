@@ -10,7 +10,7 @@
     xmlns:quilt="http://schemas.android.com/apk/res-auto"
     tools:context=".FanArts.Lista_Arts">
 <LinearLayout
-    android:background="@color/background"
+    android:background="@color/background_geral"
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"

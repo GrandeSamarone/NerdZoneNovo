@@ -14,11 +14,14 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -46,41 +49,43 @@ import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class Novo_Forum extends TrocarFundo  {
+public class Novo_Grupo_Forum extends TrocarFundo {
 
     private static final String padrao = "Obrigatório";
     private static final int SELECAO_CAMERA = 100;
     private static final int SELECAO_GALERIA = 200;
-    private static  final String ARQUIVO_PREFERENCIA ="arquivoreferencia";
+    private static final String ARQUIVO_PREFERENCIA = "arquivoreferencia";
     private Toolbar toolbar;
     private CircleImageView icone;
-    private ImageView img_topico;
-    private String urlimg,op;
+    private CircleImageView img_novo_grupo;
+    private String urlimg, op;
     private Button botaosalvar;
-    private DatabaseReference databaseusuario,databasetopico,SeguidoresRef;
+    private DatabaseReference databaseusuario, databasetopico, SeguidoresRef;
     private DataSnapshot seguidoresSnapshot;
     private FirebaseUser usuario;
     private ChildEventListener ChildEventListenerperfil;
-    private EditText titulo_topico,mensagem_topico;
+    private EditText titulo_topico, mensagem_topico;
     private Forum forum = new Forum();
     private Usuario perfil;
     private StorageReference storageReference;
     private Dialog dialog;
-    private   Uri url;
+    private Uri url;
     private ChildEventListener ChildEventListenerSeguidores;
-    private RadioButton radio_grupo,radio_topico;
+    private RadioButton radio_grupo, radio_topico;
     private String identificadorUsuario;
     private RadioGroup grupo;
     private SharedPreferences sharedPreferences;
     private SharedPreferences nome_usuario;
+    private Spinner campo_categoria_grupo;
+    private String Campo_string="Categoria";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_novo__topico);
 
-        toolbar = findViewById(R.id.toolbarsecundario);
-        toolbar.setTitle("Novo We");
+        toolbar = findViewById(R.id.toolbarsecundario_sem_foto);
+        toolbar.setTitle("Novo Grupo");
         setSupportActionBar(toolbar);
 
 
@@ -89,29 +94,25 @@ public class Novo_Forum extends TrocarFundo  {
         storageReference = ConfiguracaoFirebase.getFirebaseStorage();
         titulo_topico = findViewById(R.id.nome_topico);
         mensagem_topico = findViewById(R.id.desc_topico);
-        botaosalvar = findViewById(R.id.botaosalvartopico);
-        radio_grupo=findViewById(R.id.radiogrupo);
-        radio_topico=findViewById(R.id.radiotopico);
-        grupo=findViewById(R.id.groupwe);
+        botaosalvar = findViewById(R.id.botaosalvar_Grupo);
+        campo_categoria_grupo = findViewById(R.id.spinner_grupo_categoria);
+        grupo = findViewById(R.id.radio_group_grupo);
         botaosalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                validarDadosTopico();
+                validar_Dados_Grupo();
             }
         });
-        img_topico = findViewById(R.id.imageTopicoCadastro);
-        img_topico.setOnClickListener(new View.OnClickListener() {
+        img_novo_grupo = findViewById(R.id.image_grupo_Cadastro);
+        img_novo_grupo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = CropImage.activity()
                         .setGuidelines(CropImageView.Guidelines.ON)
-                        .getIntent(Novo_Forum.this);
+                        .getIntent(Novo_Grupo_Forum.this);
                 startActivityForResult(intent, SELECAO_GALERIA);
             }
         });
-
-
-        VerificaRadioButton();
 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -122,12 +123,13 @@ public class Novo_Forum extends TrocarFundo  {
     protected void onStart() {
         super.onStart();
 
+        VerificaRadioButton();
+        CarregarDadosSpinner();
 
         // Preferences pega o nome do usuario;
         nome_usuario = getSharedPreferences(ARQUIVO_PREFERENCIA, MODE_PRIVATE);
 
     }
-
 
 
     @Override
@@ -153,7 +155,7 @@ public class Novo_Forum extends TrocarFundo  {
 
 
                 }
-                if(imagem!=null) {
+                if (imagem != null) {
                     //Recuperar dados da imagem  para o  Firebase
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     imagem.compress(Bitmap.CompressFormat.JPEG, 70, baos);
@@ -166,7 +168,7 @@ public class Novo_Forum extends TrocarFundo  {
                             .child(nomeImagem);
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setCancelable(false);
-                    LayoutInflater layoutInflater = LayoutInflater.from(Novo_Forum.this);
+                    LayoutInflater layoutInflater = LayoutInflater.from(Novo_Grupo_Forum.this);
                     final View view = layoutInflater.inflate(R.layout.dialog_carregando_gif_analisando, null);
                     ImageView imageViewgif = view.findViewById(R.id.gifimage);
 
@@ -188,16 +190,16 @@ public class Novo_Forum extends TrocarFundo  {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     dialog.dismiss();
-                                         urlimg=uri.toString();
+                                    urlimg = uri.toString();
                                     Glide.with(getApplicationContext())
                                             .load(uri)
-                                            .into(img_topico);
+                                            .into(img_novo_grupo);
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception exception) {
                                     dialog.dismiss();
-                                    Toast.makeText(Novo_Forum.this, "Erro ao carregar a imagem", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Novo_Grupo_Forum.this, "Erro ao carregar a imagem", Toast.LENGTH_SHORT).show();
 
                                 }
                             });
@@ -212,14 +214,40 @@ public class Novo_Forum extends TrocarFundo  {
         }
     }
 
-    private Forum configurarTopico(){
 
-        String nome = nome_usuario.getString("nome","");
+    //carregar spinner
+    private void CarregarDadosSpinner() {
+        //
+        String[] artista = getResources().getStringArray(R.array.categoria_grupo);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, artista);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        campo_categoria_grupo.setAdapter(adapter);
+        campo_categoria_grupo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (campo_categoria_grupo.getSelectedItem().toString().trim().equals("Categoria")) {
+                    Toast.makeText(Novo_Grupo_Forum.this, "add uma categoria", Toast.LENGTH_SHORT).show();
+                } else {
+                    Campo_string = parent.getItemAtPosition(position).toString();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private Forum configurarTopico() {
+
+        String nome = nome_usuario.getString("nome", "");
         String titulo = titulo_topico.getText().toString();
         String mensagem = mensagem_topico.getText().toString();
 
         final Calendar calendartempo = Calendar.getInstance();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd'-'MM'-'y",java.util.Locale.getDefault());// MM'/'dd'/'y;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd'-'MM'-'y", java.util.Locale.getDefault());// MM'/'dd'/'y;
         String data = simpleDateFormat.format(calendartempo.getTime());
 
         forum.setIdauthor(identificadorUsuario);
@@ -228,17 +256,20 @@ public class Novo_Forum extends TrocarFundo  {
         forum.setFoto(urlimg);
         forum.setDescricao(mensagem);
         forum.setData(data);
+        forum.setCategoria(Campo_string);
         forum.setOpcao(op);
-        if(url!=null) {
+        if (url != null) {
             forum.setFoto(String.valueOf(url));
-        }else{
+        } else {
 
         }
         return forum;
 
     }
-    public void validarDadosTopico() {
+
+    public void validar_Dados_Grupo() {
         forum = configurarTopico();
+
         if (TextUtils.isEmpty(forum.getTitulo())) {
             titulo_topico.setError(padrao);
             return;
@@ -247,12 +278,18 @@ public class Novo_Forum extends TrocarFundo  {
             mensagem_topico.setError(padrao);
             return;
         }
-        forum.SalvarForum();
+
+            forum.SalvarForum();
+
+
+
+
+
         //int qtdTopicos = perfil.getTopicos() + 1;
         //perfil.setTopicos(qtdTopicos);
         //perfil.atualizarQtdTopicos();
-        Toast.makeText(Novo_Forum.this, "Tópico Criado Com Sucesso!", Toast.LENGTH_SHORT).show();
-        Intent it = new Intent(Novo_Forum.this, Lista_Forum.class);
+        Toast.makeText(Novo_Grupo_Forum.this, "Grupo Criado Com Sucesso!", Toast.LENGTH_SHORT).show();
+        Intent it = new Intent(Novo_Grupo_Forum.this, Lista_Forum.class);
         startActivity(it);
         finish();
     }
@@ -262,10 +299,10 @@ public class Novo_Forum extends TrocarFundo  {
         grupo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if(checkedId== R.id.radiogrupo){
-                   op="grupo";
-                }else if(checkedId==R.id.radiotopico){
-                   op="topico";
+                if(checkedId== R.id.radiogrupo_Free){
+                   op="grupo_free";
+                }else if(checkedId==R.id.radiogrupo_permissao){
+                   op="grupo_permissao";
                 }
             }
         });

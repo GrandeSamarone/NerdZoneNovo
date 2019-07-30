@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:fitsSystemWindows="true"
     tools:context=".Forum.Detalhe_Chat_Grupo"
-    android:background="@color/background">
+    android:background="@color/background_geral">
 
     <RelativeLayout
         android:id="@+id/cabecalho"

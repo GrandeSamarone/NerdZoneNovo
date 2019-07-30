@@ -21,6 +21,8 @@
             <include layout="@layout/content_main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
+
+
         </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -34,6 +36,7 @@
         app:itemIconTint="@color/custom_tab"
         app:itemTextColor="@color/custom_tab"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/navigation" />
+        app:menu="@menu/navigation"
+        android:theme="@style/bottomnavigationItemAppearance"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

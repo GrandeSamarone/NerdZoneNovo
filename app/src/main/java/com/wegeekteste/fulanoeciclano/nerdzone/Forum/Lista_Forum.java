@@ -1,27 +1,29 @@
 package com.wegeekteste.fulanoeciclano.nerdzone.Forum;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.ResourcesCompat;
+
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,18 +33,24 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.wegeekteste.fulanoeciclano.nerdzone.Activits.MainActivity;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_Forum;
+import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.MainActivityFragment;
+import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.MinhaConta.Minha_Conta_Fragment;
+import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.forum.Forum_Fragment_principal;
+import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.forum.Grupo_Fragment;
+import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.forum.Topico_Fragment;
+import com.wegeekteste.fulanoeciclano.nerdzone.Helper.BottomNavigationBehavior;
+import com.wegeekteste.fulanoeciclano.nerdzone.Helper.IOnBackPressed;
+import com.wegeekteste.fulanoeciclano.nerdzone.Helper.TrocarFundo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
-public class Lista_Forum extends AppCompatActivity  {
+public class Lista_Forum extends TrocarFundo implements View.OnClickListener {
     private Toolbar toolbar;
     private ImageView icone;
     private MaterialSearchView SeachViewTopico;
@@ -54,21 +62,21 @@ public class Lista_Forum extends AppCompatActivity  {
     private SharedPreferences preferences = null;
     private FirebaseFirestore db;
     private String identificadorUsuario;
-
+    private BottomNavigationView navigation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lista_topicos);
+        setContentView(R.layout.activity_forum);
 
 
-        icone=findViewById(R.id.icone_toolbar_secundario);
-        icone.setImageResource(R.drawable.ic_add_black_24dp);
+        //Configurações Básicas
+       // icone=findViewById(R.id.icone_toolbar_secundario);
+        //icone.setImageResource(R.drawable.ic_add_black_24dp);
+        //icone.setOnClickListener(this);
+
         toolbar = findViewById(R.id.toolbarsecundario);
         toolbar.setTitle("");
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/fontgeek.ttf");
-       /// Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.fontgeek);
-       // toolbar.setTitle("Forum");
-        //toolbar.setTy
         TextView toolbarTitle = findViewById(R.id.app_toolbar_title_secundario);
         toolbarTitle.setText(R.string.text_lista_forum);
         toolbarTitle.setTextColor(getResources().getColor(R.color.branco));
@@ -78,38 +86,6 @@ public class Lista_Forum extends AppCompatActivity  {
         setSupportActionBar(toolbar);
 
 
-       //Configuraçoes Basicas
-        identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
-        db = FirebaseFirestore.getInstance();
-        recyclerView_lista_Meus_Forum = findViewById(R.id.recycleview_topico);
-        botaoMaisTopicos=findViewById(R.id.buton_novo_topico);
-
-        icone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent it = new Intent(Lista_Forum.this,Lista_forum_Geral.class);
-                startActivity(it);
-            }
-        });
-        botaoMaisTopicos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent it = new Intent(Lista_Forum.this, Novo_Forum.class);
-                startActivity(it);
-                finish();
-            }
-        });
-        //adapter
-        adapter_Meus_forum = new Adapter_Forum(listaForum,this);
-
-        //Adapter
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
-        recyclerView_lista_Meus_Forum.setLayoutManager(layoutManager);
-        recyclerView_lista_Meus_Forum.setHasFixedSize(true);
-        recyclerView_lista_Meus_Forum.setAdapter(adapter_Meus_forum);
-
-//Aplicar Evento click
-        TrocarFundos_status_bar();
 
 
         //Botao Pesquisa
@@ -118,79 +94,37 @@ public class Lista_Forum extends AppCompatActivity  {
         SeachViewTopico.setHintTextColor(R.color.cinzaclaro);
 
 
-        RecuperarForum();
 
+
+
+
+
+        //Fragmentos
+        loadFragment(new Forum_Fragment_principal());
+        //Navegacao Inferior
+        navigation = findViewById(R.id.navigation_forum);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+//escondendo navegação
+        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams)
+                navigation.getLayoutParams();
+        layoutParams.setBehavior(new BottomNavigationBehavior());
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
-
-
-    private void RecuperarForum(){
-
-        db.collection("WeForum")
-                .whereEqualTo("id_autor", identificadorUsuario)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w("", "listen:error", e);
-                            return;
-                        }
-
-                        for (DocumentChange change : snapshots.getDocumentChanges()) {
-                            Forum forum_grupo = change.getDocument().toObject(Forum.class);
-                            forum_grupo.setId(change.getDocument().getId());
-                            //  Log.i("sdsdsd",change.getDocument().getId());
-                            // Log.i("sdsdsd2",conto.getUid());
-                            switch (change.getType()) {
-                                case ADDED:
-                                    listaForum.add(0, forum_grupo);
-
-                                    if (listaForum.size() > 0) {
-                                        //  linear_nada_cadastrado.setVisibility(View.GONE);
-                                    }
-
-                                    adapter_Meus_forum.notifyDataSetChanged();
-                                    Log.d("ad", "New city: " + change.getDocument().getData());
-                                    break;
-                                case MODIFIED:
-                                    for (Forum ct : listaForum) {
-
-                                        if(forum_grupo.getId().equals(ct.getId())){
-                                            listaForum.remove(ct);
-                                            break;
-                                        }
-                                    }
-                                    listaForum.add(0, forum_grupo);
-                                    if (listaForum.size() > 0) {
-                                        //linear_nada_cadastrado.setVisibility(View.GONE);
-                                    }
-
-                                    adapter_Meus_forum.notifyDataSetChanged();
-                                    Log.d("md", "Modified city: " + change.getDocument().getData());
-                                    break;
-                                case REMOVED:
-                                    for (Forum ct : listaForum) {
-
-                                        if(forum_grupo.getId().equals(ct.getId())){
-                                            listaForum.remove(ct);
-                                            break;
-                                        }
-                                    }
-
-                                    adapter_Meus_forum.notifyDataSetChanged();
-                                    Log.d("rem", "Removed city: " + change.getDocument().getData());
-                                    break;
-                            }
-                        }
-                    }
-                });
-
+    @Override
+    public void onBackPressed() {
+        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+        if (fragmentList != null) {
+            //TODO: Perform your logic to pass back press here
+            for(Fragment fragment : fragmentList){
+                if(fragment instanceof IOnBackPressed){
+                    ((IOnBackPressed)fragment).onBackPressed();
+                }
+            }
+        }
     }
-
-
     public boolean  onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
@@ -223,62 +157,54 @@ public class Lista_Forum extends AppCompatActivity  {
 
 
 
-    private void TrocarFundos_status_bar(){
-        //mudando a cor do statusbar
-        if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
-            setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true);
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            SystemBarTintManager systemBarTintManager = new SystemBarTintManager(this);
-            systemBarTintManager.setStatusBarTintEnabled(true);
-            systemBarTintManager.setStatusBarTintResource(R.drawable.gradiente_toolbarstatusbar);
-        }
-        if (Build.VERSION.SDK_INT >= 19) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            SystemBarTintManager systemBarTintManager = new SystemBarTintManager(this);
-            systemBarTintManager.setStatusBarTintEnabled(true);
-            systemBarTintManager.setStatusBarTintResource(R.drawable.gradiente_toolbarstatusbar);
-            //  systemBarTintManager.setStatusBarTintDrawable(Mydrawable);
-        }
-        //make fully Android Transparent Status bar
-        if (Build.VERSION.SDK_INT >= 21) {
-            setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true);
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
-            getWindow().setNavigationBarColor(Color.parseColor("#1565c0"));
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            SystemBarTintManager systemBarTintManager = new SystemBarTintManager(this);
-            systemBarTintManager.setStatusBarTintEnabled(true);
-            systemBarTintManager.setNavigationBarTintEnabled(true);
-            systemBarTintManager.setStatusBarTintResource(R.drawable.gradiente_toolbarstatusbar);
+
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+           // case R.id.icone_toolbar_secundario :
+           // Intent it = new Intent(Lista_Forum.this,Lista_forum_Geral.class);
+            //startActivity(it);
+            //break;
         }
     }
 
-    public static void setWindowFlag(Activity activity, final int bits, boolean on) {
-        Window win = activity.getWindow();
-        WindowManager.LayoutParams winParams = win.getAttributes();
-        if (on) {
-            winParams.flags |= bits;
-        } else {
-            winParams.flags &= ~bits;
-        }
-        win.setAttributes(winParams);
+    //Recebe Fragment
+    private void loadFragment(Fragment fragment) {
+        // load fragment
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+        transaction.replace(R.id.frame_forum, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
-    private void Dialog_Primeiravez() {
-        LayoutInflater li = getLayoutInflater();
-        View view = li.inflate(R.layout.dialog_informacao_topico, null);
-        view.findViewById(R.id.botaoentendi).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View arg0) {
-                //desfaz o dialog_opcao_foto.
-                dialog.dismiss();
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Fragment fragment;
+            switch (item.getItemId()) {
+                case R.id.navigation_home_forum:
+                    fragment = new Forum_Fragment_principal();
+                    loadFragment(fragment);
+                    return true;
+                case R.id.navigation_grupos:
+                    fragment = new Grupo_Fragment();
+                    loadFragment(fragment);
+                    return true;
+                case R.id.navigation_topico:
+                    fragment = new Topico_Fragment();
+                    loadFragment(fragment);
+                    return true;
+                case R.id.navigation_voltar:
+
+                    return true;
             }
-        });
-        //Dialog de tela
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(view);
-        dialog = builder.create();
-        dialog.show();
-
-    }
-
+            return false;
+        }
+    };
 
 }

@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     android:id="@+id/refreshconto"
     android:orientation="vertical"
-    android:background="@color/background">
+    android:background="@color/background_geral">
         <include android:id="@+id/toolbar"
             layout="@layout/toolbarsecundario"/>
         <RelativeLayout

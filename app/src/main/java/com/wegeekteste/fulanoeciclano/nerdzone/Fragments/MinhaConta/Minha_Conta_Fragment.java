@@ -32,6 +32,7 @@ import com.google.firebase.storage.StorageReference;
 import com.wegeekteste.fulanoeciclano.nerdzone.Activits.MainActivity;
 import com.wegeekteste.fulanoeciclano.nerdzone.Activits.MinhaConta;
 import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
+import com.wegeekteste.fulanoeciclano.nerdzone.Helper.IOnBackPressed;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.Permissoes;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Usuario;
@@ -44,7 +45,7 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Minha_Conta_Fragment extends Fragment {
+public class Minha_Conta_Fragment extends Fragment implements IOnBackPressed {
 
     private String[] permissoesNecessarias = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -135,5 +136,10 @@ public class Minha_Conta_Fragment extends Fragment {
     public void onPause() {
         super.onPause();
         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        return false;
     }
 }

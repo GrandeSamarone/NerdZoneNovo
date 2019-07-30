@@ -19,9 +19,13 @@
 
 
     <string name="title_shop">Home</string>
+    <string name="title_forum">Fórum</string>
     <string name="title_gifts">Zoom</string>
+    <string name="title_grupos">Grupos</string>
+    <string name="title_topicos">Tópicos</string>
     <string name="title_cart">Anterior</string>
     <string name="title_profile">Perfil</string>
+    <string name="title_Voltar">Voltar</string>
     <string name="text_icone_heroi">HERÓIS</string>
     <string name="text_icon_galeria">GALERIA</string>
     <string name="text_icon_camera">CÂMERA</string>
@@ -116,6 +120,18 @@
         <item>SE</item>
         <item>SP</item>
         <item>TO</item>
+    </string-array>
+
+    <string-array name="categoria_grupo">
+        <item>Categoria</item>
+        <item>Games</item>
+        <item>HQ</item>
+        <item>Filmes</item>
+        <item>Comércio</item>
+        <item>Desenhos</item>
+        <item>Action Figures</item>
+
+
     </string-array>
     <string-array name="fanartcategoria">
         <item>Categoria</item>

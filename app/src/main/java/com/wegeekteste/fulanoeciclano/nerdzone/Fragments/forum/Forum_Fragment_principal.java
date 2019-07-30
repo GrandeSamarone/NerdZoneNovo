@@ -2,7 +2,9 @@ package com.wegeekteste.fulanoeciclano.nerdzone.Fragments.forum;
 
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -14,39 +16,38 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.LinearLayout;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_Forum;
-import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Grupo.Page_Info_Grupo;
-import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Lista_Forum;
-import com.wegeekteste.fulanoeciclano.nerdzone.Helper.IOnBackPressed;
-import com.wegeekteste.fulanoeciclano.nerdzone.Helper.RecyclerItemClickListener;
+import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Novo_Grupo_Forum;
+import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Grupo_Fragment extends Fragment implements IOnBackPressed {
+public class Forum_Fragment_principal extends Fragment implements View.OnClickListener {
+    private Adapter_Forum adapter_Meus_forum;
+    private RecyclerView recyclerView_lista_Meus_Forum;
+    private ArrayList<Forum> listaForum = new ArrayList<>();
+    private Dialog dialog;
+    private SharedPreferences preferences = null;
     private FirebaseFirestore db;
-    private Adapter_Forum adapter_forum;
-    private Adapter_Forum adapter_topico;
-    private RecyclerView recicle_Grupo_geral,recicle_Topico_geral;
-    private ArrayList<Forum> ListaG = new ArrayList<>();
-    private ArrayList<Forum> ListaT = new ArrayList<>();
-    private String id_Forum;
+    private String identificadorUsuario;
+    private BottomNavigationView navigation;
     private ShimmerFrameLayout shimmerContainer;
-
-    public Grupo_Fragment() {
+    private LinearLayout criarGrupo;
+    public Forum_Fragment_principal() {
         // Required empty public constructor
     }
 
@@ -55,60 +56,105 @@ public class Grupo_Fragment extends Fragment implements IOnBackPressed {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_grupo_, container, false);
+      View view=inflater.inflate(R.layout.fragment_forum__fragment_principal, container, false);
 
-        //Configuracoes_Originais
+       //Configuraçoes Basicas
+        identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
         db = FirebaseFirestore.getInstance();
+        recyclerView_lista_Meus_Forum = view.findViewById(R.id.recycleview_grupo);
+        criarGrupo = view.findViewById(R.id.line_criarGrupo);
+        criarGrupo.setOnClickListener(this);
 
-
+        //adapter
+        adapter_Meus_forum = new Adapter_Forum(listaForum,getContext());
 
         //efeito carregando do facebook
-        shimmerContainer = (ShimmerFrameLayout) view.findViewById(R.id.shimmer_view_container_Grupo);
-        recicle_Grupo_geral=view.findViewById(R.id.RecycleViewGrupo_geral);
-        adapter_forum = new Adapter_Forum(ListaG,getContext());
+        shimmerContainer = (ShimmerFrameLayout) view.findViewById(R.id.shimmer_view_container_Forum);
+
         //Adapter
         @SuppressLint("WrongConstant") RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false);
-        recicle_Grupo_geral.setLayoutManager(layoutManager);
-        recicle_Grupo_geral.setHasFixedSize(true);
-        recicle_Grupo_geral.setAdapter(adapter_forum);
-
-        recicle_Grupo_geral.addOnItemTouchListener(new RecyclerItemClickListener(
-                getContext(), recicle_Grupo_geral, new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                List<Forum> listaAtualizada = adapter_forum.getForuns();
-
-                if(listaAtualizada.size()>0){
-                    String id_grupo_selecionado = adapter_forum.getForuns().get(position).getId();
-                    Forum forumselecionado = listaAtualizada.get(position);
-                    Intent it = new Intent(getContext(), Page_Info_Grupo.class);
-                    it.putExtra("grupo_info",forumselecionado);
-                    it.putExtra("grupo_id",id_grupo_selecionado);
-                    startActivity(it);
-
-                }
-            }
-
-            @Override
-            public void onLongItemClick(View view, int position) {
-
-            }
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-        }
-        ));
+        recyclerView_lista_Meus_Forum.setLayoutManager(layoutManager);
+        recyclerView_lista_Meus_Forum.setHasFixedSize(true);
+        recyclerView_lista_Meus_Forum.setAdapter(adapter_Meus_forum);
 
 
+        RecuperarForum();
 
-
-
-        Recuperar_Grupo_geral();
+        // lembrar de como reparar se o collection é null
     return view;
     }
 
+
+    private void RecuperarForum(){
+        shimmerContainer.stopShimmerAnimation();
+        shimmerContainer.setVisibility(View.GONE);
+        db.collection("WeForum")
+                .whereEqualTo("id_autor", identificadorUsuario)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w("", "listen:error", e);
+                            return;
+                        }
+
+                        for (DocumentChange change : snapshots.getDocumentChanges()) {
+                            Forum forum_grupo = change.getDocument().toObject(Forum.class);
+                            forum_grupo.setId(change.getDocument().getId());
+                            //  Log.i("sdsdsd",change.getDocument().getId());
+                            // Log.i("sdsdsd2",conto.getUid());
+                            switch (change.getType()) {
+                                case ADDED:
+
+                                    listaForum.add(0, forum_grupo);
+
+                                    if (listaForum.size() > 0) {
+                                        //  linear_nada_cadastrado.setVisibility(View.GONE);
+                                    }
+
+                                    adapter_Meus_forum.notifyDataSetChanged();
+                                    shimmerContainer.stopShimmerAnimation();
+                                    shimmerContainer.setVisibility(View.GONE);
+                                    Log.d("ad", "New city: " + change.getDocument().getData());
+                                    break;
+                                case MODIFIED:
+                                    for (Forum ct : listaForum) {
+
+                                        if(forum_grupo.getId().equals(ct.getId())){
+                                            listaForum.remove(ct);
+                                            break;
+                                        }
+                                    }
+                                    listaForum.add(0, forum_grupo);
+                                    if (listaForum.size() > 0) {
+                                        //linear_nada_cadastrado.setVisibility(View.GONE);
+                                    }
+
+                                    adapter_Meus_forum.notifyDataSetChanged();
+                                    shimmerContainer.stopShimmerAnimation();
+                                    shimmerContainer.setVisibility(View.GONE);
+                                    Log.d("md", "Modified city: " + change.getDocument().getData());
+                                    break;
+                                case REMOVED:
+                                    for (Forum ct : listaForum) {
+
+                                        if(forum_grupo.getId().equals(ct.getId())){
+                                            listaForum.remove(ct);
+                                            break;
+                                        }
+                                    }
+
+                                    adapter_Meus_forum.notifyDataSetChanged();
+                                    shimmerContainer.stopShimmerAnimation();
+                                    shimmerContainer.setVisibility(View.GONE);
+                                    Log.d("rem", "Removed city: " + change.getDocument().getData());
+                                    break;
+                            }
+                        }
+                    }
+                });
+
+    }
     @Override
     public void onResume() {
         super.onResume();
@@ -122,74 +168,13 @@ public class Grupo_Fragment extends Fragment implements IOnBackPressed {
         super.onPause();
     }
 
-    public void Recuperar_Grupo_geral(){
-        db.collection("WeForum")
-                .whereEqualTo("opcao", "grupo")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w("", "listen:error", e);
-                            return;
-                        }
-
-                        for (DocumentChange change : snapshots.getDocumentChanges()) {
-                            Log.i("sdsdsd",change.getDocument().getId());
-                            Forum forum_grupo = change.getDocument().toObject(Forum.class);
-                            forum_grupo.setId(change.getDocument().getId());
-                            //  Log.i("sdsdsd",change.getDocument().getId());
-                            // Log.i("sdsdsd2",conto.getUid());
-                            switch (change.getType()) {
-                                case ADDED:
-                                    ListaG.add(0, forum_grupo);
-
-                                    if (ListaG.size() > 0) {
-                                        //  linear_nada_cadastrado.setVisibility(View.GONE);
-                                    }
-                                    shimmerContainer.stopShimmerAnimation();
-                                    shimmerContainer.setVisibility(View.GONE);
-                                    adapter_forum.notifyDataSetChanged();
-                                    Log.d("ad", "New city: " + change.getDocument().getData());
-                                    break;
-                                case MODIFIED:
-                                    for (Forum ct : ListaG) {
-
-                                        if(forum_grupo.getId().equals(ct.getId())){
-                                            ListaG.remove(ct);
-                                            break;
-                                        }
-                                    }
-                                    ListaG.add(0, forum_grupo);
-                                    if (ListaG.size() > 0) {
-                                        //linear_nada_cadastrado.setVisibility(View.GONE);
-                                    }
-                                    shimmerContainer.stopShimmerAnimation();
-                                    shimmerContainer.setVisibility(View.GONE);
-                                    adapter_forum.notifyDataSetChanged();
-                                    Log.d("md", "Modified city: " + change.getDocument().getData());
-                                    break;
-                                case REMOVED:
-                                    for (Forum ct : ListaG) {
-
-                                        if(forum_grupo.getId().equals(ct.getId())){
-                                            ListaG.remove(ct);
-                                            break;
-                                        }
-                                    }
-                                    shimmerContainer.stopShimmerAnimation();
-                                    shimmerContainer.setVisibility(View.GONE);
-                                    adapter_forum.notifyDataSetChanged();
-                                    Log.d("rem", "Removed city: " + change.getDocument().getData());
-                                    break;
-                            }
-                        }
-                    }
-                });
-
-    }
-
     @Override
-    public boolean onBackPressed() {
-        return false;
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.line_criarGrupo:
+                Intent it = new Intent(getContext(), Novo_Grupo_Forum.class);
+                startActivity(it);
+
+        }
     }
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+    <item
+        android:id="@+id/navigation_home_forum"
+        android:icon="@drawable/ic_feed"
+        android:title="@string/title_forum" />
+
+    <item
+        android:id="@+id/navigation_grupos"
+        android:icon="@drawable/icon_group"
+        android:title="@string/title_grupos" />
+
+    <item
+        android:id="@+id/navigation_topico"
+        android:icon="@drawable/icon_topico"
+        android:title="@string/title_topicos" />
+
+    <item
+        android:id="@+id/navigation_perfil"
+        android:icon="@drawable/ic_perfil_black_24dp"
+        android:title="@string/title_profile" />
+
+</menu>

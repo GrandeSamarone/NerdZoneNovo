@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
+
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,7 +36,6 @@ import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_Membro_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_chat_grupo;
-import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Lista_forum_Geral;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.TrocarFundo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Chat_Grupo;
@@ -353,8 +352,8 @@ private void Recuperar_Membros_online(){
 
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
 
-                startActivity(new Intent(Page_Chat_grupo.this, Lista_forum_Geral.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+               // startActivity(new Intent(Page_Chat_grupo.this, Lista_forum_Geral.class)
+                 //       .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 
         }
 

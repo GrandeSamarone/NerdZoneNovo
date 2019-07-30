@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:cardview="http://schemas.android.com/tools"
-    android:background="@color/background">
+    android:background="@color/background_geral">
 
   <androidx.cardview.widget.CardView
 
@@ -12,7 +12,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_centerHorizontal="true"
-      android:backgroundTint="@color/background"
+      android:backgroundTint="@color/background_geral"
       android:clickable="true"
       android:foreground="?android:attr/selectableItemBackground"
       app:cardCornerRadius="4dp"

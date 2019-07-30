@@ -20,7 +20,6 @@
         <activity android:name=".HQ.Pag_producao_hq"></activity>
         <activity android:name=".HQ.Lista_geral_hq" />
         <activity android:name=".Forum.Grupo.Page_Info_Grupo" />
-        <activity android:name=".Forum.Lista_forum_Geral" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -93,7 +92,7 @@
         <activity android:name=".Forum.Lista_Forum" />
         <activity android:name=".Edit.Edit_evento_Activity" />
         <activity android:name=".Edit.Edit_Loja_Activity" />
-        <activity android:name=".Forum.Novo_Forum" />
+        <activity android:name=".Forum.Novo_Grupo_Forum" />
         <activity android:name=".Forum.Grupo.Page_Chat_grupo" />
         <activity android:name=".Conto.ListaConto" />
         <activity android:name=".Conto.Novo_Conto" />

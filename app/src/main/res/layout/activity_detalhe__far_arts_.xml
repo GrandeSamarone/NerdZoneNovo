@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/background"
+    android:background="@color/background_geral"
     >
 
     <androidx.appcompat.widget.Toolbar
@@ -46,7 +46,7 @@
         android:background="@drawable/gradiente_icone" />
 <ProgressBar
     android:id="@+id/progressoart"
-    android:indeterminateTint="@color/background"
+    android:indeterminateTint="@color/background_geral"
     android:layout_below="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"

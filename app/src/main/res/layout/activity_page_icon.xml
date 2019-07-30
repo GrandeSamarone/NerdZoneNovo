@@ -15,7 +15,7 @@
         android:id="@+id/SmartTabLayoutIcons"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/background"
+        android:background="@color/background_geral"
         app:stl_defaultTabTextColor="@color/custom_tab"
         app:stl_dividerColor="@color/branco"
         app:stl_indicatorColor="@color/colorPrimary"

@@ -275,7 +275,7 @@ public class MercadoActivity extends AppCompatActivity implements SwipeRefreshLa
             errobusca.setVisibility(View.VISIBLE);
             errobusca.setText(evento_null);
         }else{
-            linear.setBackgroundColor (getResources().getColor(R.color.background));
+            linear.setBackgroundColor (getResources().getColor(R.color.background_geral));
         }
     }
     adapter = new MercadoAdapter(listaComercioBusca, MercadoActivity.this);

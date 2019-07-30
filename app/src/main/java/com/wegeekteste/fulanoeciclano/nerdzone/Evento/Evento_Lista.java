@@ -200,7 +200,7 @@ public class Evento_Lista extends AppCompatActivity  implements SwipeRefreshLayo
                     ListaEvento.add(0, evento);
                     if(ListaEvento.size()>0){
                         linear.setVisibility(View.GONE);
-                        linear.setBackgroundColor (getResources().getColor(R.color.background));
+                        linear.setBackgroundColor (getResources().getColor(R.color.background_geral));
                     }
                     adapterevento.notifyDataSetChanged();
                     swipeatualizar.setRefreshing(false);
@@ -371,7 +371,7 @@ public class Evento_Lista extends AppCompatActivity  implements SwipeRefreshLayo
                 errobusca.setVisibility(View.VISIBLE);
                 errobusca.setText(evento_null);
             }else{
-                linear.setBackgroundColor (getResources().getColor(R.color.background));
+                linear.setBackgroundColor (getResources().getColor(R.color.background_geral));
             }
 
         }

@@ -7,7 +7,7 @@
     android:id="@+id/root_view_topico"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
-    android:background="@color/background">
+    android:background="@color/background_geral">
 
             <RelativeLayout
                 android:id="@+id/cabecalho"

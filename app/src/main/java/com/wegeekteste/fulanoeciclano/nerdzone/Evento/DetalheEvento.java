@@ -176,7 +176,7 @@ public class DetalheEvento extends AppCompatActivity {
 
                          collapsingToolbarLayout.setTitle(eventoselecionado.getTitulo());
                          collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.transparente));
-                         collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.background));
+                         collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.background_geral));
 
 
                          Uri uri = Uri.parse(eventoselecionado.getCapaevento());

@@ -7,12 +7,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentReference;
@@ -22,9 +25,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.MinhaConta.Minha_Conta_Fragment;
 import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.MainActivityFragment;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.BottomNavigationBehavior;
+import com.wegeekteste.fulanoeciclano.nerdzone.Helper.IOnBackPressed;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Usuario;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
+
+import java.util.List;
+
+import static com.tangxiaolv.telegramgallery.Utils.AndroidUtilities.showToast;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -35,12 +43,16 @@ public class MainActivity extends AppCompatActivity {
     private DocumentReference docRef;
     private BottomNavigationView navigation;
     private static final String ARQUIVO_PREFERENCIA = "arquivoreferencia";
+    private Toast toast = null;
+    int counter=0;
+    private Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
 
 
         //Configuraçoes Originais
@@ -70,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+
+
         //preferences
         SharedPreference();
         //Trocando Fundo statusbar
@@ -80,9 +94,11 @@ public class MainActivity extends AppCompatActivity {
     private void loadFragment(Fragment fragment) {
         // load fragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
         transaction.replace(R.id.frameContaner_Principal, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -90,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment fragment;
+
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     fragment = new MainActivityFragment();
@@ -135,11 +151,46 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    public void onStop() {
-        super.onStop();
-
+    protected void onPause() {
+        killToast();
+        super.onPause();
     }
 
+    //Fechar o app quando o usuario aperta 2 vezes o botao voltar
+    @Override
+    public void onBackPressed() {
+        counter+=1;
+        showToast("Press Novamente para sair");
+        if(counter==2){
+            this.finish();
+        }
+    }
+
+
+
+    private void showToast(String message) {
+        if (this.toast == null) {
+            // Create toast if found null, it would he the case of first call only
+            this.toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+
+        } else if (this.toast.getView() == null) {
+            // Toast not showing, so create new one
+            this.toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+
+        } else {
+            // Updating toast message is showing
+            this.toast.setText(message);
+        }
+
+        // Showing toast finally
+        this.toast.show();
+    }
+
+    private void killToast() {
+        if (this.toast != null) {
+            this.toast.cancel();
+        }
+    }
 
 
 

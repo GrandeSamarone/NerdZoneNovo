@@ -21,16 +21,17 @@ import java.util.Map;
 // [START post_class]
 @IgnoreExtraProperties
 public class Forum implements Serializable {
-    public String id;
-    public String idauthor;
-    public String nomeauthor;
-    public String titulo;
-    public String foto;
-    public String descricao;
-    public String data;
-    public String opcao;
-    public int likecount = 0;
-    public  int quantcomentario=0;
+    private String id;
+    private String idauthor;
+    private String nomeauthor;
+    private String titulo;
+    private String foto;
+    private String descricao;
+    private String data;
+    private String opcao;
+    private String categoria;
+    private int likecount = 0;
+    private  int quantcomentario=0;
     public Map<String, Boolean> stars = new HashMap<>();
     String usuariologado = UsuarioFirebase.getIdentificadorUsuario();
     public Forum() {
@@ -48,6 +49,7 @@ public class Forum implements Serializable {
       newForum.put("foto", getFoto());
       newForum.put("nomeauthor", getNomeauthor());
       newForum.put("opcao", getOpcao());
+      newForum.put("categoria", getCategoria());
       newForum.put("data",getData());
 
 // Add a new document with a generated ID
@@ -203,6 +205,14 @@ public class Forum implements Serializable {
 
     public void setOpcao(String opcao) {
         this.opcao = opcao;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 }
 // [END post_class]

@@ -56,6 +56,7 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Lista_Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.MinhaConta.Minha_Conta_Fragment;
 import com.wegeekteste.fulanoeciclano.nerdzone.HQ.Pag_producao_hq;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.BottomNavigationBehavior;
+import com.wegeekteste.fulanoeciclano.nerdzone.Helper.IOnBackPressed;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.RecyclerItemClickListener;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.TrocarFundo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
@@ -77,7 +78,7 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainActivityFragment extends Fragment  {
+public class MainActivityFragment extends Fragment   implements IOnBackPressed{
 
 
     private RecyclerView recyclerViewListaGibiMercado;
@@ -462,5 +463,10 @@ public class MainActivityFragment extends Fragment  {
         win.setAttributes(winParams);
     }
 
+    @Override
+    public boolean onBackPressed() {
+
+        return false;
+    }
 }
 
