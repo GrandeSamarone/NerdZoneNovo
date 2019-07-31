@@ -1,6 +1,5 @@
 package com.wegeekteste.fulanoeciclano.nerdzone.Forum;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,41 +8,31 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
-import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
-import android.util.Log;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.wegeekteste.fulanoeciclano.nerdzone.Activits.MainActivity;
-import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_Forum;
-import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.MainActivityFragment;
-import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.MinhaConta.Minha_Conta_Fragment;
+import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_Forum_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.forum.Forum_Fragment_principal;
 import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.forum.Grupo_Fragment;
 import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.forum.Topico_Fragment;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.BottomNavigationBehavior;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.IOnBackPressed;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.TrocarFundo;
-import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
@@ -54,7 +43,7 @@ public class Lista_Forum extends TrocarFundo implements View.OnClickListener {
     private Toolbar toolbar;
     private ImageView icone;
     private MaterialSearchView SeachViewTopico;
-    private Adapter_Forum adapter_Meus_forum;
+    private Adapter_Forum_Grupo adapter_Meus_forum;
     private FloatingActionButton botaoMaisTopicos;
     private RecyclerView recyclerView_lista_Meus_Forum;
     private ArrayList<Forum> listaForum = new ArrayList<>();

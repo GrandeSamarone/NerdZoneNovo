@@ -21,13 +21,17 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_Forum;
+import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_Forum_Grupo;
+import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_Membro_Grupo;
+import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Grupo.Page_Chat_grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Grupo.Page_Info_Grupo;
-import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Lista_Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.IOnBackPressed;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.RecyclerItemClickListener;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
+import com.wegeekteste.fulanoeciclano.nerdzone.Model.Membro_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
 import java.util.ArrayList;
@@ -38,13 +42,15 @@ import java.util.List;
  */
 public class Grupo_Fragment extends Fragment implements IOnBackPressed {
     private FirebaseFirestore db;
-    private Adapter_Forum adapter_forum;
-    private Adapter_Forum adapter_topico;
-    private RecyclerView recicle_Grupo_geral,recicle_Topico_geral;
+    private Adapter_Forum_Grupo adapter_forumGrupo;
+    private ArrayList<Membro_Grupo> list_membro_grupo= new ArrayList<>();
+    private RecyclerView recicle_Grupo_geral,recicle_Grupo_online;
     private ArrayList<Forum> ListaG = new ArrayList<>();
     private ArrayList<Forum> ListaT = new ArrayList<>();
     private String id_Forum;
     private ShimmerFrameLayout shimmerContainer;
+    private ListenerRegistration registration;
+    private ListenerRegistration registration_membro;
 
     public Grupo_Fragment() {
         // Required empty public constructor
@@ -65,21 +71,21 @@ public class Grupo_Fragment extends Fragment implements IOnBackPressed {
         //efeito carregando do facebook
         shimmerContainer = (ShimmerFrameLayout) view.findViewById(R.id.shimmer_view_container_Grupo);
         recicle_Grupo_geral=view.findViewById(R.id.RecycleViewGrupo_geral);
-        adapter_forum = new Adapter_Forum(ListaG,getContext());
+        adapter_forumGrupo = new Adapter_Forum_Grupo(ListaG,getContext());
         //Adapter
         @SuppressLint("WrongConstant") RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false);
         recicle_Grupo_geral.setLayoutManager(layoutManager);
         recicle_Grupo_geral.setHasFixedSize(true);
-        recicle_Grupo_geral.setAdapter(adapter_forum);
+        recicle_Grupo_geral.setAdapter(adapter_forumGrupo);
 
         recicle_Grupo_geral.addOnItemTouchListener(new RecyclerItemClickListener(
                 getContext(), recicle_Grupo_geral, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                List<Forum> listaAtualizada = adapter_forum.getForuns();
+                List<Forum> listaAtualizada = adapter_forumGrupo.getForuns();
 
                 if(listaAtualizada.size()>0){
-                    String id_grupo_selecionado = adapter_forum.getForuns().get(position).getId();
+                    String id_grupo_selecionado = adapter_forumGrupo.getForuns().get(position).getId();
                     Forum forumselecionado = listaAtualizada.get(position);
                     Intent it = new Intent(getContext(), Page_Info_Grupo.class);
                     it.putExtra("grupo_info",forumselecionado);
@@ -103,8 +109,7 @@ public class Grupo_Fragment extends Fragment implements IOnBackPressed {
 
 
 
-
-
+        //chamando
         Recuperar_Grupo_geral();
     return view;
     }
@@ -123,9 +128,9 @@ public class Grupo_Fragment extends Fragment implements IOnBackPressed {
     }
 
     public void Recuperar_Grupo_geral(){
-        db.collection("WeForum")
-                .whereEqualTo("opcao", "grupo")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+        Query query= db.collection("WeForum")
+                .orderBy("data", Query.Direction.ASCENDING);
+        registration=query.addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
                         if (e != null) {
@@ -148,7 +153,7 @@ public class Grupo_Fragment extends Fragment implements IOnBackPressed {
                                     }
                                     shimmerContainer.stopShimmerAnimation();
                                     shimmerContainer.setVisibility(View.GONE);
-                                    adapter_forum.notifyDataSetChanged();
+                                    adapter_forumGrupo.notifyDataSetChanged();
                                     Log.d("ad", "New city: " + change.getDocument().getData());
                                     break;
                                 case MODIFIED:
@@ -165,7 +170,7 @@ public class Grupo_Fragment extends Fragment implements IOnBackPressed {
                                     }
                                     shimmerContainer.stopShimmerAnimation();
                                     shimmerContainer.setVisibility(View.GONE);
-                                    adapter_forum.notifyDataSetChanged();
+                                    adapter_forumGrupo.notifyDataSetChanged();
                                     Log.d("md", "Modified city: " + change.getDocument().getData());
                                     break;
                                 case REMOVED:
@@ -178,7 +183,7 @@ public class Grupo_Fragment extends Fragment implements IOnBackPressed {
                                     }
                                     shimmerContainer.stopShimmerAnimation();
                                     shimmerContainer.setVisibility(View.GONE);
-                                    adapter_forum.notifyDataSetChanged();
+                                    adapter_forumGrupo.notifyDataSetChanged();
                                     Log.d("rem", "Removed city: " + change.getDocument().getData());
                                     break;
                             }
@@ -187,6 +192,13 @@ public class Grupo_Fragment extends Fragment implements IOnBackPressed {
                 });
 
     }
+
+
+
+
+
+
+
 
     @Override
     public boolean onBackPressed() {

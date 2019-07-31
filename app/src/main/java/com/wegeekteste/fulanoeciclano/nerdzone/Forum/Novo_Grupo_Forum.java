@@ -10,7 +10,10 @@ import android.provider.MediaStore;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,12 +22,17 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.daasuu.bl.ArrowDirection;
+import com.daasuu.bl.BubbleLayout;
+import com.daasuu.bl.BubblePopupHelper;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseUser;
@@ -45,9 +53,12 @@ import com.wegeekteste.fulanoeciclano.nerdzone.R;
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Random;
 import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.tangxiaolv.telegramgallery.Utils.Utilities.random;
 
 public class Novo_Grupo_Forum extends TrocarFundo {
 
@@ -58,7 +69,7 @@ public class Novo_Grupo_Forum extends TrocarFundo {
     private Toolbar toolbar;
     private CircleImageView icone;
     private CircleImageView img_novo_grupo;
-    private String urlimg, op;
+    private String urlimg, isChecked;
     private Button botaosalvar;
     private DatabaseReference databaseusuario, databasetopico, SeguidoresRef;
     private DataSnapshot seguidoresSnapshot;
@@ -77,7 +88,7 @@ public class Novo_Grupo_Forum extends TrocarFundo {
     private SharedPreferences sharedPreferences;
     private SharedPreferences nome_usuario;
     private Spinner campo_categoria_grupo;
-    private String Campo_string="Categoria";
+    private TextView text_con_grupo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +103,8 @@ public class Novo_Grupo_Forum extends TrocarFundo {
         //Configuraçoes Originais
         identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
         storageReference = ConfiguracaoFirebase.getFirebaseStorage();
+
+        text_con_grupo=findViewById(R.id.text_configuracao_grupo);
         titulo_topico = findViewById(R.id.nome_topico);
         mensagem_topico = findViewById(R.id.desc_topico);
         botaosalvar = findViewById(R.id.botaosalvar_Grupo);
@@ -100,7 +113,7 @@ public class Novo_Grupo_Forum extends TrocarFundo {
         botaosalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                validar_Dados_Grupo();
+                validarDados_Grupo();
             }
         });
         img_novo_grupo = findViewById(R.id.image_grupo_Cadastro);
@@ -112,6 +125,28 @@ public class Novo_Grupo_Forum extends TrocarFundo {
                         .getIntent(Novo_Grupo_Forum.this);
                 startActivityForResult(intent, SELECAO_GALERIA);
             }
+        });
+
+
+        //Balão informação
+        BubbleLayout bubbleLayout = (BubbleLayout) LayoutInflater.from(this).inflate(R.layout.layout_sample_popup, null);
+        PopupWindow popupWindow = BubblePopupHelper.create(this, bubbleLayout);
+        final Random random = new Random();
+
+        text_con_grupo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int[] location = new int[2];
+                v.getLocationInWindow(location);
+                if (random.nextBoolean()) {
+                    bubbleLayout.setArrowDirection(ArrowDirection.RIGHT_CENTER);
+                } else {
+                    bubbleLayout.setArrowDirection(ArrowDirection.RIGHT_CENTER);
+                }
+                popupWindow.showAtLocation(v, Gravity.NO_GRAVITY, location[0], v.getHeight() + location[1]);
+            }
+
+
         });
 
 
@@ -222,15 +257,12 @@ public class Novo_Grupo_Forum extends TrocarFundo {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, artista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         campo_categoria_grupo.setAdapter(adapter);
+
         campo_categoria_grupo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                validateSpinner(campo_categoria_grupo,"erro");
 
-                if (campo_categoria_grupo.getSelectedItem().toString().trim().equals("Categoria")) {
-                    Toast.makeText(Novo_Grupo_Forum.this, "add uma categoria", Toast.LENGTH_SHORT).show();
-                } else {
-                    Campo_string = parent.getItemAtPosition(position).toString();
-                }
             }
 
             @Override
@@ -240,24 +272,32 @@ public class Novo_Grupo_Forum extends TrocarFundo {
         });
     }
 
-    private Forum configurarTopico() {
+    boolean validateSpinner(Spinner spinner, String error){
+        View selectedView = spinner.getSelectedView();
+        if (selectedView != null && selectedView instanceof TextView) {
+            TextView selectedTextView = (TextView) selectedView;
+            if (selectedTextView.getText().equals("Selecione")) {
+                selectedTextView.setError(error);
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    private Forum Configurar_Novo_Forum() {
 
         String nome = nome_usuario.getString("nome", "");
         String titulo = titulo_topico.getText().toString();
         String mensagem = mensagem_topico.getText().toString();
-
-        final Calendar calendartempo = Calendar.getInstance();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd'-'MM'-'y", java.util.Locale.getDefault());// MM'/'dd'/'y;
-        String data = simpleDateFormat.format(calendartempo.getTime());
-
+        String categoria_grupo = campo_categoria_grupo.getSelectedItem().toString();
         forum.setIdauthor(identificadorUsuario);
         forum.setNomeauthor(nome);
         forum.setTitulo(titulo);
         forum.setFoto(urlimg);
         forum.setDescricao(mensagem);
-        forum.setData(data);
-        forum.setCategoria(Campo_string);
-        forum.setOpcao(op);
+        forum.setCategoria(categoria_grupo);
+        forum.setOpcao(isChecked);
         if (url != null) {
             forum.setFoto(String.valueOf(url));
         } else {
@@ -267,32 +307,48 @@ public class Novo_Grupo_Forum extends TrocarFundo {
 
     }
 
-    public void validar_Dados_Grupo() {
-        forum = configurarTopico();
 
-        if (TextUtils.isEmpty(forum.getTitulo())) {
-            titulo_topico.setError(padrao);
-            return;
+    public void validarDados_Grupo() {
+        forum = Configurar_Novo_Forum();
+                    // verificando se  está vazio
+                    if (TextUtils.isEmpty(forum.getTitulo())) {
+                        titulo_topico.setError(padrao);
+                        return;
+                    }
+                    if (TextUtils.isEmpty(forum.getDescricao())) {
+                        mensagem_topico.setError(padrao);
+                        return;
+                    }
+        if ( (!forum.getCategoria().equals("Selecione"))) {
+            if (forum.getFoto() != null) {
+                if (forum.getOpcao()!=null) {
+
+
+                    forum.SalvarForum();
+                    Toast.makeText(Novo_Grupo_Forum.this, "Grupo Criado Com Sucesso!", Toast.LENGTH_SHORT).show();
+                    Intent it = new Intent(Novo_Grupo_Forum.this, Lista_Forum.class);
+                    startActivity(it);
+                    finish();
+                } else {
+                    Toast toast = Toast.makeText(this, "Grupo Livre ou com Permissão?", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
+                    toast.show();
+                }
+            }else {
+                Toast toast = Toast.makeText(this, "Selecione uma Foto", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
+                toast.show();
+            }
+        }else {
+            Toast toast = Toast.makeText(this, "Selecione uma Categoria", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
+            toast.show();
         }
-        if (TextUtils.isEmpty(forum.getDescricao())) {
-            mensagem_topico.setError(padrao);
-            return;
+
         }
 
-            forum.SalvarForum();
 
 
-
-
-
-        //int qtdTopicos = perfil.getTopicos() + 1;
-        //perfil.setTopicos(qtdTopicos);
-        //perfil.atualizarQtdTopicos();
-        Toast.makeText(Novo_Grupo_Forum.this, "Grupo Criado Com Sucesso!", Toast.LENGTH_SHORT).show();
-        Intent it = new Intent(Novo_Grupo_Forum.this, Lista_Forum.class);
-        startActivity(it);
-        finish();
-    }
 
     public void VerificaRadioButton(){
         //radio group
@@ -300,9 +356,9 @@ public class Novo_Grupo_Forum extends TrocarFundo {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if(checkedId== R.id.radiogrupo_Free){
-                   op="grupo_free";
+                    isChecked="grupo_free";
                 }else if(checkedId==R.id.radiogrupo_permissao){
-                   op="grupo_permissao";
+                    isChecked="grupo_permissao";
                 }
             }
         });

@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString("nome", usuario.getNome());
                 editor.putString("foto_usuario", usuario.getFoto());
                 Log.i("sdosdo0", usuario.getFoto());
-                Toast.makeText(MainActivity.this, usuario.getNome() + " pegou", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(MainActivity.this, usuario.getNome() + " pegou", Toast.LENGTH_SHORT).show();
                 editor.commit();
 
             }

@@ -123,7 +123,7 @@
     </string-array>
 
     <string-array name="categoria_grupo">
-        <item>Categoria</item>
+        <item>Selecione</item>
         <item>Games</item>
         <item>HQ</item>
         <item>Filmes</item>

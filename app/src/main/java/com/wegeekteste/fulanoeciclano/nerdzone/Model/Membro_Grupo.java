@@ -26,7 +26,10 @@ public class Membro_Grupo {
 
         db.collection("WeForum").document(getId_grupo())
                 .collection("Membros").document(getId_usuario()).set(membrosMap);
+
     }
+
+
 
     public String getId() {
         return id;

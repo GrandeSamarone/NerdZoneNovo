@@ -26,18 +26,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <de.hdodenhof.circleimageview.CircleImageView
+
                         android:id="@+id/icone_chat_toolbar"
                         android:background="@drawable/fundo_user"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                      android:layout_alignParentLeft="true"
-                        android:layout_marginLeft="8dp"
+                        android:layout_marginLeft="45dp"
                         android:layout_marginTop="10dp"/>
                     <TextView
+                        android:fontFamily="@font/fontgeek"
                         android:textSize="25dp"
                         android:id="@+id/detalhe_topico_titulo"
-                        android:layout_marginLeft="4dp"
+                        android:layout_marginLeft="8dp"
                         android:text="Wegeek"
+                        android:textColor="@color/background_geral"
+                        android:textStyle="bold"
+                        android:maxLines="1"
                         android:layout_marginTop="16dp"
                         android:layout_toRightOf="@+id/icone_user_toolbar"
                         android:layout_width="match_parent"
@@ -61,6 +66,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
+
             <androidx.recyclerview.widget.RecyclerView
                 android:visibility="gone"
                 android:id="@+id/recycler_chat_online"

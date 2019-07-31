@@ -2,7 +2,11 @@ package com.wegeekteste.fulanoeciclano.nerdzone.Adapter;
 
 import android.content.Context;
 import android.net.Uri;
+
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,17 +23,24 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.CircleProgressDrawable;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
 import java.util.List;
 
-public class Adapter_Forum extends RecyclerView.Adapter<Adapter_Forum.MyViewHolder> {
+import static android.content.ContentValues.TAG;
+
+public class Adapter_Forum_Grupo extends RecyclerView.Adapter<Adapter_Forum_Grupo.MyViewHolder> {
 
     private List<Forum> foruns;
     private Context context;
-    public Adapter_Forum(List<Forum> forum, Context context){
+    private FirebaseFirestore db;
+    public Adapter_Forum_Grupo(List<Forum> forum, Context context){
         this.foruns = forum;
         this.context=context;
     }
@@ -38,7 +49,7 @@ public class Adapter_Forum extends RecyclerView.Adapter<Adapter_Forum.MyViewHold
     }
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_mercado,parent,false);
+        View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_forum_grupo,parent,false);
 
         return new MyViewHolder(item);
     }
@@ -82,6 +93,19 @@ public class Adapter_Forum extends RecyclerView.Adapter<Adapter_Forum.MyViewHold
         }
 
 
+                 db = FirebaseFirestore.getInstance();
+                db.collection("WeForum").document("eaEWsB0NzJYcYAJxNpB0")
+                        .collection("Online").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    Log.d("sdsdsd77", task.getResult().size() + "");
+                    holder.Quant_Online.setText(String.valueOf(task.getResult().size()));
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
 
     }
 
@@ -101,7 +125,7 @@ public class Adapter_Forum extends RecyclerView.Adapter<Adapter_Forum.MyViewHold
         TextView categoria;
         TextView estado;
         SimpleDraweeView capa;
-        RatingBar rating;
+        TextView Quant_Online;
 
 
 
@@ -113,7 +137,7 @@ public class Adapter_Forum extends RecyclerView.Adapter<Adapter_Forum.MyViewHold
             categoria = itemView.findViewById(R.id.textcategoria);
             estado = itemView.findViewById(R.id.textestado);
             capa = itemView.findViewById(R.id.capamercado);
-            rating = itemView.findViewById(R.id.rating_mercado);
+            Quant_Online = itemView.findViewById(R.id.text_quant_online);
         }
     }
 }

@@ -9,12 +9,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ServerTimestamp;
 import com.google.firebase.storage.StorageReference;
 import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +30,7 @@ public class Forum implements Serializable {
     private String titulo;
     private String foto;
     private String descricao;
-    private String data;
+    private @ServerTimestamp Date data;
     private String opcao;
     private String categoria;
     private int likecount = 0;
@@ -50,7 +53,7 @@ public class Forum implements Serializable {
       newForum.put("nomeauthor", getNomeauthor());
       newForum.put("opcao", getOpcao());
       newForum.put("categoria", getCategoria());
-      newForum.put("data",getData());
+      newForum.put("data", FieldValue.serverTimestamp());
 
 // Add a new document with a generated ID
       db.collection("WeForum")
@@ -183,11 +186,11 @@ public class Forum implements Serializable {
         this.stars = stars;
     }
 
-    public String getData() {
+    public Date getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(Date data) {
         this.data = data;
     }
 

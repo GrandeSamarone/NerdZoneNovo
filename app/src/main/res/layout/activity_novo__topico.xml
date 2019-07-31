@@ -83,12 +83,17 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
+            android:id="@+id/text_configuracao_grupo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Configurações do Grupo:"
             android:textColor="@color/pretoescrita"
             android:textSize="20sp"
-            android:fontFamily="@font/fontgeek"/>
+            android:fontFamily="@font/fontgeek"
+            android:drawableRight="@drawable/ic_help_outline_black_24dp"/>
+
+
+
         <RadioGroup
     android:id="@+id/radio_group_grupo"
     android:layout_width="match_parent"
@@ -115,6 +120,7 @@
             android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/pretoescrita"
             android:text="Categoria:"
             android:textSize="20sp"
             android:fontFamily="@font/fontgeek"/>
@@ -122,7 +128,7 @@
             android:layout_marginTop="8dp"
             android:id="@+id/spinner_grupo_categoria"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="30dp" />
 
     <Button
         android:layout_marginTop="16dp"

@@ -21,7 +21,7 @@
     <style name="botaopadrao" parent="Theme.AppCompat.Light">
         <item name="colorControlHighlight">#00bff9</item>
         <item name="colorButtonNormal">@color/colorPrimary</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@color/background_geral</item>
 
     </style>
 

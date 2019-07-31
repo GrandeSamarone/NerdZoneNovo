@@ -3,31 +3,41 @@ package com.wegeekteste.fulanoeciclano.nerdzone.Forum.Grupo;
 import android.content.Intent;
 import android.net.Uri;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.wegeekteste.fulanoeciclano.nerdzone.Helper.TrocarFundo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class Page_Info_Grupo extends AppCompatActivity {
+public class Page_Info_Grupo extends TrocarFundo {
 
     private Button botao_entrar_grupo;
     private CircleImageView img_perfil_grupo;
-    private TextView nome_info,descricao_info,criador_info,membros_info;
+    private TextView nome_info,descricao_info,criador_info,membros_info,nome_toolbar;
     private Forum forum;
     private String id_grupo_selecionado;
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_page_permissao);
 
+        toolbar = findViewById(R.id.toolbarsecundario);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+
            //Configuracoes Básicas
+           nome_toolbar=findViewById(R.id.app_toolbar_title_secundario);
             img_perfil_grupo=findViewById(R.id.icone_grupo_info);
             nome_info=findViewById(R.id.nome_grupo_info);
             descricao_info=findViewById(R.id.desc_grupo_info);
@@ -43,6 +53,7 @@ public class Page_Info_Grupo extends AppCompatActivity {
                     it.putExtra("forum_selecionado",forum);
                     it.putExtra("id_forum_selecionado",id_grupo_selecionado);
                     startActivity(it);
+                    finish();
 
                 }
             });
@@ -57,6 +68,7 @@ public class Page_Info_Grupo extends AppCompatActivity {
          if(bundle.containsKey("grupo_info")){
            forum= (Forum) bundle.getSerializable("grupo_info");
              nome_info.setText(forum.getTitulo());
+             nome_toolbar.setText(forum.getTitulo());
              descricao_info.setText(forum.getDescricao());
              criador_info.setText(forum.getNomeauthor());
 
@@ -69,5 +81,28 @@ public class Page_Info_Grupo extends AppCompatActivity {
             }
          }
            }
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+
+
+    public boolean  onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
+
+               finish();
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

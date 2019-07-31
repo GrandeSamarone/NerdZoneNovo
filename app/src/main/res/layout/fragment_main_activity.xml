@@ -269,7 +269,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="155dp"
                     android:layout_marginTop="4dp"
-                    android:layout_marginBottom="4dp"
+                    android:layout_marginBottom="8dp"
                     android:layout_marginLeft="-5dp"
                     android:layout_marginRight="-5dp"
                     android:elevation="6dp"
@@ -291,7 +291,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
+                    android:visibility="gone"
                     >
                     <TextView
                         android:id="@+id/txt_historias"
@@ -330,6 +330,7 @@
                         />
                 </RelativeLayout>
                 <androidx.cardview.widget.CardView
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="155dp"
                     android:layout_marginTop="4dp"
@@ -356,7 +357,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
+                    android:visibility="gone"
                     >
                     <TextView
                         android:id="@+id/txt_galeria"
@@ -395,6 +396,7 @@
                         />
                 </RelativeLayout>
                 <androidx.cardview.widget.CardView
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="155dp"
                     android:layout_marginTop="4dp"

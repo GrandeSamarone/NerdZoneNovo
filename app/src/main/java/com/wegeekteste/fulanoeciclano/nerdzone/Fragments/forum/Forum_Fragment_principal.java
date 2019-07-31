@@ -25,7 +25,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_Forum;
+import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_Forum_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Novo_Grupo_Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
@@ -37,7 +37,7 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  */
 public class Forum_Fragment_principal extends Fragment implements View.OnClickListener {
-    private Adapter_Forum adapter_Meus_forum;
+    private Adapter_Forum_Grupo adapter_Meus_forum;
     private RecyclerView recyclerView_lista_Meus_Forum;
     private ArrayList<Forum> listaForum = new ArrayList<>();
     private Dialog dialog;
@@ -66,7 +66,7 @@ public class Forum_Fragment_principal extends Fragment implements View.OnClickLi
         criarGrupo.setOnClickListener(this);
 
         //adapter
-        adapter_Meus_forum = new Adapter_Forum(listaForum,getContext());
+        adapter_Meus_forum = new Adapter_Forum_Grupo(listaForum,getContext());
 
         //efeito carregando do facebook
         shimmerContainer = (ShimmerFrameLayout) view.findViewById(R.id.shimmer_view_container_Forum);

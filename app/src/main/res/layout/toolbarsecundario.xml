@@ -39,10 +39,12 @@
             android:id="@+id/app_toolbar_title_secundario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Wegeek"
+            android:text=""
             android:textAlignment="center"
-            android:textSize="26dp"
-            android:textStyle="bold" />
+            android:textSize="24dp"
+            android:textStyle="bold"
+            android:textColor="@color/background_geral"
+            android:fontFamily="@font/fontgeek"/>
     </RelativeLayout>
 
 

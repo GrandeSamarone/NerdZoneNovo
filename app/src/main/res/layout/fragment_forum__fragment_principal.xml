@@ -117,7 +117,7 @@
                         android:fontFamily="@font/fontgeek"
                         android:textColor="@color/pretoescrita"
                         android:textSize="14sp"
-                        android:text="Convite"
+                        android:text="Convites"
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />

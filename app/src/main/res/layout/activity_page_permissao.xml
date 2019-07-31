@@ -4,62 +4,89 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".Forum.Grupo.Page_Info_Grupo">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbarsecundario" />
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginTop="16dp"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/icone_grupo_info"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center" />
 
         <TextView
             android:id="@+id/nome_grupo_info"
-            android:textSize="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/fontgeek"
             android:text="NOME"
             android:textAlignment="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:textSize="30dp" />
 
         <TextView
             android:id="@+id/desc_grupo_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:textSize="20dp"
+            android:fontFamily="@font/fontgeek"
             android:text="DESCRICAO"
             android:textAlignment="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:textSize="20dp" />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center">
         <TextView
+            android:fontFamily="@font/fontgeek"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:textAlignment="center"
+            android:layout_marginRight="8dp"
             android:text="Criado por"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:textAlignment="center" />
+
         <TextView
-            android:layout_marginTop="5dp"
+            android:fontFamily="@font/fontgeek"
             android:id="@+id/criador_grupo_info"
-            android:textAlignment="center"
-            android:text="Criador"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:text="Criador"
+            android:textAlignment="center" />
+</LinearLayout>
+
+        <TextView
+            android:fontFamily="@font/fontgeek"
             android:id="@+id/membros_grupo_info"
-            android:textAlignment="center"
-            android:text="Membros"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Membros"
+            android:textAlignment="center" />
+
 
         <Button
             android:id="@+id/botao_grupo_info"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="Entrar no Grupo"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:drawableRight="@drawable/ic_arrow_forward"
+            android:fontFamily="@font/fontgeek"
+            android:text="Se torne um Membro"
+            android:textSize="24sp"
+            android:theme="@style/botaopadrao" />
     </LinearLayout>
 
 
