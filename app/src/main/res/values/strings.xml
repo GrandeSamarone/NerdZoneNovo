@@ -124,12 +124,18 @@
 
     <string-array name="categoria_grupo">
         <item>Selecione</item>
-        <item>Games</item>
-        <item>HQ</item>
-        <item>Filmes</item>
+        <item>Action Figures</item>
         <item>Comércio</item>
         <item>Desenhos</item>
-        <item>Action Figures</item>
+        <item>Filmes</item>
+        <item>Games</item>
+        <item>HQ</item>
+        <item>Tecnologia</item>
+        <item>História</item>
+
+
+
+
 
 
     </string-array>

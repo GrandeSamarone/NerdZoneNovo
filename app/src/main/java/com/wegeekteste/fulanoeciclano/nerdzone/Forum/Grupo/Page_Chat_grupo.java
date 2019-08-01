@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,15 +18,14 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -52,9 +52,10 @@ import com.wegeekteste.fulanoeciclano.nerdzone.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static android.content.ContentValues.TAG;
 
 public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener {
 
@@ -79,30 +80,28 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
     private String identificadorUsuario;
     private SharedPreferences Foto_usuario;
     private SharedPreferences nome_usuario;
-    private TextView user_digitando;
+    private TextView detalhe_topico_quant_membros;
     private ListenerRegistration registration, registration_membro;
     private static final String ARQUIVO_PREFERENCIA = "arquivoreferencia";
-    private LinearLayout line_digitando;
     private boolean typingStarted;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fresco.initialize(this);
 
-        setContentView(R.layout.activity_detalhetopico);
+        setContentView(R.layout.activity_detalhe_chat_grupo);
         toolbar = findViewById(R.id.toolbartopico);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
         //Configuracoes Iniciais
-        line_digitando=findViewById(R.id.liner_digitando);
+
         db = FirebaseFirestore.getInstance();
-        user_digitando=findViewById(R.id.user_digitando);
         identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
         icone = findViewById(R.id.icone_chat_toolbar);
         titulo = findViewById(R.id.detalhe_topico_titulo);
         edit_chat_emoji = findViewById(R.id.caixa_de_texto_comentario_topico);
-
+        detalhe_topico_quant_membros=findViewById(R.id.detalhe_topico_quant_membros);
         botao_env_msg = findViewById(R.id.button_postar_comentario_topico);
         botao_env_msg.setOnClickListener(this);
         botaoicone = findViewById(R.id.botao_post_icone_topico);
@@ -136,6 +135,7 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         if (forum_selecionado != null) {
             Log.i("373773", forum_selecionado.getFoto());
             titulo.setText(forum_selecionado.getTitulo());
+            detalhe_topico_quant_membros.setText(String.valueOf(forum_selecionado.getMembro_count()));
             //  mensagem.setText(topicoselecionado.getDescricao());
             // RecuperarIcone_e_nome_author(topicoselecionado.getIdauthor());
             if (forum_selecionado.getFoto() != null) {
@@ -170,6 +170,10 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         Digitando();
         Recuperar_Mensagens();
 
+         //Conta a quantidade de membros
+        quant_membros();
+        //recuperar que está digitando
+        Recuperar_Membros_Digitand_online();
         // Preferences pega o nome do usuario;
         nome_usuario = getSharedPreferences(ARQUIVO_PREFERENCIA, MODE_PRIVATE);
         Foto_usuario = getSharedPreferences(ARQUIVO_PREFERENCIA, MODE_PRIVATE);
@@ -213,16 +217,16 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
                 if (!TextUtils.isEmpty(s.toString()) && s.toString().trim().length() == 1) {
                     //Log.i(TAG, “typing started event…”);
                     typingStarted = true;
-                    user_digitando.setText("Marlos trinidad");
+                  //  user_digitando.setText("Marlos trinidad");
                     Adicionar_Membro_digitando_true();
-                    line_digitando.setVisibility(View.VISIBLE);
+
                     //send typing started status
                 } else if (s.toString().trim().length() == 0 && typingStarted) {
                     //Log.i(TAG, “typing stopped event…”);
                     typingStarted = false;
                     //user_digitando.setText("Marlos trinidad");
                     Adicionar_Membro_digitando_false();
-                    line_digitando.setVisibility(View.GONE);
+
                     //send typing stopped status
                 }
 
@@ -279,15 +283,12 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         membrosMap.put("digitando", true);
         db.collection("WeForum").document(Id_Forum_selecionado)
                 .collection("Membros").document(identificadorUsuario).update(membrosMap);
-
     }
-
     private void Adicionar_Membro_digitando_false() {
         HashMap<String, Object> membrosMap = new HashMap<>();
         membrosMap.put("digitando", false);
         db.collection("WeForum").document(Id_Forum_selecionado)
                 .collection("Membros").document(identificadorUsuario).update(membrosMap);
-
     }
 
     private void SalvarMensagem() {
@@ -315,6 +316,7 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         edit_chat_emoji.setText("");
     }
 
+    //Recuperar Mensagens do Chat
     private void Recuperar_Mensagens() {
         list_conversa_grupo.clear();
 
@@ -343,13 +345,13 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
 
     }
 
-
-    /*private void Recuperar_Membros_online() {
+       //Recupera que está digitando
+    private void Recuperar_Membros_Digitand_online() {
         list_membro_grupo.clear();
         Query query =
                 db.collection("WeForum").document(Id_Forum_selecionado)
                         .collection("Membros")
-                        .whereEqualTo("status", "online");
+                        .whereEqualTo("digitando", true);
         registration_membro = query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
@@ -411,7 +413,26 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         });
     }
 
-*/
+    //Conta a quantidade de membros
+    private void quant_membros() {
+        db = FirebaseFirestore.getInstance();
+        db.collection("WeForum").document(Id_Forum_selecionado)
+         .collection("Membros").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    Log.d("sdsdsd77", task.getResult().size() + "");
+                    HashMap<String, Object> membrosMap = new HashMap<>();
+                    membrosMap.put("membro_count", task.getResult().size());
+                    db.collection("WeForum").document(Id_Forum_selecionado).update(membrosMap);
+
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+
+    }
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {

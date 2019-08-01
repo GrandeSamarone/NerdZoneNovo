@@ -86,7 +86,7 @@ return  TIPO_REMETENTE;
         public MyViewHolder(View itemView) {
             super(itemView);
             mensagem= itemView.findViewById(R.id.textMensagemtexto);
-            Usuario_Foto = itemView.findViewById(R.id.chat_img_usuario);
+       //     Usuario_Foto = itemView.findViewById(R.id.chat_img_usuario);
             tempo = itemView.findViewById(R.id.tempodochat);
 
         }

@@ -92,20 +92,9 @@ public class Adapter_Forum_Grupo extends RecyclerView.Adapter<Adapter_Forum_Grup
             }
         }
 
+            holder.Quant_Online.setText(String.valueOf(forum.getMembro_count()));
 
-                 db = FirebaseFirestore.getInstance();
-                db.collection("WeForum").document("eaEWsB0NzJYcYAJxNpB0")
-                        .collection("Online").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    Log.d("sdsdsd77", task.getResult().size() + "");
-                    holder.Quant_Online.setText(String.valueOf(task.getResult().size()));
-                } else {
-                    Log.d(TAG, "Error getting documents: ", task.getException());
-                }
-            }
-        });
+
 
     }
 

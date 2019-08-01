@@ -24,6 +24,7 @@ import java.util.Map;
 // [START post_class]
 @IgnoreExtraProperties
 public class Forum implements Serializable {
+
     private String id;
     private String idauthor;
     private String nomeauthor;
@@ -33,7 +34,7 @@ public class Forum implements Serializable {
     private @ServerTimestamp Date data;
     private String opcao;
     private String categoria;
-    private int likecount = 0;
+    private int membro_count = 0;
     private  int quantcomentario=0;
     public Map<String, Boolean> stars = new HashMap<>();
     String usuariologado = UsuarioFirebase.getIdentificadorUsuario();
@@ -53,6 +54,7 @@ public class Forum implements Serializable {
       newForum.put("nomeauthor", getNomeauthor());
       newForum.put("opcao", getOpcao());
       newForum.put("categoria", getCategoria());
+      newForum.put("membro_count",0);
       newForum.put("data", FieldValue.serverTimestamp());
 
 // Add a new document with a generated ID
@@ -162,12 +164,12 @@ public class Forum implements Serializable {
         this.descricao = descricao;
     }
 
-    public int getLikecount() {
-        return likecount;
+    public int getMembro_count() {
+        return membro_count;
     }
 
-    public void setLikecount(int likecount) {
-        this.likecount = likecount;
+    public void setMembro_count(int membro_count) {
+        this.membro_count = membro_count;
     }
 
     public int getQuantcomentario() {

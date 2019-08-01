@@ -3,6 +3,7 @@ package com.wegeekteste.fulanoeciclano.nerdzone.Fragments.forum;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -17,7 +18,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -30,12 +33,15 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Grupo.Page_Chat_grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Grupo.Page_Info_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.IOnBackPressed;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.RecyclerItemClickListener;
+import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Membro_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,7 +57,9 @@ public class Grupo_Fragment extends Fragment implements IOnBackPressed {
     private ShimmerFrameLayout shimmerContainer;
     private ListenerRegistration registration;
     private ListenerRegistration registration_membro;
-
+    private SharedPreferences sPreferences=null;
+    private String verificacao;
+    private String identificadorUsuario;
     public Grupo_Fragment() {
         // Required empty public constructor
     }
@@ -66,7 +74,7 @@ public class Grupo_Fragment extends Fragment implements IOnBackPressed {
         //Configuracoes_Originais
         db = FirebaseFirestore.getInstance();
 
-
+        identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
 
         //efeito carregando do facebook
         shimmerContainer = (ShimmerFrameLayout) view.findViewById(R.id.shimmer_view_container_Grupo);
@@ -87,11 +95,10 @@ public class Grupo_Fragment extends Fragment implements IOnBackPressed {
                 if(listaAtualizada.size()>0){
                     String id_grupo_selecionado = adapter_forumGrupo.getForuns().get(position).getId();
                     Forum forumselecionado = listaAtualizada.get(position);
-                    Intent it = new Intent(getContext(), Page_Info_Grupo.class);
-                    it.putExtra("grupo_info",forumselecionado);
-                    it.putExtra("grupo_id",id_grupo_selecionado);
-                    startActivity(it);
 
+
+                  //Verificando se já é membro
+                    Verificar_membro(id_grupo_selecionado,forumselecionado);
                 }
             }
 
@@ -195,7 +202,28 @@ public class Grupo_Fragment extends Fragment implements IOnBackPressed {
 
 
 
+private void Verificar_membro(String id_grupo,Forum forum_selecionado){
+    //Verifica se é a primeira vez para vizualizar as informacoes do grupo
+    db.collection("WeForum").document(id_grupo)
+            .collection("Membros").document(identificadorUsuario).get()
+            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if(documentSnapshot.exists()){
+                        Intent it = new Intent(getContext(), Page_Chat_grupo.class);
+                        it.putExtra("forum_selecionado",forum_selecionado);
+                        it.putExtra("id_forum_selecionado",id_grupo);
+                        startActivity(it);
+                    }else{
+                        Intent it = new Intent(getContext(), Page_Info_Grupo.class);
+                        it.putExtra("grupo_info",forum_selecionado);
+                        it.putExtra("grupo_id",id_grupo);
+                        startActivity(it);
+                    }
+                }
+            });
 
+}
 
 
 

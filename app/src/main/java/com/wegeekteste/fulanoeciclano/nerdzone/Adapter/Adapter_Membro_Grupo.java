@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
+import com.wegeekteste.fulanoeciclano.nerdzone.Model.Chat_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Membro_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
@@ -19,6 +21,8 @@ public class Adapter_Membro_Grupo extends RecyclerView.Adapter<Adapter_Membro_Gr
 
     private List<Membro_Grupo> membro_grupos;
     private Context context;
+    public static  final int MSG_TYPE_LEFT = 0;
+    public static  final int MSG_TYPE_RIGHT = 1;
     public Adapter_Membro_Grupo(List<Membro_Grupo> membro_grupos, Context context){
         this.membro_grupos = membro_grupos;
         this.context=context;
@@ -28,9 +32,14 @@ public class Adapter_Membro_Grupo extends RecyclerView.Adapter<Adapter_Membro_Gr
     }
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.membro_grupo_online,parent,false);
+        if (membro_grupos.size() > 1) {
+            View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.membros_grupo_online, parent, false);
+            return new Adapter_Membro_Grupo.MyViewHolder(item);
+        } else {
+            View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.membro_grupo_online, parent, false);
+            return new Adapter_Membro_Grupo.MyViewHolder(item);
+        }
 
-        return new MyViewHolder(item);
     }
 
     @Override
@@ -51,7 +60,16 @@ public class Adapter_Membro_Grupo extends RecyclerView.Adapter<Adapter_Membro_Gr
 
     }
 
-
+    @Override
+    public int getItemViewType(int position) {
+        Membro_Grupo membro = membro_grupos.get(position);
+        String idUser = UsuarioFirebase.getIdentificadorUsuario();
+        if (membro.getId_usuario().equals(idUser)){
+            return MSG_TYPE_RIGHT;
+        } else {
+            return MSG_TYPE_LEFT;
+        }
+    }
 
     @Override
     public int getItemCount() {

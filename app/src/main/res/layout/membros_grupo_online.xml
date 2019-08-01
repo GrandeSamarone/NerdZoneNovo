@@ -13,17 +13,10 @@
         android:layout_height="30dp"
         app:civ_border_color="@color/branco"
         app:civ_border_width="2dp"
-          fresco:roundAsCircle="true"
+        fresco:roundAsCircle="true"
         fresco:overlayImage="@drawable/oval"
         android:background="@drawable/fundo_user" />
 
 
-    <TextView
-        android:layout_gravity="bottom"
-        android:fontFamily="@font/fontgeek"
-        android:layout_marginLeft="4dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Digitando..."/>
 
 </LinearLayout>

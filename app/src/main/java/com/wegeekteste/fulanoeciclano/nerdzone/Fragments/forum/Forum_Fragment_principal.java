@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -26,12 +27,16 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_Forum_Grupo;
+import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Grupo.Page_Chat_grupo;
+import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Grupo.Page_Info_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Novo_Grupo_Forum;
+import com.wegeekteste.fulanoeciclano.nerdzone.Helper.RecyclerItemClickListener;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,7 +82,34 @@ public class Forum_Fragment_principal extends Fragment implements View.OnClickLi
         recyclerView_lista_Meus_Forum.setHasFixedSize(true);
         recyclerView_lista_Meus_Forum.setAdapter(adapter_Meus_forum);
 
+        recyclerView_lista_Meus_Forum.addOnItemTouchListener(new RecyclerItemClickListener(
+                getContext(), recyclerView_lista_Meus_Forum, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                List<Forum> listaAtualizada = adapter_Meus_forum.getForuns();
 
+                if(listaAtualizada.size()>0){
+                    String id_grupo_selecionado = adapter_Meus_forum.getForuns().get(position).getId();
+                    Forum forumselecionado = listaAtualizada.get(position);
+                    Intent it = new Intent(getContext(), Page_Chat_grupo.class);
+                    it.putExtra("forum_selecionado",forumselecionado);
+                    it.putExtra("id_forum_selecionado",id_grupo_selecionado);
+                    startActivity(it);
+
+                }
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        }
+        ));
         RecuperarForum();
 
         // lembrar de como reparar se o collection é null

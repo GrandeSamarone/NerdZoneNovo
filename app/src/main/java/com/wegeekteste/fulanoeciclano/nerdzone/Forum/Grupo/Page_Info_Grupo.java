@@ -1,6 +1,7 @@
 package com.wegeekteste.fulanoeciclano.nerdzone.Forum.Grupo;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -44,6 +45,9 @@ public class Page_Info_Grupo extends TrocarFundo {
             criador_info=findViewById(R.id.criador_grupo_info);
             membros_info=findViewById(R.id.membros_grupo_info);
             botao_entrar_grupo = findViewById(R.id.botao_grupo_info);
+
+
+
 
 
             botao_entrar_grupo.setOnClickListener(new View.OnClickListener() {

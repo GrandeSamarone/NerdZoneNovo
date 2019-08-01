@@ -181,7 +181,7 @@ public class Edit_Topico_Activity extends AppCompatActivity {
             topicos.setData(forum.getData());
             topicos.setDescricao(mensagem_topico.getText().toString());
             topicos.setTitulo(titulo_topico.getText().toString());
-            topicos.setLikecount(forum.getLikecount());
+
             topicos.setIdauthor(forum.getIdauthor());
             databasetopico.child(topicos.getId()).setValue(topicos).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override

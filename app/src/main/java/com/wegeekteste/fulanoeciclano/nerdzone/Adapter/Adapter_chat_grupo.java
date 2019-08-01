@@ -58,7 +58,7 @@ public class Adapter_chat_grupo extends   RecyclerView.Adapter<Adapter_chat_grup
             if (chat.isIsseen()){
                 holder.txt_seen.setText("Seen");
             } else {
-                holder.txt_seen.setText("Delivered");
+                holder.txt_seen.setText("entregue");
             }
         } else {
             holder.txt_seen.setVisibility(View.GONE);

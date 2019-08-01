@@ -12,17 +12,15 @@
         android:id="@+id/teste"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/chat_img_usuario"
 
-        android:layout_toEndOf="@+id/chat_img_usuario"
-        android:layout_toRightOf="@+id/chat_img_usuario"
         android:background="@drawable/in_message_bg"
        >
         <com.vanniktech.emoji.EmojiTextView
             android:id="@+id/textMensagemtexto"
             android:textColor="@color/brancochat"
+            android:fontFamily="@font/fontgeek"
             android:text="oiii"
-            android:textSize="18sp"
+            android:textSize="16sp"
             style="@style/TextAppearance.AppCompat.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

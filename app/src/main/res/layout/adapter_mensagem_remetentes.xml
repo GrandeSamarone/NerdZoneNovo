@@ -20,7 +20,8 @@
             <com.vanniktech.emoji.EmojiTextView
                 android:id="@+id/textMensagemtexto"
                 style="@style/TextAppearance.AppCompat.Small"
-                android:textSize="18sp"
+                android:textSize="16sp"
+                android:fontFamily="@font/fontgeek"
                 android:textColor="@color/brancochat"
                 android:text="oi"
                 android:layout_width="wrap_content"
