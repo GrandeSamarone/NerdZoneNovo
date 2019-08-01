@@ -11,6 +11,7 @@ public class Membro_Grupo {
     private String foto_usuario;
     private String status;
     private String id_grupo;
+    private Boolean digitando;
 
 
     public Membro_Grupo(){
@@ -23,7 +24,7 @@ public class Membro_Grupo {
         membrosMap.put("id_usuario", getId_usuario());
         membrosMap.put("foto_usuario",getFoto_usuario() );
         membrosMap.put("nome_usuario", getNome_usuario());
-
+        membrosMap.put("digitando", false);
         db.collection("WeForum").document(getId_grupo())
                 .collection("Membros").document(getId_usuario()).set(membrosMap);
 
@@ -78,5 +79,14 @@ public class Membro_Grupo {
 
     public void setId_grupo(String id_grupo) {
         this.id_grupo = id_grupo;
+    }
+
+
+    public Boolean getDigitando() {
+        return digitando;
+    }
+
+    public void setDigitando(Boolean digitando) {
+        this.digitando = digitando;
     }
 }

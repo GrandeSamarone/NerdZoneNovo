@@ -10,10 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +32,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.tylersuehr.bubbles.BubbleLayout;
 import com.vanniktech.emoji.EmojiEditText;
 import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
@@ -76,24 +79,30 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
     private String identificadorUsuario;
     private SharedPreferences Foto_usuario;
     private SharedPreferences nome_usuario;
+    private TextView user_digitando;
     private ListenerRegistration registration, registration_membro;
     private static final String ARQUIVO_PREFERENCIA = "arquivoreferencia";
-
+    private LinearLayout line_digitando;
+    private boolean typingStarted;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fresco.initialize(this);
+
         setContentView(R.layout.activity_detalhetopico);
         toolbar = findViewById(R.id.toolbartopico);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
         //Configuracoes Iniciais
+        line_digitando=findViewById(R.id.liner_digitando);
         db = FirebaseFirestore.getInstance();
+        user_digitando=findViewById(R.id.user_digitando);
         identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
         icone = findViewById(R.id.icone_chat_toolbar);
         titulo = findViewById(R.id.detalhe_topico_titulo);
         edit_chat_emoji = findViewById(R.id.caixa_de_texto_comentario_topico);
+
         botao_env_msg = findViewById(R.id.button_postar_comentario_topico);
         botao_env_msg.setOnClickListener(this);
         botaoicone = findViewById(R.id.botao_post_icone_topico);
@@ -158,9 +167,8 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
     @Override
     protected void onStart() {
         super.onStart();
-
+        Digitando();
         Recuperar_Mensagens();
-        Recuperar_Membros_online();
 
         // Preferences pega o nome do usuario;
         nome_usuario = getSharedPreferences(ARQUIVO_PREFERENCIA, MODE_PRIVATE);
@@ -172,7 +180,7 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         super.onResume();
         Status("online");
         //  Adicionar_Membro();
-        Online();
+       // Online();
 
     }
 
@@ -184,7 +192,7 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         Status("offline");
 
         //RemoveMembro
-        offline();
+       // offline();
     }
 
     @Override
@@ -198,6 +206,44 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
     }
 
 
+    private void Digitando(){
+        edit_chat_emoji.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+                if (!TextUtils.isEmpty(s.toString()) && s.toString().trim().length() == 1) {
+                    //Log.i(TAG, “typing started event…”);
+                    typingStarted = true;
+                    user_digitando.setText("Marlos trinidad");
+                    Adicionar_Membro_digitando_true();
+                    line_digitando.setVisibility(View.VISIBLE);
+                    //send typing started status
+                } else if (s.toString().trim().length() == 0 && typingStarted) {
+                    //Log.i(TAG, “typing stopped event…”);
+                    typingStarted = false;
+                    //user_digitando.setText("Marlos trinidad");
+                    Adicionar_Membro_digitando_false();
+                    line_digitando.setVisibility(View.GONE);
+                    //send typing stopped status
+                }
+
+            }
+
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+
+
+                Log.i("sdsdsd1",s.subSequence(start, start + count).toString());
+
+
+            }
+
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                s.toString();
+                Log.i("sdsdsd2",s.subSequence(start, start + count).toString());
+            }
+        });
+    }
     private void Status(String status) {
         String nome = nome_usuario.getString("nome", "");
         String foto = Foto_usuario.getString("foto_usuario", "");
@@ -211,7 +257,7 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         membro_grupo.SalvarMembro();
 
     }
-
+       //para contar quantos play online
     private void Online() {
 
         HashMap<String, Object> membrosMap = new HashMap<>();
@@ -219,9 +265,7 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         db.collection("WeForum").document(Id_Forum_selecionado)
                 .collection("Online").document(identificadorUsuario).set(membrosMap);
     }
-
     private void offline(){
-
         HashMap<String, Object> membrosMap = new HashMap<>();
         membrosMap.put("id_usuario", identificadorUsuario);
         db.collection("WeForum").document(Id_Forum_selecionado)
@@ -229,19 +273,20 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
 
     }
 
-    private void Adicionar_Membro() {
+    //envia se o usuario está digitando ou nao
+    private void Adicionar_Membro_digitando_true() {
         HashMap<String, Object> membrosMap = new HashMap<>();
-        membrosMap.put("id_usuario", identificadorUsuario);
+        membrosMap.put("digitando", true);
         db.collection("WeForum").document(Id_Forum_selecionado)
-                .collection("Membros").document(identificadorUsuario).set(membrosMap);
+                .collection("Membros").document(identificadorUsuario).update(membrosMap);
 
     }
 
-    private void Remover_Membro() {
+    private void Adicionar_Membro_digitando_false() {
         HashMap<String, Object> membrosMap = new HashMap<>();
-        membrosMap.put("id_usuario", identificadorUsuario);
+        membrosMap.put("digitando", false);
         db.collection("WeForum").document(Id_Forum_selecionado)
-                .collection("Membros").document(identificadorUsuario).delete();
+                .collection("Membros").document(identificadorUsuario).update(membrosMap);
 
     }
 
@@ -299,7 +344,7 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
     }
 
 
-    private void Recuperar_Membros_online() {
+    /*private void Recuperar_Membros_online() {
         list_membro_grupo.clear();
         Query query =
                 db.collection("WeForum").document(Id_Forum_selecionado)
@@ -366,7 +411,7 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         });
     }
 
-
+*/
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {

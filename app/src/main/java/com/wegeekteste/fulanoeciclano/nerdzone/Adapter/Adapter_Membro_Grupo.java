@@ -70,7 +70,7 @@ public class Adapter_Membro_Grupo extends RecyclerView.Adapter<Adapter_Membro_Gr
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            foto__icon = itemView.findViewById(R.id.Foto_membro_grupo);
+            foto__icon = itemView.findViewById(R.id.foto_membro_grupo);
 
         }
     }

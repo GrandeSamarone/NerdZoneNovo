@@ -36,7 +36,7 @@
                         android:layout_marginTop="10dp"/>
                     <TextView
                         android:fontFamily="@font/fontgeek"
-                        android:textSize="25dp"
+                        android:textSize="20dp"
                         android:id="@+id/detalhe_topico_titulo"
                         android:layout_marginLeft="8dp"
                         android:text="Wegeek"
@@ -57,8 +57,19 @@
                         android:background="@drawable/toolbar_sombra"/>
                 </FrameLayout>
             </RelativeLayout>
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:visibility="gone"
+        android:id="@+id/recycler_chat_online"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:divider="@android:color/transparent"
+        android:transcriptMode="alwaysScroll"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="2dp"
         android:layout_below="@+id/cabecalho"
+        tools:listitem="@layout/adapter_commentario" />
+    <ScrollView
+        android:layout_below="@+id/recycler_chat_online"
         android:layout_above="@+id/digitar"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -66,18 +77,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:visibility="gone"
-                android:id="@+id/recycler_chat_online"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:divider="@android:color/transparent"
-                android:transcriptMode="alwaysScroll"
-                android:layout_marginTop="8dp"
-                android:layout_below="@+id/conteudo"
-                tools:listitem="@layout/adapter_commentario" />
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_comentario_topico"
                 android:layout_width="match_parent"
@@ -87,7 +86,25 @@
                 android:layout_marginTop="8dp"
                 android:layout_below="@+id/conteudo"
                 tools:listitem="@layout/adapter_commentario" />
-        </LinearLayout>
+           <LinearLayout
+               android:id="@+id/liner_digitando"
+               android:visibility="gone"
+               android:orientation="horizontal"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/user_digitando"
+                android:text="name"
+                android:fontFamily="@font/fontgeek"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        <TextView
+            android:text=" Está Digitando..."
+            android:fontFamily="@font/fontgeek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+           </LinearLayout>
+           </LinearLayout>
     </ScrollView>
     <LinearLayout
         android:id="@+id/digitar"

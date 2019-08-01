@@ -132,7 +132,7 @@ dependencies {
   // implementation "com.github.lguipeng:BubbleView:1.0.1"
     implementation 'com.github.MasayukiSuda:BubbleLayout:v1.2.1'
     // balao usuarios
-    implementation 'com.github.tylersuehr7:bubble-layout:1.0'
+   // implementation 'com.github.tylersuehr7:bubble-layout:1.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
