@@ -1,0 +1,89 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:padding="8dp"
+    android:layout_marginBottom="4dp"
+    android:elevation="4dp"
+    cardview:cardCornerRadius="4dp"
+    android:clickable="true"
+    android:backgroundTint="@color/background_cardview"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        >
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_alignParentLeft="true"
+            android:id="@+id/foto_titula_convite"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:civ_border_color="@color/brancofraco"
+            app:civ_border_width="2dp"
+            />
+
+        <TextView
+            android:fontFamily="@font/fontgeek"
+            android:id="@+id/nome_titula_convite"
+            style="@style/AppTheme.Subheader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/foto_titula_convite"
+            android:text="titulo "
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_toLeftOf="@+id/textcategoria"
+            android:layout_toRightOf="@+id/foto_titula_convite"
+            android:ellipsize="end"
+            android:maxLines="1" />
+        <TextView
+            android:text="descricao"
+            android:id="@+id/text_convite"
+            android:fontFamily="@font/fontgeek"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/nome_titula_convite"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/foto_titula_convite"
+            android:textColor="@color/cinzasecunradrio" />
+
+        <TextView
+            android:id="@+id/textcategoria"
+            style="@style/AppTheme.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/cinzadisabilitado"
+            />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_convite"
+                android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                    android:layout_marginRight="8dp"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:text="Aceita" />
+
+            <Button
+
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:text="Recusar" />
+
+        </LinearLayout>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

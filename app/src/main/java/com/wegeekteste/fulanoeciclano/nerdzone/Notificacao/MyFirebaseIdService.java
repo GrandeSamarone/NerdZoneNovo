@@ -25,7 +25,6 @@ public class MyFirebaseIdService extends FirebaseInstanceIdService {
     private void updateToken(String refreshToken) {
         FirebaseFirestore  db = FirebaseFirestore.getInstance();
         String identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
-        Token token = new Token(refreshToken);
-        db.collection("Tokens").document(identificadorUsuario).set(token);
+        db.collection("Usuarios").document(identificadorUsuario).update("token",refreshToken);
     }
 }

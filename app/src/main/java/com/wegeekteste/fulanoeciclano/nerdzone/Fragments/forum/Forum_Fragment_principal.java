@@ -21,12 +21,15 @@ import android.widget.LinearLayout;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_Forum_Grupo;
+import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Convite_Activity;
 import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Grupo.Page_Chat_grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Grupo.Page_Info_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Novo_Grupo_Forum;
@@ -51,7 +54,8 @@ public class Forum_Fragment_principal extends Fragment implements View.OnClickLi
     private String identificadorUsuario;
     private BottomNavigationView navigation;
     private ShimmerFrameLayout shimmerContainer;
-    private LinearLayout criarGrupo;
+    private LinearLayout criarGrupo,line_convites;
+    FirebaseUser fuser;
     public Forum_Fragment_principal() {
         // Required empty public constructor
     }
@@ -69,6 +73,8 @@ public class Forum_Fragment_principal extends Fragment implements View.OnClickLi
         recyclerView_lista_Meus_Forum = view.findViewById(R.id.recycleview_grupo);
         criarGrupo = view.findViewById(R.id.line_criarGrupo);
         criarGrupo.setOnClickListener(this);
+        line_convites=view.findViewById(R.id.line_convite);
+        line_convites.setOnClickListener(this);
 
         //adapter
         adapter_Meus_forum = new Adapter_Forum_Grupo(listaForum,getContext());
@@ -112,6 +118,7 @@ public class Forum_Fragment_principal extends Fragment implements View.OnClickLi
         ));
         RecuperarForum();
 
+
         // lembrar de como reparar se o collection é null
     return view;
     }
@@ -122,7 +129,7 @@ public class Forum_Fragment_principal extends Fragment implements View.OnClickLi
         shimmerContainer.stopShimmerAnimation();
         shimmerContainer.setVisibility(View.GONE);
         db.collection("WeForum")
-                .whereEqualTo("id_autor", identificadorUsuario)
+                .whereEqualTo("idauthor", identificadorUsuario)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
@@ -207,6 +214,11 @@ public class Forum_Fragment_principal extends Fragment implements View.OnClickLi
             case R.id.line_criarGrupo:
                 Intent it = new Intent(getContext(), Novo_Grupo_Forum.class);
                 startActivity(it);
+                break;
+            case R.id.line_convite:
+                Intent it_convite = new Intent(getContext(), Convite_Activity.class);
+                startActivity(it_convite);
+                break;
 
         }
     }

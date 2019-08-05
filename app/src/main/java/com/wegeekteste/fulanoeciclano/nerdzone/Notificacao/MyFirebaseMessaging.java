@@ -10,6 +10,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 
 
 import androidx.core.app.NotificationCompat;
@@ -19,34 +20,33 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Grupo.Page_Chat_grupo;
+import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
 
 public class MyFirebaseMessaging extends FirebaseMessagingService {
 
     @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
+        public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        String sented = remoteMessage.getData().get("sented");
-        String user = remoteMessage.getData().get("user");
+        String id_recebe = remoteMessage.getData().get("id_recebe");
+        String user_mandou = remoteMessage.getData().get("id_mandou");
 
         SharedPreferences preferences = getSharedPreferences("PREFS", MODE_PRIVATE);
-        String currentUser = preferences.getString("currentuser", "none");
+        String Id_Admin = preferences.getString("Admin_grupo", "none");
 
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (firebaseUser != null && sented.equals(firebaseUser.getUid())){
-            if (!currentUser.equals(user)) {
+
+            if (!Id_Admin.equals(user_mandou)) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     sendOreoNotification(remoteMessage);
                 } else {
                     sendNotification(remoteMessage);
                 }
             }
-        }
     }
 
     private void sendOreoNotification(RemoteMessage remoteMessage){
-        String user = remoteMessage.getData().get("user");
+        String user = remoteMessage.getData().get("id_mandou");
         String icon = remoteMessage.getData().get("icon");
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
@@ -76,7 +76,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
     private void sendNotification(RemoteMessage remoteMessage) {
 
-        String user = remoteMessage.getData().get("user");
+        String user = remoteMessage.getData().get("id_mandou");
         String icon = remoteMessage.getData().get("icon");
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");

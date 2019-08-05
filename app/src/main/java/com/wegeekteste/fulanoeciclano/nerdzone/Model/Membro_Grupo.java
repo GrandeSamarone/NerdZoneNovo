@@ -12,6 +12,9 @@ public class Membro_Grupo {
     private String status;
     private String id_grupo;
     private Boolean digitando;
+    private Boolean permissao;
+    private Boolean bloqueio;
+
 
 
     public Membro_Grupo(){
@@ -22,6 +25,8 @@ public class Membro_Grupo {
         HashMap<String, Object> membrosMap = new HashMap<>();
         membrosMap.put("status", getStatus());
         membrosMap.put("id_usuario", getId_usuario());
+        membrosMap.put("bloqueio",false);
+        membrosMap.put("permissao",false);
         membrosMap.put("foto_usuario",getFoto_usuario() );
         membrosMap.put("nome_usuario", getNome_usuario());
         membrosMap.put("digitando", false);
@@ -88,5 +93,21 @@ public class Membro_Grupo {
 
     public void setDigitando(Boolean digitando) {
         this.digitando = digitando;
+    }
+
+    public Boolean getPermissao() {
+        return permissao;
+    }
+
+    public void setPermissao(Boolean permissao) {
+        this.permissao = permissao;
+    }
+
+    public Boolean getBloqueio() {
+        return bloqueio;
+    }
+
+    public void setBloqueio(Boolean bloqueio) {
+        this.bloqueio = bloqueio;
     }
 }

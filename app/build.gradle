@@ -132,13 +132,13 @@ dependencies {
     implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
 
     //balão animacao
-  // implementation "com.github.lguipeng:BubbleView:1.0.1"
+    // implementation "com.github.lguipeng:BubbleView:1.0.1"
     implementation 'com.github.MasayukiSuda:BubbleLayout:v1.2.1'
     // balao usuarios
-   // implementation 'com.github.tylersuehr7:bubble-layout:1.0'
+    // implementation 'com.github.tylersuehr7:bubble-layout:1.0'
 
-       //Recicle para carregar um limite e parar
-   // implementation 'ir.farshid_roohi:customAdapterRecycleView:1.0.4'
+    //Recicle para carregar um limite e parar
+    // implementation 'ir.farshid_roohi:customAdapterRecycleView:1.0.4'
 
 }
 

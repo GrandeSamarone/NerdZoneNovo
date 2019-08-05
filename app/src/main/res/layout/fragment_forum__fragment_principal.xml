@@ -96,6 +96,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/line_convite"
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:layout_weight="0"

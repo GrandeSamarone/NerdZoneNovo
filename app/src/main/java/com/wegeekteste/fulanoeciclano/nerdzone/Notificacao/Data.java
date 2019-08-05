@@ -1,29 +1,37 @@
 package com.wegeekteste.fulanoeciclano.nerdzone.Notificacao;
 
 public class Data {
-    private String user;
+    private String id_mandou;
     private int icon;
     private String body;
     private String title;
-    private String sented;
+    private String id_recebe;
 
-    public Data(String user, int icon, String body, String title, String sented) {
-        this.user = user;
+    public Data(String id_mandou, int icon, String body, String title, String id_recebe) {
+        this.id_mandou = id_mandou;
         this.icon = icon;
         this.body = body;
         this.title = title;
-        this.sented = sented;
+        this.id_recebe = id_recebe;
     }
 
     public Data() {
     }
 
-    public String getUser() {
-        return user;
+    public String getId_mandou() {
+        return id_mandou;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setId_mandou(String id_mandou) {
+        this.id_mandou = id_mandou;
+    }
+
+    public String getId_recebe() {
+        return id_recebe;
+    }
+
+    public void setId_recebe(String id_recebe) {
+        this.id_recebe = id_recebe;
     }
 
     public int getIcon() {
@@ -50,11 +58,5 @@ public class Data {
         this.title = title;
     }
 
-    public String getSented() {
-        return sented;
-    }
 
-    public void setSented(String sented) {
-        this.sented = sented;
-    }
 }

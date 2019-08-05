@@ -2,6 +2,8 @@ package com.wegeekteste.fulanoeciclano.nerdzone.Model;
 
 
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -29,6 +31,7 @@ public class Forum implements Serializable {
     private String idauthor;
     private String nomeauthor;
     private String titulo;
+    private String token_author;
     private String foto;
     private String descricao;
     private @ServerTimestamp Date data;
@@ -49,7 +52,8 @@ public class Forum implements Serializable {
       newForum.put("id",getId());
       newForum.put("titulo", getTitulo());
       newForum.put("descricao", getDescricao());
-      newForum.put("id_autor", getIdauthor());
+      newForum.put("idauthor", getIdauthor());
+      newForum.put("token_author", getToken_author());
       newForum.put("foto", getFoto());
       newForum.put("nomeauthor", getNomeauthor());
       newForum.put("opcao", getOpcao());
@@ -76,11 +80,7 @@ public class Forum implements Serializable {
       });
   }
 
-    public void salvarTopicoPublico(){
-        DatabaseReference anuncioref = ConfiguracaoFirebase.getFirebaseDatabase()
-                .child("topico");
-        anuncioref.child(getId()).setValue(this);
-    }
+
 
     public void remover(){
         String identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
@@ -218,6 +218,14 @@ public class Forum implements Serializable {
 
     public void setCategoria(String categoria) {
         this.categoria = categoria;
+    }
+
+    public String getToken_author() {
+        return token_author;
+    }
+
+    public void setToken_author(String token_author) {
+        this.token_author = token_author;
     }
 }
 // [END post_class]

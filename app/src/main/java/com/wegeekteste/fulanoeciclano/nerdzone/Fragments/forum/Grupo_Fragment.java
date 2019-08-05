@@ -203,6 +203,7 @@ public class Grupo_Fragment extends Fragment implements IOnBackPressed {
 
 
 private void Verificar_membro(String id_grupo,Forum forum_selecionado){
+
     //Verifica se é a primeira vez para vizualizar as informacoes do grupo
     db.collection("WeForum").document(id_grupo)
             .collection("Membros").document(identificadorUsuario).get()

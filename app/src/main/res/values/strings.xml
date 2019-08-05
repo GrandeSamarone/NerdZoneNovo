@@ -178,6 +178,7 @@
         <item>Infantil</item>
         <item>Agro</item>
     </string-array>
+    <string name="title_activity_convite_">Convite_Activity</string>
 
 
 </resources>

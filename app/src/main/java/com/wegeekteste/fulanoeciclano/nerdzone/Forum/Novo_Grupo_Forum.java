@@ -39,6 +39,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -54,6 +55,7 @@ import com.wegeekteste.fulanoeciclano.nerdzone.R;
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.UUID;
 
@@ -90,7 +92,7 @@ public class Novo_Grupo_Forum extends TrocarFundo {
     private SharedPreferences nome_usuario;
     private Spinner campo_categoria_grupo;
     private TextView text_con_grupo;
-
+    private FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +106,7 @@ public class Novo_Grupo_Forum extends TrocarFundo {
         //Configuraçoes Originais
         identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
         storageReference = ConfiguracaoFirebase.getFirebaseStorage();
-
+        db = FirebaseFirestore.getInstance();
         text_con_grupo=findViewById(R.id.text_configuracao_grupo);
         titulo_topico = findViewById(R.id.nome_topico);
         mensagem_topico = findViewById(R.id.desc_topico);
@@ -290,10 +292,12 @@ public class Novo_Grupo_Forum extends TrocarFundo {
     private Forum Configurar_Novo_Forum() {
 
         String nome = nome_usuario.getString("nome", "");
+        String token = nome_usuario.getString("token", "");
         String titulo = titulo_topico.getText().toString();
         String mensagem = mensagem_topico.getText().toString();
         String categoria_grupo = campo_categoria_grupo.getSelectedItem().toString();
         forum.setIdauthor(identificadorUsuario);
+        forum.setToken_author(token);
         forum.setNomeauthor(nome);
         forum.setTitulo(titulo);
         forum.setFoto(urlimg);
@@ -327,6 +331,8 @@ public class Novo_Grupo_Forum extends TrocarFundo {
 
 
                     forum.SalvarForum();
+
+
                     Toast.makeText(Novo_Grupo_Forum.this, "Grupo Criado Com Sucesso!", Toast.LENGTH_SHORT).show();
                     Intent it = new Intent(Novo_Grupo_Forum.this, Lista_Forum.class);
                     startActivity(it);

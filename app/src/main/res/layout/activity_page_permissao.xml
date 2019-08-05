@@ -84,7 +84,7 @@
             android:layout_marginTop="16dp"
             android:drawableRight="@drawable/ic_arrow_forward"
             android:fontFamily="@font/fontgeek"
-            android:text="Se torne um Membro"
+            android:text=""
             android:textSize="24sp"
             android:theme="@style/botaopadrao" />
     </LinearLayout>

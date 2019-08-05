@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener authStateListener;
     private GoogleApiClient googleApiClient;
     private FirebaseAuth firebaseAuth;
+    FirebaseUser fuser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("nome", usuario.getNome());
                 editor.putString("foto_usuario", usuario.getFoto());
+                editor.putString("token", usuario.getToken());
                 Log.i("sdosdo0", usuario.getFoto());
                 // Toast.makeText(MainActivity.this, usuario.getNome() + " pegou", Toast.LENGTH_SHORT).show();
                 editor.commit();
@@ -122,7 +124,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        fuser = FirebaseAuth.getInstance().getCurrentUser();
+        Log.i("sds74485",fuser.getUid());
     }
 
 

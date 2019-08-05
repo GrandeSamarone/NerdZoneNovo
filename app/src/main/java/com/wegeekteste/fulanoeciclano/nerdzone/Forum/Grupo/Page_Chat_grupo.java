@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -25,7 +24,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,11 +42,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -61,7 +54,6 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 import com.vanniktech.emoji.EmojiEditText;
 import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
@@ -73,7 +65,6 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_Membro_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_chat_grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Lista_Forum;
-import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Novo_Grupo_Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.forum.APIService;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.CircleProgressDrawable;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.TrocarFundo;
@@ -82,10 +73,6 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Model.Chat_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Membro_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Notificacao.Client;
-import com.wegeekteste.fulanoeciclano.nerdzone.Notificacao.Data;
-import com.wegeekteste.fulanoeciclano.nerdzone.Notificacao.MyResponse;
-import com.wegeekteste.fulanoeciclano.nerdzone.Notificacao.Sender;
-import com.wegeekteste.fulanoeciclano.nerdzone.Notificacao.Token;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
 import java.io.ByteArrayOutputStream;
@@ -93,11 +80,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static android.content.ContentValues.TAG;
 
@@ -191,7 +173,6 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         forum_selecionado = (Forum) getIntent().getSerializableExtra("forum_selecionado");
         Id_Forum_selecionado = getIntent().getStringExtra("id_forum_selecionado");
         if (forum_selecionado != null) {
-            Log.i("373773", forum_selecionado.getFoto());
             titulo.setText(forum_selecionado.getTitulo());
             detalhe_topico_quant_membros.setText(String.valueOf(forum_selecionado.getMembro_count()));
             //  mensagem.setText(topicoselecionado.getDescricao());
@@ -230,8 +211,7 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
 
 // Notificação
     private void updateToken(String token){
-        Token token1 = new Token(token);
-        db.collection("Tokens").document(identificadorUsuario).set(token1);
+
     }
 
 
