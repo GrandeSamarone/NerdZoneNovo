@@ -94,7 +94,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
           app:layout_constraintTop_toBottomOf="@+id/toolbartopico"
-        app:layout_constraintTop_toTopOf="@+id/recycler_comentario_topico">
+        app:layout_constraintTop_toTopOf="@+id/recycler_chat_grupo">
 
         <View
             android:layout_width="match_parent"
@@ -117,15 +117,12 @@
         tools:listitem="@layout/adapter_commentario" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_comentario_topico"
+        android:id="@+id/recycler_chat_grupo"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-
         android:layout_marginBottom="8dp"
-        android:transcriptMode="alwaysScroll"
         app:layout_constraintBottom_toTopOf="@+id/digitar"
-        app:layout_constraintTop_toBottomOf="@+id/toolbartopico"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbartopico" />
 
 
     <LinearLayout

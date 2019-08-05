@@ -15,6 +15,8 @@ public class Chat_Grupo {
     private String foto_usuario;
     private String id_grupo;
     private String mensagem;
+    private String id_mensagem;
+    private String mensagem_type;
     private String mensagem_img;
     private String status;
     private @ServerTimestamp Date tempo;
@@ -34,7 +36,8 @@ public class Chat_Grupo {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> data = new HashMap<>();
         data.put("mensagem",getMensagem());
-        data.put("mensagem_img",getMensagem_img());
+        data.put("id_mensagem",getId_mensagem());
+        data.put("mensagem_type",getMensagem_type());
         data.put("tempo", FieldValue.serverTimestamp());
         data.put("nome_usuario",getNome_usuario());
         data.put("foto_usuario",getFoto_usuario());
@@ -50,6 +53,7 @@ public class Chat_Grupo {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> data = new HashMap<>();
         data.put("mensagem",getMensagem());
+        data.put("id_mensagem",getId_mensagem());
         data.put("mensagem_img",getMensagem_img());
         data.put("tempo", FieldValue.serverTimestamp());
         data.put("nome_usuario",getNome_usuario());
@@ -135,6 +139,19 @@ public class Chat_Grupo {
         this.status = status;
     }
 
+    public String getId_mensagem() {
+        return id_mensagem;
+    }
 
+    public String getMensagem_type() {
+        return mensagem_type;
+    }
 
+    public void setMensagem_type(String mensagem_type) {
+        this.mensagem_type = mensagem_type;
+    }
+
+    public void setId_mensagem(String id_mensagem) {
+        this.id_mensagem = id_mensagem;
+    }
 }

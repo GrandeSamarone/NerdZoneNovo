@@ -175,14 +175,13 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         recycler_chat_online.setAdapter(adapter_membro_grupo);
 
 
-        recyclerView_chat = findViewById(R.id.recycler_comentario_topico);
+        recyclerView_chat = findViewById(R.id.recycler_chat_grupo);
         recyclerView_chat.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getApplicationContext());
         layoutManager.setStackFromEnd(true);
         recyclerView_chat.setLayoutManager(layoutManager);
         adapter = new Adapter_chat_grupo(getApplicationContext(), list_conversa_grupo);
         recyclerView_chat.setAdapter(adapter);
-
 
         //emotion
         root = findViewById(R.id.root_view_topico);
@@ -392,18 +391,18 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         String nome = nome_usuario.getString("nome", "");
         String foto = Foto_usuario.getString("foto_usuario", "");
         String textoComentario = edit_chat_emoji.getText().toString();
-
+        String id_mensagem_texto = UUID.randomUUID().toString();
 
         if (textoComentario != null && !textoComentario.equals("")) {
             chat.setId_grupo(Id_Forum_selecionado);
             chat.setId_usuario(identificadorUsuario);
             Log.i("sdoskdosdk77", identificadorUsuario);
             chat.setNome_usuario(nome);
+            chat.setMensagem_type("texto");
             chat.setFoto_usuario(foto);
             chat.setId_grupo(Id_Forum_selecionado);
-            // chat.setTempo(data_time);
             chat.setMensagem(textoComentario);
-            chat.setMensagem_img(null);
+            chat.setId_mensagem(id_mensagem_texto);
             chat.Salvar_msg();
         } else {
             Toast.makeText(this, "Insira um comentário antes da salvar!",
@@ -419,27 +418,46 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
 
 
     }
+    private void SalvarMensagem_imagem(String url) {
+        //SharedPreferencies pegando a variavel e os dados
+        String id_mensagem_img = UUID.randomUUID().toString();
+        String nome = nome_usuario.getString("nome", "");
+        String foto = Foto_usuario.getString("foto_usuario", "");
+        chat.setId_grupo(Id_Forum_selecionado);
+        chat.setId_usuario(identificadorUsuario);
+        chat.setMensagem(url);
+        chat.setMensagem_type("imagem");
+        chat.setNome_usuario(nome);
+        chat.setFoto_usuario(foto);
+        chat.setMensagem_img(url);
+        chat.setId_mensagem(id_mensagem_img);
+        chat.setId_grupo(Id_Forum_selecionado);
+        // chat.setTempo(data_time);
+        chat.Salvar_msg();
+
+    }
 
 
-
-    //Recuperar Mensagens do Chat
-    private void Recupdderar_Mensagens() {
+    private void Recuperar_Mensagens(){
         list_conversa_grupo.clear();
 
-        Query query = db
+        Query query=  db
                 .collection("WeForum").document(Id_Forum_selecionado)
                 .collection("Mensagens").orderBy("tempo", Query.Direction.ASCENDING);
         registration = query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 List<DocumentChange> documentChanges = queryDocumentSnapshots.getDocumentChanges();
-                    for (DocumentChange doc : documentChanges) {
+                if (documentChanges != null) {
+                    for (DocumentChange doc: documentChanges) {
                         if (doc.getType() == DocumentChange.Type.ADDED) {
-                            Chat_Grupo coment = doc.getDocument().toObject(Chat_Grupo.class);
+                            Chat_Grupo coment=doc.getDocument().toObject(Chat_Grupo.class);
                             list_conversa_grupo.add(coment);
+                            adapter.notifyDataSetChanged();
 
                             recyclerView_chat.smoothScrollToPosition(recyclerView_chat.getAdapter().getItemCount());
-                            recyclerView_chat.setAdapter(adapter);
+                        }
+
 
                     }
                 }
@@ -448,48 +466,6 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
 
     }
 
-    private void  Recuperar_Mensagens(){
-        Query query = db
-                .collection("WeForum").document(Id_Forum_selecionado)
-                .collection("Mensagens").orderBy("tempo", Query.Direction.ASCENDING);
-        registration = query.addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w("", "listen:error", e);
-                            return;
-                        }
-
-                        for (DocumentChange change : snapshots.getDocumentChanges()) {
-                            Chat_Grupo chat_grupo = change.getDocument().toObject(Chat_Grupo.class);
-
-                            switch (change.getType()) {
-                                case ADDED: ;
-                                    list_conversa_grupo.add(chat_grupo);
-
-                                    recyclerView_chat.smoothScrollToPosition(recyclerView_chat.getAdapter().getItemCount());
-                                    recyclerView_chat.setAdapter(adapter);
-                                    break;
-                                case MODIFIED:
-                                    for (Chat_Grupo ct : list_conversa_grupo) {
-
-
-                                            break;
-                                        }
-
-
-                                    Log.d("md", "Modified city: " + change.getDocument().getData());
-                                    break;
-                                case REMOVED:
-
-                                    Log.d("rem", "Removed city: " + change.getDocument().getData());
-                                    break;
-                            }
-                        }
-                    }
-                });
-
-    }
 
     //Recupera que está digitando
     private void Recuperar_Membros_Digitand_online() {
@@ -602,12 +578,13 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
                         .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 finish();
               break;
-            case R.id.menu_enviar_img:
+            /*case R.id.menu_enviar_img:
                 Intent intent = CropImage.activity()
                         .setGuidelines(CropImageView.Guidelines.ON)
                         .getIntent(Page_Chat_grupo.this);
                 startActivityForResult(intent, SELECAO_GALERIA);
-                break;
+                              break;
+        */
         }
 
         return super.onOptionsItemSelected(item);
@@ -734,20 +711,5 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
             }
         }
     }
-    private void SalvarMensagem_imagem(String url) {
-        //SharedPreferencies pegando a variavel e os dados
-        String nome = nome_usuario.getString("nome", "");
-        String foto = Foto_usuario.getString("foto_usuario", "");
-        Log.i("sdoskdosdk779",url);
-        chat.setId_grupo(Id_Forum_selecionado);
-        chat.setId_usuario(identificadorUsuario);
-        chat.setMensagem(null);
-        chat.setNome_usuario(nome);
-        chat.setFoto_usuario(foto);
-        chat.setMensagem_img(url);
-        chat.setId_grupo(Id_Forum_selecionado);
-        // chat.setTempo(data_time);
-        chat.Salvar_msg_img();
 
-    }
 }

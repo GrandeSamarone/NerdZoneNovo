@@ -41,10 +41,8 @@
             />
     </LinearLayout>
 
-    <TextView
+    <com.vanniktech.emoji.EmojiTextView
         android:layout_below="@+id/name_chat_grupo_destinatario"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_toRightOf="@id/icon_chat_grupo_destinario"
         android:layout_marginLeft="5dp"
         android:text="hello"
@@ -52,8 +50,9 @@
         android:id="@+id/textMensagemtexto"
         android:textSize="16sp"
         android:padding="8dp"
-        android:background="@drawable/background_left"/>
-
+        android:background="@drawable/background_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

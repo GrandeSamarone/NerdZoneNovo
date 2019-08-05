@@ -36,19 +36,20 @@
             android:id="@+id/profile_image"
             android:visibility="gone"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/background_right"
-            android:text="hello"
+        <com.vanniktech.emoji.EmojiTextView
+            android:visibility="gone"
             android:layout_alignParentEnd="true"
+            android:layout_marginLeft="5dp"
+            android:text="hello"
+            android:fontFamily="@font/fontgeek"
+            android:textColor="@color/background_geral"
             android:id="@+id/textMensagemtexto"
             android:textSize="16sp"
-            android:textColor="@color/background_geral"
-            android:fontFamily="@font/fontgeek"
             android:padding="8dp"
+            android:background="@drawable/background_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true" />
-
         <LinearLayout
             android:padding="4dp"
             android:id="@+id/line_img_chat"
@@ -76,6 +77,7 @@
         </LinearLayout>
 
         <TextView
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tempodochat"

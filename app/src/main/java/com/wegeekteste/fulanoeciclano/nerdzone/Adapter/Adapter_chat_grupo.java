@@ -23,6 +23,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.vanniktech.emoji.EmojiTextView;
 import com.wegeekteste.fulanoeciclano.nerdzone.Abrir_Imagem.AbrirImagem;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.CircleProgressDrawable;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
@@ -64,8 +65,10 @@ public class Adapter_chat_grupo extends   RecyclerView.Adapter<Adapter_chat_grup
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         Chat_Grupo chat = mChat.get(position);
-
-        holder.show_message.setText(chat.getMensagem());
+         if(chat.getMensagem_type().equals("texto")) {
+             holder.show_message.setVisibility(View.VISIBLE);
+             holder.show_message.setText(chat.getMensagem());
+         }
         if(chat.getNome_usuario()!=null) {
             holder.name_chat.setText(chat.getNome_usuario());
         }else{
@@ -88,12 +91,12 @@ public class Adapter_chat_grupo extends   RecyclerView.Adapter<Adapter_chat_grup
             }
         } else {
             holder.txt_seen.setVisibility(View.GONE);
-        } if(chat.getMensagem_img()!=null){
+        } if(chat.getMensagem_type().equals("imagem")){
              holder.line.setVisibility(View.VISIBLE);
              holder.chat_img.setVisibility(View.VISIBLE);
              holder.chat_img.setImageResource(R.drawable.icon_foto_fanarts);
              holder.show_message.setVisibility(View.GONE);
-            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(chat.getMensagem_img()))
+            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(chat.getMensagem()))
                     .setLocalThumbnailPreviewsEnabled(true)
                     .setProgressiveRenderingEnabled(true)
                     .setResizeOptions(new ResizeOptions(100, 100))
@@ -118,7 +121,7 @@ public class Adapter_chat_grupo extends   RecyclerView.Adapter<Adapter_chat_grup
             @Override
             public void onClick(View v) {
                 Intent it =new Intent(mContext, AbrirImagem.class);
-                it.putExtra("id_foto", chat.getMensagem_img());
+                it.putExtra("id_foto", chat.getMensagem());
                 it.putExtra("nome_foto", chat.getNome_usuario());
                 mContext.startActivity(it);
             }
@@ -133,7 +136,7 @@ public class Adapter_chat_grupo extends   RecyclerView.Adapter<Adapter_chat_grup
 
     public  class ViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView show_message;
+        private EmojiTextView show_message;
         private CircleImageView profile_image;
         private TextView txt_seen,name_chat;
         private LinearLayout line;
