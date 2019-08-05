@@ -117,6 +117,7 @@ public class Forum_Fragment_principal extends Fragment implements View.OnClickLi
     }
 
 
+
     private void RecuperarForum(){
         shimmerContainer.stopShimmerAnimation();
         shimmerContainer.setVisibility(View.GONE);

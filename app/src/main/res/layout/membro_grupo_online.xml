@@ -18,12 +18,6 @@
         android:background="@drawable/fundo_user" />
 
 
-    <TextView
-        android:layout_gravity="bottom"
-        android:fontFamily="@font/fontgeek"
-        android:layout_marginLeft="4dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Digitando..."/>
+
 
 </LinearLayout>

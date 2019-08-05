@@ -13,8 +13,8 @@
 
     <item
         android:id="@+id/navigation_voltar"
-        android:icon="@drawable/ic_arrow_back"
-        android:title="@string/title_cart" />
+        android:icon="@drawable/ic_chat"
+        android:title="@string/title_chat" />
 
     <item
         android:id="@+id/navigation_perfil"

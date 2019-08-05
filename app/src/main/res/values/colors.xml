@@ -12,6 +12,7 @@
     <color name="background_cardview">#fafafa</color>
     <color name="colorAccent">#fa2c28</color>
     <color name="vermelho">#ff0500</color>
+    <color name="vermelho_chat">#c36a6b</color>
     <color name="brancofraco">#d2e1e0e0</color>
     <color name="cinzaclaro">#EEEEEE</color>
     <color name="cinzabalao">#c1c1c1</color>
@@ -32,6 +33,7 @@
     <color name="colorFloatingActionBarAccent">#4285F4</color>
     <color name="actionbar_opacity">#33000000</color>
     <color name="azul_votacao">#e01565c0</color>
+    <color name="fundo_chat">#e6e6e6</color>
 
     <integer-array name="custom_tab_colors">
         <item>@color/branco</item>

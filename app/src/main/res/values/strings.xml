@@ -24,6 +24,7 @@
     <string name="title_grupos">Grupos</string>
     <string name="title_topicos">Tópicos</string>
     <string name="title_cart">Anterior</string>
+    <string name="title_chat">Chat</string>
     <string name="title_profile">Perfil</string>
     <string name="title_Voltar">Voltar</string>
     <string name="text_icone_heroi">HERÓIS</string>
@@ -126,18 +127,13 @@
         <item>Selecione</item>
         <item>Action Figures</item>
         <item>Comércio</item>
-        <item>Desenhos</item>
+        <item>Mangá</item>
         <item>Filmes</item>
+        <item>Ficção Cientifica</item>
         <item>Games</item>
         <item>HQ</item>
         <item>Tecnologia</item>
         <item>História</item>
-
-
-
-
-
-
     </string-array>
     <string-array name="fanartcategoria">
         <item>Categoria</item>

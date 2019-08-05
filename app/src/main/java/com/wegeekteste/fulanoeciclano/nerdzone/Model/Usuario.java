@@ -22,6 +22,7 @@ import java.util.Map;
 public class Usuario implements Serializable {
 
     private String id;
+    private String token;
     private String tipoconta;
     private String nome;
     private String frase;
@@ -46,6 +47,7 @@ public class Usuario implements Serializable {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> newUsuario = new HashMap<>();
         newUsuario.put("id",identificadorUsuario);
+        newUsuario.put("token",getToken());
         newUsuario.put("nome", getNome());
         newUsuario.put("frase", getFrase());
         newUsuario.put("foto", getFoto());
@@ -276,5 +278,14 @@ public class Usuario implements Serializable {
 
     public void setEvento(int evento) {
         this.evento = evento;
+    }
+
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

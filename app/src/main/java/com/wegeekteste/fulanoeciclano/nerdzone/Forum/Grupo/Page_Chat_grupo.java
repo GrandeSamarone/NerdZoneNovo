@@ -2,36 +2,66 @@ package com.wegeekteste.fulanoeciclano.nerdzone.Forum.Grupo;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.view.MenuCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 
+import android.os.Handler;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.generic.GenericDraweeHierarchy;
+import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
+import com.facebook.drawee.generic.RoundingParams;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 import com.vanniktech.emoji.EmojiEditText;
 import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
@@ -41,19 +71,33 @@ import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_Membro_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_chat_grupo;
+import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Lista_Forum;
+import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Novo_Grupo_Forum;
+import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.forum.APIService;
+import com.wegeekteste.fulanoeciclano.nerdzone.Helper.CircleProgressDrawable;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.TrocarFundo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Chat_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Membro_Grupo;
+import com.wegeekteste.fulanoeciclano.nerdzone.Notificacao.Client;
+import com.wegeekteste.fulanoeciclano.nerdzone.Notificacao.Data;
+import com.wegeekteste.fulanoeciclano.nerdzone.Notificacao.MyResponse;
+import com.wegeekteste.fulanoeciclano.nerdzone.Notificacao.Sender;
+import com.wegeekteste.fulanoeciclano.nerdzone.Notificacao.Token;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.content.ContentValues.TAG;
 
@@ -61,12 +105,13 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
 
     private Toolbar toolbar;
     private Adapter_chat_grupo adapter;
+    private StorageReference storageReference;
     private Adapter_Membro_Grupo adapter_membro_grupo;
     private ArrayList<Membro_Grupo> list_membro_grupo = new ArrayList<>();
     private Chat_Grupo chat = new Chat_Grupo();
     private ArrayList<Chat_Grupo> list_conversa_grupo = new ArrayList<>();
     private RecyclerView recyclerView_chat, recycler_chat_online;
-    private CircleImageView icone;
+    private SimpleDraweeView icone;
     private TextView titulo;
     private EmojiEditText edit_chat_emoji;
     private androidx.appcompat.widget.AppCompatButton botao_env_msg;
@@ -83,7 +128,17 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
     private TextView detalhe_topico_quant_membros;
     private ListenerRegistration registration, registration_membro;
     private static final String ARQUIVO_PREFERENCIA = "arquivoreferencia";
+    private static final int SELECAO_GALERIA = 200;
     private boolean typingStarted;
+    private boolean isScrolling = false;
+    private boolean isLastItemReached;
+    private int VisibleItemCount, FistVisibleItem, totalItems;
+    private LinearLayoutManager layoutManager;
+    private DocumentSnapshot lastVisible;
+    private AlertDialog dialog;
+    //notificacao
+    APIService apiService;
+    boolean notify = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,13 +150,15 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         setSupportActionBar(toolbar);
 
         //Configuracoes Iniciais
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
 
+        storageReference = ConfiguracaoFirebase.getFirebaseStorage();
         db = FirebaseFirestore.getInstance();
         identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
         icone = findViewById(R.id.icone_chat_toolbar);
         titulo = findViewById(R.id.detalhe_topico_titulo);
         edit_chat_emoji = findViewById(R.id.caixa_de_texto_comentario_topico);
-        detalhe_topico_quant_membros=findViewById(R.id.detalhe_topico_quant_membros);
+        detalhe_topico_quant_membros = findViewById(R.id.detalhe_topico_quant_membros);
         botao_env_msg = findViewById(R.id.button_postar_comentario_topico);
         botao_env_msg.setOnClickListener(this);
         botaoicone = findViewById(R.id.botao_post_icone_topico);
@@ -120,9 +177,11 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
 
         recyclerView_chat = findViewById(R.id.recycler_comentario_topico);
         recyclerView_chat.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        layoutManager = new LinearLayoutManager(getApplicationContext());
         layoutManager.setStackFromEnd(true);
         recyclerView_chat.setLayoutManager(layoutManager);
+        adapter = new Adapter_chat_grupo(getApplicationContext(), list_conversa_grupo);
+        recyclerView_chat.setAdapter(adapter);
 
 
         //emotion
@@ -139,16 +198,43 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
             //  mensagem.setText(topicoselecionado.getDescricao());
             // RecuperarIcone_e_nome_author(topicoselecionado.getIdauthor());
             if (forum_selecionado.getFoto() != null) {
-                Uri url = Uri.parse(forum_selecionado.getFoto());
-                Glide.with(this)
-                        .load(url)
-                        .into(icone);
+                String stringcapa = forum_selecionado.getFoto();
+                if (stringcapa != null) {
+                    ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(stringcapa))
+                            .setLocalThumbnailPreviewsEnabled(true)
+                            .setProgressiveRenderingEnabled(true)
+                            .setResizeOptions(new ResizeOptions(60, 60))
+                            .build();
+
+                    DraweeController controller = Fresco.newDraweeControllerBuilder()
+                            .setImageRequest(request)
+                            .build();
+                    icone.setController(controller);
+                    RoundingParams roundingParams = RoundingParams.fromCornersRadius(10f);
+
+                    GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(getResources());
+                    GenericDraweeHierarchy hierarchy = builder
+                            .setRoundingParams(roundingParams)
+                            .setProgressBarImage(new CircleProgressDrawable())
+                            //  .setPlaceholderImage(context.getResources().getDrawable(R.drawable.carregando))
+                            .build();
+                    icone.setHierarchy(hierarchy);
+                }
             }
         }
 
+         //Notificação
+        updateToken(FirebaseInstanceId.getInstance().getToken());
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+
+// Notificação
+    private void updateToken(String token){
+        Token token1 = new Token(token);
+        db.collection("Tokens").document(identificadorUsuario).set(token1);
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -168,9 +254,9 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
     protected void onStart() {
         super.onStart();
         Digitando();
-        Recuperar_Mensagens();
 
-         //Conta a quantidade de membros
+        Recuperar_Mensagens();
+        //Conta a quantidade de membros
         quant_membros();
         //recuperar que está digitando
         Recuperar_Membros_Digitand_online();
@@ -184,7 +270,8 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         super.onResume();
         Status("online");
         //  Adicionar_Membro();
-       // Online();
+        // Online();
+
 
     }
 
@@ -196,7 +283,7 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         Status("offline");
 
         //RemoveMembro
-       // offline();
+        // offline();
     }
 
     @Override
@@ -210,14 +297,19 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
     }
 
 
-    private void Digitando(){
+    private void CarregarRecicle() {
+
+    }
+
+
+    private void Digitando() {
         edit_chat_emoji.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s.toString()) && s.toString().trim().length() == 1) {
-                    //Log.i(TAG, “typing started event…”);
+                    Log.i("sdsdsd7474", String.valueOf(TextUtils.isEmpty(s.toString())));
                     typingStarted = true;
-                  //  user_digitando.setText("Marlos trinidad");
+                    //  user_digitando.setText("Marlos trinidad");
                     Adicionar_Membro_digitando_true();
 
                     //send typing started status
@@ -226,7 +318,6 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
                     typingStarted = false;
                     //user_digitando.setText("Marlos trinidad");
                     Adicionar_Membro_digitando_false();
-
                     //send typing stopped status
                 }
 
@@ -235,19 +326,18 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
             public void beforeTextChanged(CharSequence s, int start,
                                           int count, int after) {
 
-
-                Log.i("sdsdsd1",s.subSequence(start, start + count).toString());
-
+                Log.i("sdsdsd1", s.subSequence(start, start + count).toString());
 
             }
 
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
                 s.toString();
-                Log.i("sdsdsd2",s.subSequence(start, start + count).toString());
+                Log.i("sdsdsd2", s.subSequence(start, start + count).toString());
             }
         });
     }
+
     private void Status(String status) {
         String nome = nome_usuario.getString("nome", "");
         String foto = Foto_usuario.getString("foto_usuario", "");
@@ -261,7 +351,8 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         membro_grupo.SalvarMembro();
 
     }
-       //para contar quantos play online
+
+    //para contar quantos play online
     private void Online() {
 
         HashMap<String, Object> membrosMap = new HashMap<>();
@@ -269,7 +360,8 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         db.collection("WeForum").document(Id_Forum_selecionado)
                 .collection("Online").document(identificadorUsuario).set(membrosMap);
     }
-    private void offline(){
+
+    private void offline() {
         HashMap<String, Object> membrosMap = new HashMap<>();
         membrosMap.put("id_usuario", identificadorUsuario);
         db.collection("WeForum").document(Id_Forum_selecionado)
@@ -283,13 +375,17 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         membrosMap.put("digitando", true);
         db.collection("WeForum").document(Id_Forum_selecionado)
                 .collection("Membros").document(identificadorUsuario).update(membrosMap);
+
     }
+
     private void Adicionar_Membro_digitando_false() {
         HashMap<String, Object> membrosMap = new HashMap<>();
         membrosMap.put("digitando", false);
         db.collection("WeForum").document(Id_Forum_selecionado)
                 .collection("Membros").document(identificadorUsuario).update(membrosMap);
+
     }
+
 
     private void SalvarMensagem() {
         //SharedPreferencies pegando a variavel e os dados
@@ -307,6 +403,7 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
             chat.setId_grupo(Id_Forum_selecionado);
             // chat.setTempo(data_time);
             chat.setMensagem(textoComentario);
+            chat.setMensagem_img(null);
             chat.Salvar_msg();
         } else {
             Toast.makeText(this, "Insira um comentário antes da salvar!",
@@ -314,10 +411,19 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         }
         //Limpar comentario
         edit_chat_emoji.setText("");
+   String recebe= "Y3NtZWdhdHhAZ21haWwuY29t";
+        if (notify) {
+           // sendNotifiaction(recebe, nome, textoComentario);
+        }
+        notify = false;
+
+
     }
 
+
+
     //Recuperar Mensagens do Chat
-    private void Recuperar_Mensagens() {
+    private void Recupdderar_Mensagens() {
         list_conversa_grupo.clear();
 
         Query query = db
@@ -327,17 +433,14 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 List<DocumentChange> documentChanges = queryDocumentSnapshots.getDocumentChanges();
-                if (documentChanges != null) {
                     for (DocumentChange doc : documentChanges) {
                         if (doc.getType() == DocumentChange.Type.ADDED) {
                             Chat_Grupo coment = doc.getDocument().toObject(Chat_Grupo.class);
                             list_conversa_grupo.add(coment);
-                            //  adapter.notifyDataSetChanged();
-                        }
 
+                            recyclerView_chat.smoothScrollToPosition(recyclerView_chat.getAdapter().getItemCount());
+                            recyclerView_chat.setAdapter(adapter);
 
-                        adapter = new Adapter_chat_grupo(getApplicationContext(), list_conversa_grupo);
-                        recyclerView_chat.setAdapter(adapter);
                     }
                 }
             }
@@ -345,7 +448,50 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
 
     }
 
-       //Recupera que está digitando
+    private void  Recuperar_Mensagens(){
+        Query query = db
+                .collection("WeForum").document(Id_Forum_selecionado)
+                .collection("Mensagens").orderBy("tempo", Query.Direction.ASCENDING);
+        registration = query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w("", "listen:error", e);
+                            return;
+                        }
+
+                        for (DocumentChange change : snapshots.getDocumentChanges()) {
+                            Chat_Grupo chat_grupo = change.getDocument().toObject(Chat_Grupo.class);
+
+                            switch (change.getType()) {
+                                case ADDED: ;
+                                    list_conversa_grupo.add(chat_grupo);
+
+                                    recyclerView_chat.smoothScrollToPosition(recyclerView_chat.getAdapter().getItemCount());
+                                    recyclerView_chat.setAdapter(adapter);
+                                    break;
+                                case MODIFIED:
+                                    for (Chat_Grupo ct : list_conversa_grupo) {
+
+
+                                            break;
+                                        }
+
+
+                                    Log.d("md", "Modified city: " + change.getDocument().getData());
+                                    break;
+                                case REMOVED:
+
+                                    Log.d("rem", "Removed city: " + change.getDocument().getData());
+                                    break;
+                            }
+                        }
+                    }
+                });
+
+    }
+
+    //Recupera que está digitando
     private void Recuperar_Membros_Digitand_online() {
         list_membro_grupo.clear();
         Query query =
@@ -389,7 +535,8 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
                             }
                             list_membro_grupo.add(0, membro_grupo);
                             if (list_membro_grupo.size() > 0) {
-                                //linear_nada_cadastrado.setVisibility(View.GONE);
+                                recycler_chat_online.setVisibility(View.VISIBLE);
+
                             }
 
                             adapter_membro_grupo.notifyDataSetChanged();
@@ -403,7 +550,7 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
                                     break;
                                 }
                             }
-
+                            recycler_chat_online.setVisibility(View.VISIBLE);
                             adapter_membro_grupo.notifyDataSetChanged();
                             Log.d("rem", "Removed city: " + change.getDocument().getData());
                             break;
@@ -417,7 +564,7 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
     private void quant_membros() {
         db = FirebaseFirestore.getInstance();
         db.collection("WeForum").document(Id_Forum_selecionado)
-         .collection("Membros").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .collection("Membros").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -433,6 +580,18 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         });
 
     }
+
+
+    //botao Pesquisar
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_chat_grupo,menu);
+
+        MenuCompat.setGroupDividerEnabled(menu, true);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
@@ -441,7 +600,14 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
 
                 startActivity(new Intent(Page_Chat_grupo.this, Lista_Forum.class)
                         .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-
+                finish();
+              break;
+            case R.id.menu_enviar_img:
+                Intent intent = CropImage.activity()
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .getIntent(Page_Chat_grupo.this);
+                startActivityForResult(intent, SELECAO_GALERIA);
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -489,5 +655,99 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
                 .build(edit_chat_emoji);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (resultCode == RESULT_OK) {
+            Bitmap imagem = null;
+
+            try {
+                switch (requestCode) {
+                    case SELECAO_GALERIA:
+                        CropImage.ActivityResult resultGALERIA = CropImage.getActivityResult(data);
+                        Uri resultUriGALERIA = resultGALERIA.getUri();
+                        imagem = MediaStore.Images.Media.getBitmap(getContentResolver(), resultUriGALERIA);
+                        Log.i("sdoskdosdk77", String.valueOf(imagem));
+                        break;
+
+
+                }
+                if (imagem != null) {
+                    //Recuperar dados da imagem  para o  Firebase
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    imagem.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+                    byte[] dadosImagem = baos.toByteArray();
+                    String nomeImagem = UUID.randomUUID().toString();
+                    StorageReference imagemRef = storageReference
+                            .child("imagens")
+                            .child("forum")
+                            .child(Id_Forum_selecionado)
+                            .child(identificadorUsuario)
+                            .child(nomeImagem);
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setCancelable(false);
+                    LayoutInflater layoutInflater = LayoutInflater.from(Page_Chat_grupo.this);
+                    final View view = layoutInflater.inflate(R.layout.dialog_carregando_gif_comscroop, null);
+                    ImageView imageViewgif = view.findViewById(R.id.gifimage);
+
+                    if (!Page_Chat_grupo.this.isFinishing()) {
+                        Glide.with(this)
+                                .asGif()
+                                .load(R.drawable.gif_self)
+                                .into(imageViewgif);
+                        builder.setView(view);
+                    }
+                    dialog = builder.create();
+                    dialog.show();
+
+
+                    UploadTask uploadTask = imagemRef.putBytes(dadosImagem);
+                    //caso de errado
+                    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                   //Salvando a imagem
+                                    Log.i("sdoskdosdk77", String.valueOf(uri));
+                                    SalvarMensagem_imagem(uri.toString());
+                                    dialog.dismiss();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                     dialog.dismiss();
+                                    Toast.makeText(Page_Chat_grupo.this, "Erro ao carregar a imagem", Toast.LENGTH_SHORT).show();
+
+                                }
+                            });
+                        }
+                    });
+
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    private void SalvarMensagem_imagem(String url) {
+        //SharedPreferencies pegando a variavel e os dados
+        String nome = nome_usuario.getString("nome", "");
+        String foto = Foto_usuario.getString("foto_usuario", "");
+        Log.i("sdoskdosdk779",url);
+        chat.setId_grupo(Id_Forum_selecionado);
+        chat.setId_usuario(identificadorUsuario);
+        chat.setMensagem(null);
+        chat.setNome_usuario(nome);
+        chat.setFoto_usuario(foto);
+        chat.setMensagem_img(url);
+        chat.setId_grupo(Id_Forum_selecionado);
+        // chat.setTempo(data_time);
+        chat.Salvar_msg_img();
+
+    }
 }

@@ -32,6 +32,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -48,6 +50,7 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.AdapterPagInicial.Adapter
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.AdapterPagInicial.Adapter_FanArtsInicial;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.AdapterPagInicial.EventoAdapterPagInicial;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.AdapterPagInicial.TopicoAdapterPagInicial;
+import com.wegeekteste.fulanoeciclano.nerdzone.Autenticacao.LoginActivity;
 import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Conto.ListaConto;
 import com.wegeekteste.fulanoeciclano.nerdzone.Evento.DetalheEvento;
@@ -106,6 +109,7 @@ public class MainActivityFragment extends Fragment   implements IOnBackPressed{
     private DocumentReference docRef;
     private BottomNavigationView navigation;
     private static final String ARQUIVO_PREFERENCIA = "arquivoreferencia";
+    private FirebaseAuth.AuthStateListener authStateListener;
     private  Fragment fragment;
     public MainActivityFragment() {
         // Required empty public constructor
@@ -131,8 +135,7 @@ public class MainActivityFragment extends Fragment   implements IOnBackPressed{
        // botoes_Mais();
         RecuperarConto();
        TrocarFundo();
-        identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
-        Log.i("sd22", identificadorUsuario);
+
         //todas configuraões do recycleview
         recyclerViewListaConto = view.findViewById(R.id.RecycleViewhistoria);
         recyclerViewListaGibiMercado = view.findViewById(R.id.RecycleViewMercado);
@@ -188,8 +191,27 @@ public class MainActivityFragment extends Fragment   implements IOnBackPressed{
         maiscontoTxt = view.findViewById(R.id.maishistorias);
         maisfanartsTxt = view.findViewById(R.id.maisgaleria);
         botoes_Mais();
+
+
+
+
+        authStateListener = firebaseAuth -> {
+            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+            if (firebaseUser == null) {
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                startActivity(intent);
+            }else{
+                identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
+
+            }
+        };
+
+
         return view;
     }
+
+
+
 
     @Override
     public void onPause() {

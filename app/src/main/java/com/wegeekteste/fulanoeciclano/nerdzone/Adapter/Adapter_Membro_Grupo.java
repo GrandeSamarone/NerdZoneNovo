@@ -32,13 +32,8 @@ public class Adapter_Membro_Grupo extends RecyclerView.Adapter<Adapter_Membro_Gr
     }
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (membro_grupos.size() > 1) {
-            View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.membros_grupo_online, parent, false);
-            return new Adapter_Membro_Grupo.MyViewHolder(item);
-        } else {
             View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.membro_grupo_online, parent, false);
             return new Adapter_Membro_Grupo.MyViewHolder(item);
-        }
 
     }
 

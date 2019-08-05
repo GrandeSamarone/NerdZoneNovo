@@ -1,5 +1,6 @@
 package com.wegeekteste.fulanoeciclano.nerdzone.Activits;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -16,12 +17,17 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import com.wegeekteste.fulanoeciclano.nerdzone.Autenticacao.LoginActivity;
 import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.MinhaConta.Minha_Conta_Fragment;
 import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.MainActivityFragment;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.BottomNavigationBehavior;
@@ -46,7 +52,9 @@ public class MainActivity extends AppCompatActivity {
     private Toast toast = null;
     int counter=0;
     private Fragment fragment;
-
+    private FirebaseAuth.AuthStateListener authStateListener;
+    private GoogleApiClient googleApiClient;
+    private FirebaseAuth firebaseAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,14 +62,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-
-        //Configuraçoes Originais
-
+        //Configuraçoes Originai
         db = FirebaseFirestore.getInstance();
-        identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
-        Log.i("sd22", identificadorUsuario);
-
-
         //Fragmentos
         loadFragment(new MainActivityFragment());
         //Navegacao Inferior
@@ -73,22 +75,57 @@ public class MainActivity extends AppCompatActivity {
                 navigation.getLayoutParams();
         layoutParams.setBehavior(new BottomNavigationBehavior());
 
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API)
+                .build();
+
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        authStateListener = firebaseAuth -> {
+            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+            if (firebaseUser == null) {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }else{
+                identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
+                Log.i("sodksodk",identificadorUsuario);
+                SharedPreference();
+            } };
 
         //Verifica se é a primeira vez da instalacao
-        sPreferences = getSharedPreferences("primeiravez_Main_Activit", MODE_PRIVATE);
+        sPreferences =getSharedPreferences("primeiravez_Main_Activit", MODE_PRIVATE);
         if (sPreferences.getBoolean("primeiravez_Main_Activit", true)) {
             sPreferences.edit().putBoolean("primeiravez_Main_Activit", false).apply();
-
         }
 
-
-
-
-        //preferences
-        SharedPreference();
         //Trocando Fundo statusbar
         //TrocarFundos_status_bar();
     }
+
+
+    //Pegar dados do usuario do firebase e guardar local
+    private void SharedPreference() {
+
+        docRef = db.collection("Usuarios").document(identificadorUsuario);
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Usuario usuario = documentSnapshot.toObject(Usuario.class);
+                SharedPreferences sharedPreferences =getSharedPreferences(ARQUIVO_PREFERENCIA, 0);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("nome", usuario.getNome());
+                editor.putString("foto_usuario", usuario.getFoto());
+                Log.i("sdosdo0", usuario.getFoto());
+                // Toast.makeText(MainActivity.this, usuario.getNome() + " pegou", Toast.LENGTH_SHORT).show();
+                editor.commit();
+
+            }
+        });
+
+
+    }
+
+
 
     //Recebe Fragment
     private void loadFragment(Fragment fragment) {
@@ -127,29 +164,20 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
-    //Pegar dados do usuario do firebase e guardar local
-    private void SharedPreference() {
-
-        docRef = db.collection("Usuarios").document(identificadorUsuario);
-        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Usuario usuario = documentSnapshot.toObject(Usuario.class);
-                SharedPreferences sharedPreferences = getSharedPreferences(ARQUIVO_PREFERENCIA, 0);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("nome", usuario.getNome());
-                editor.putString("foto_usuario", usuario.getFoto());
-                Log.i("sdosdo0", usuario.getFoto());
-               // Toast.makeText(MainActivity.this, usuario.getNome() + " pegou", Toast.LENGTH_SHORT).show();
-                editor.commit();
-
-            }
-        });
-
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        googleApiClient.connect();
+        firebaseAuth.addAuthStateListener(authStateListener);
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (googleApiClient.isConnected()) {
+            googleApiClient.disconnect();
+        }
+    }
     @Override
     protected void onPause() {
         killToast();

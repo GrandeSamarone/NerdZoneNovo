@@ -27,6 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.wegeekteste.fulanoeciclano.nerdzone.Activits.MainActivity;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_Forum_Grupo;
+import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.forum.APIService;
 import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.forum.Forum_Fragment_principal;
 import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.forum.Grupo_Fragment;
 import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.forum.Topico_Fragment;
@@ -34,6 +35,7 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Helper.BottomNavigationBehavior;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.IOnBackPressed;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.TrocarFundo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
+import com.wegeekteste.fulanoeciclano.nerdzone.Notificacao.Client;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
 import java.util.ArrayList;
@@ -52,6 +54,8 @@ public class Lista_Forum extends TrocarFundo implements View.OnClickListener {
     private FirebaseFirestore db;
     private String identificadorUsuario;
     private BottomNavigationView navigation;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

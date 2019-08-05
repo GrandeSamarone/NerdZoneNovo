@@ -5,17 +5,18 @@
     android:id="@+id/root_view_topico"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_geral"
+    android:background="@color/fundo_chat"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbartopico"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@drawable/gradiente_toolbar"
-        android:theme="@style/Theme.AppCompat"
+        android:theme="@style/DrawerArrowStyle"
         app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
@@ -24,22 +25,18 @@
             android:layout_height="wrap_content"
             tools:ignore="MissingConstraints">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <com.facebook.drawee.view.SimpleDraweeView
 
                     android:id="@+id/icone_chat_toolbar"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="45dp"
+
                     android:layout_marginTop="10dp"
                     android:background="@drawable/fundo_user" />
 
                 <LinearLayout
+                    android:layout_toRightOf="@+id/icone_chat_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -55,8 +52,7 @@
                         android:maxLines="1"
                         android:text="Wegeek"
                         android:textColor="@color/background_geral"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
+                        android:textSize="18dp" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -90,23 +86,21 @@
                             android:textSize="16dp" />
                     </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
-
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
 
     <FrameLayout
+        android:id="@+id/frame_linha"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbartopico"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbartopico">
+          app:layout_constraintTop_toBottomOf="@+id/toolbartopico"
+        app:layout_constraintTop_toTopOf="@+id/recycler_comentario_topico">
 
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="@drawable/toolbar_sombra" />
     </FrameLayout>
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_chat_online"
@@ -115,23 +109,23 @@
         android:layout_marginTop="8dp"
         android:divider="@android:color/transparent"
         android:transcriptMode="alwaysScroll"
+        android:translationZ="2dp"
+        android:layout_marginLeft="8dp"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="@+id/toolbartopico"
-        app:layout_constraintTop_toBottomOf="@+id/toolbartopico"
+        app:layout_constraintTop_toBottomOf="@id/frame_linha"
+        app:layout_constraintLeft_toLeftOf="parent"
         tools:listitem="@layout/adapter_commentario" />
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_comentario_topico"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
 
         android:layout_marginBottom="8dp"
-        android:divider="@android:color/transparent"
         android:transcriptMode="alwaysScroll"
-
+        app:layout_constraintBottom_toTopOf="@+id/digitar"
         app:layout_constraintTop_toBottomOf="@+id/toolbartopico"
-        tools:listitem="@layout/adapter_commentario" />
+        tools:layout_editor_absoluteX="0dp" />
 
 
     <LinearLayout
@@ -139,11 +133,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="8dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingBottom="6dp"
         android:weightSum="1.0"
+        android:background="@color/fundo_chat"
         app:layout_constraintBottom_toBottomOf="parent"
         >
 
@@ -152,7 +145,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:layout_marginRight="5dp"
-            android:layout_marginBottom="3dp"
+            android:layout_marginBottom="8dp"
             android:layout_weight="1"
             android:background="@drawable/fundo_mensagem_chat"
             android:elevation="2dp"
@@ -173,7 +166,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:background="@android:color/white"
-                android:hint="Deixe um comentário"
+                android:hint="Fale alguma coisa"
+                android:textColor="@color/pretoescrita"
+                android:fontFamily="@font/fontgeek"
                 android:inputType="textMultiLine" />
 
             <ImageView
@@ -188,6 +183,7 @@
             android:id="@+id/button_postar_comentario_topico"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/icon_enviar" />
     </LinearLayout>
 

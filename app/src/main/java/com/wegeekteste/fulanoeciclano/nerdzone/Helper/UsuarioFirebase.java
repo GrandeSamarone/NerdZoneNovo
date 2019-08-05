@@ -22,6 +22,7 @@ public class UsuarioFirebase {
         String identificadorUsuario;
         String email = null;
         FirebaseAuth usuario = ConfiguracaoFirebase.getFirebaseAutenticacao();
+
         if(usuario.getCurrentUser().getEmail()!=null){
             email =usuario.getCurrentUser().getEmail();
         }

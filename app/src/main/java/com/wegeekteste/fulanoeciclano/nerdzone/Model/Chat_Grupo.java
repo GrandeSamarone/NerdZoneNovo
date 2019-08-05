@@ -15,6 +15,7 @@ public class Chat_Grupo {
     private String foto_usuario;
     private String id_grupo;
     private String mensagem;
+    private String mensagem_img;
     private String status;
     private @ServerTimestamp Date tempo;
     private boolean isseen;
@@ -33,6 +34,7 @@ public class Chat_Grupo {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> data = new HashMap<>();
         data.put("mensagem",getMensagem());
+        data.put("mensagem_img",getMensagem_img());
         data.put("tempo", FieldValue.serverTimestamp());
         data.put("nome_usuario",getNome_usuario());
         data.put("foto_usuario",getFoto_usuario());
@@ -40,6 +42,22 @@ public class Chat_Grupo {
         data.put("id_usuario",getId_usuario());
         data.put("id_grupo",getId_grupo());
               db
+                .collection("WeForum").document(getId_grupo())
+                .collection("Mensagens").add(data);
+    };
+
+    public  void Salvar_msg_img(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> data = new HashMap<>();
+        data.put("mensagem",getMensagem());
+        data.put("mensagem_img",getMensagem_img());
+        data.put("tempo", FieldValue.serverTimestamp());
+        data.put("nome_usuario",getNome_usuario());
+        data.put("foto_usuario",getFoto_usuario());
+        data.put("status",getStatus());
+        data.put("id_usuario",getId_usuario());
+        data.put("id_grupo",getId_grupo());
+        db
                 .collection("WeForum").document(getId_grupo())
                 .collection("Mensagens").add(data);
     };
@@ -76,6 +94,14 @@ public class Chat_Grupo {
         this.mensagem = mensagem;
     }
 
+    public String getMensagem_img() {
+        return mensagem_img;
+    }
+
+    public void setMensagem_img(String mensagem_img) {
+        this.mensagem_img = mensagem_img;
+    }
+
     public boolean isIsseen() {
         return isseen;
     }
@@ -108,4 +134,7 @@ public class Chat_Grupo {
     public void setStatus(String status) {
         this.status = status;
     }
+
+
+
 }

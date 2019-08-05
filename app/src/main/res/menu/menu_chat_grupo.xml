@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <item
+        android:id="@+id/menu_enviar_img"
+        android:title="enviar_img"
+        android:icon="@drawable/ic_photo_camera_whit_24dp"
+        app:showAsAction="always" />
+
+    <group android:id="@+id/sorting" >
+    <item
+        android:id="@+id/menu_configuracao"
+        android:title="Configuração" />
+    </group>
+    <group android:id="@+id/sorting_" >
+    <item
+        android:id="@+id/menu_membro"
+        android:title="Membros" />
+    </group>
+</menu>

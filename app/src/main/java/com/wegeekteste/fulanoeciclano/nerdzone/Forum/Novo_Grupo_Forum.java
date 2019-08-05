@@ -43,6 +43,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Grupo.Page_Chat_grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.TrocarFundo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
@@ -207,12 +208,13 @@ public class Novo_Grupo_Forum extends TrocarFundo {
                     final View view = layoutInflater.inflate(R.layout.dialog_carregando_gif_analisando, null);
                     ImageView imageViewgif = view.findViewById(R.id.gifimage);
 
-                    Glide.with(this)
-                            .asGif()
-                            .load(R.drawable.gif_analizando)
-                            .into(imageViewgif);
-                    builder.setView(view);
-
+                    if (!Novo_Grupo_Forum.this.isFinishing()) {
+                        Glide.with(this)
+                                .asGif()
+                                .load(R.drawable.gif_analizando)
+                                .into(imageViewgif);
+                        builder.setView(view);
+                    }
                     dialog = builder.create();
                     dialog.show();
                     ;

@@ -1,46 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
-    android:layout_marginBottom="@dimen/margenBalaoBottom"
-    android:layout_marginLeft="@dimen/margenLeftChat"
-    android:layout_marginStart="@dimen/margenLeftChat">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/tools"
+    android:padding="8dp"
+    android:layout_height="wrap_content">
 
-    <RelativeLayout
-        android:layout_alignParentRight="true"
-        android:id="@+id/layout"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:visibility="gone"
+        android:id="@+id/icon_chat_grupo_destinario"
+        android:background="@drawable/fundo_user"/>
+
+    <TextView
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/out_message_bg"
+        android:layout_toRightOf="@id/icon_chat_grupo_destinario"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="5dp"
+        android:text="No Name:"
+        android:fontFamily="@font/fontgeek"
+        android:id="@+id/name_chat_grupo_destinatario"
+        android:textSize="12sp" />
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_alignParentEnd="true"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true">
 
-        >
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile_image"
+            android:visibility="gone"/>
 
-            <com.vanniktech.emoji.EmojiTextView
-                android:id="@+id/textMensagemtexto"
-                style="@style/TextAppearance.AppCompat.Small"
-                android:textSize="16sp"
-                android:fontFamily="@font/fontgeek"
-                android:textColor="@color/brancochat"
-                android:text="oi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textIsSelectable="true"
-                app:emojiSize="@dimen/emoji_size_only_emojis"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_right"
+            android:text="hello"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/textMensagemtexto"
+            android:textSize="16sp"
+            android:textColor="@color/background_geral"
+            android:fontFamily="@font/fontgeek"
+            android:padding="8dp"
+            android:layout_alignParentRight="true" />
+
+        <LinearLayout
+            android:padding="4dp"
+            android:id="@+id/line_img_chat"
+           android:visibility="gone"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/background_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true">
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:visibility="gone"
+            android:id="@+id/img_msg_grupo"
+            android:layout_width="100sp"
+            android:layout_height="100sp"
+            fresco:placeholderImage="@color/red"
+            fresco:placeholderImageScaleType="fitCenter"
+            fresco:retryImage="@drawable/dedo"
+            fresco:retryImageScaleType="centerCrop"
+            fresco:progressBarImage="@drawable/bgmenus"
+            fresco:progressBarImageScaleType="centerInside"
+            fresco:progressBarAutoRotateInterval="1000"
+            fresco:backgroundImage="@color/blue"
+            fresco:overlayImage="@drawable/watermark"
+            />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tempodochat"
+            android:layout_below="@id/textMensagemtexto"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
-    <TextView
-        android:id="@+id/tempodochat"
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="00/00/000"
-        android:textColor="@color/branco"
-        android:textSize="10sp"
-        android:layout_below="@+id/layout"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="16dp"
-
-        />
 </RelativeLayout>

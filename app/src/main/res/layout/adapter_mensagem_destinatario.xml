@@ -1,40 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="wrap_content"
-    android:layout_width="wrap_content"
-    android:orientation="vertical"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:padding="8dp"
+    android:layout_height="wrap_content">
 
-    xmlns:fresco="http://schemas.android.com/apk/res-auto">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/icon_chat_grupo_destinario"
+       android:background="@drawable/fundo_user"/>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:fresco="http://schemas.android.com/tools"
-        android:id="@+id/teste"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:background="@drawable/in_message_bg"
-       >
-        <com.vanniktech.emoji.EmojiTextView
-            android:id="@+id/textMensagemtexto"
-            android:textColor="@color/brancochat"
-            android:fontFamily="@font/fontgeek"
-            android:text="oiii"
-            android:textSize="16sp"
-            style="@style/TextAppearance.AppCompat.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textIsSelectable="true"
-            app:emojiSize="@dimen/emoji_size_only_emojis" />
-
-              </androidx.constraintlayout.widget.ConstraintLayout>
-    <TextView
-        android:layout_marginLeft="16dp"
-        android:id="@+id/tempodochat"
+        android:layout_toRightOf="@id/icon_chat_grupo_destinario"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="5dp"
+        android:text="No Name:"
+        android:fontFamily="@font/fontgeek"
+        android:id="@+id/name_chat_grupo_destinatario"
+        android:textSize="12sp" />
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/line_img_chat"
+        android:padding="4dp"
+        android:background="@drawable/background_left"
         android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:text="00/00/000"
-        android:textColor="@color/branco"
-        android:textSize="10sp" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name_chat_grupo_destinatario"
+        android:layout_toRightOf="@id/icon_chat_grupo_destinario"
+        android:layout_marginLeft="5dp"
 
-</LinearLayout>
+        >
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/img_msg_grupo"
+            android:layout_width="100sp"
+            android:layout_height="100sp"
+            android:visibility="gone"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:layout_below="@+id/name_chat_grupo_destinatario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/icon_chat_grupo_destinario"
+        android:layout_marginLeft="5dp"
+        android:text="hello"
+        android:fontFamily="@font/fontgeek"
+        android:id="@+id/textMensagemtexto"
+        android:textSize="16sp"
+        android:padding="8dp"
+        android:background="@drawable/background_left"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tempodochat"
+        android:visibility="gone"
+        android:layout_below="@id/textMensagemtexto"/>
+
+
+</RelativeLayout>

@@ -70,7 +70,7 @@ public class Adapter_Forum_Grupo extends RecyclerView.Adapter<Adapter_Forum_Grup
                 ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(stringcapa))
                         .setLocalThumbnailPreviewsEnabled(true)
                         .setProgressiveRenderingEnabled(true)
-                        .setResizeOptions(new ResizeOptions(200, 200))
+                        .setResizeOptions(new ResizeOptions(100, 100))
                         .build();
 
                 DraweeController controller = Fresco.newDraweeControllerBuilder()
