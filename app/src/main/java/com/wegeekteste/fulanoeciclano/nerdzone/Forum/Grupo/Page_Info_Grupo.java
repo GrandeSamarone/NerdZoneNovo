@@ -66,7 +66,7 @@ public class Page_Info_Grupo extends TrocarFundo {
     private SharedPreferences nome_usuario,foto_usuario;
     private static  final String ARQUIVO_PREFERENCIA ="arquivoreferencia";
     private String nome_user;
-    private String foto;
+    private String foto,nome_grupo;
     boolean notify = false;
     APIService apiService;
 
@@ -91,29 +91,13 @@ public class Page_Info_Grupo extends TrocarFundo {
             botao_entrar_grupo = findViewById(R.id.botao_grupo_info);
             identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
 
-
+                botao_entrar_grupo.setText("se torne um membro");
 
 
             botao_entrar_grupo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    Membro_solicitacao_grupo membro=new Membro_solicitacao_grupo();
-                   membro.setBloqueio(false);
-                   membro.setPermissao(false);
-                   membro.setFoto_usuario(foto);
-                   membro.setId_admin_grupo(forum.getIdauthor());
-                   membro.setId_usuario(identificadorUsuario);
-                   membro.setNome_usuario(nome_user);
-                   membro.setId_grupo(id_grupo_selecionado);
-                   membro.SalvarSolicitacao();
-                   notify=true;
-                    botao_entrar_grupo.setText("Solicitação Enviada!");
-                    if (notify) {
-                        sendNotifiaction( forum.getIdauthor(),nome_user, "Solicitacao de grupo");
-                        Toast.makeText(Page_Info_Grupo.this, "etapa0", Toast.LENGTH_SHORT).show();
-                    }
-                    notify = false;
+                 Verificar_opcaoGrupo();
                 }
             });
 
@@ -135,7 +119,7 @@ public class Page_Info_Grupo extends TrocarFundo {
                 nome_toolbar.setText(forum.getTitulo());
                 descricao_info.setText(forum.getDescricao());
                 criador_info.setText(forum.getNomeauthor());
-
+                nome_grupo=forum.getTitulo();
                 String foto = forum.getFoto();
                 if (foto != null) {
                     Uri url = Uri.parse(foto);
@@ -148,7 +132,7 @@ public class Page_Info_Grupo extends TrocarFundo {
         }
 
 
-        Verificar_Tipo_Grupo();
+
         CarregarDados_do_Usuario();
         Verificar_solicitacao();
 
@@ -159,11 +143,11 @@ public class Page_Info_Grupo extends TrocarFundo {
         super.onPause();
         Admin_grupo("none");
     }
-    private void sendNotifiaction( final String id_author_recebe, final String username_de_quem_mando,String msg){
+    private void sendNotifiaction( final String receptor, final String username_de_quem_mando,String msg){
 
-        Toast.makeText(Page_Info_Grupo.this, "etapa1 + "+id_author_recebe, Toast.LENGTH_LONG).show();
 
-         db.collection("WeForum").whereEqualTo("idauthor",id_author_recebe).get()
+
+         db.collection("WeForum").whereEqualTo("idauthor",receptor).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -171,9 +155,8 @@ public class Page_Info_Grupo extends TrocarFundo {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                              Forum forum=document.toObject(Forum.class);
 
-                                Data data = new Data(identificadorUsuario, R.mipmap.ic_launcher,
-                                        username_de_quem_mando+": "+msg, "New Message", id_author_recebe);
-                                Toast.makeText(Page_Info_Grupo.this, "etapa2 + "+forum.getToken_author(), Toast.LENGTH_LONG).show();
+                                Data data = new Data(identificadorUsuario, R.drawable.favicon,
+                                        username_de_quem_mando+": "+msg, "Nova Solicitação", receptor);
                                 Sender sender = new Sender(data,  forum.getToken_author());
 
                                 Toast.makeText(Page_Info_Grupo.this, forum.getToken_author(), Toast.LENGTH_SHORT).show();
@@ -236,6 +219,38 @@ public class Page_Info_Grupo extends TrocarFundo {
         finish();
     }
 
+
+    private void Verificar_opcaoGrupo(){
+        if(forum.getOpcao().equals("grupo_free")){
+            Intent it = new Intent(Page_Info_Grupo.this,Page_Chat_grupo.class);
+            it.putExtra("forum_selecionado",forum);
+            it.putExtra("id_forum_selecionado",id_grupo_selecionado);
+            startActivity(it);
+            finish();
+        }else {
+
+            Membro_solicitacao_grupo membro = new Membro_solicitacao_grupo();
+            membro.setBloqueio(false);
+            membro.setPermissao(false);
+            membro.setFoto_usuario(foto);
+            membro.setId_admin_grupo(forum.getIdauthor());
+            membro.setId_usuario(identificadorUsuario);
+            membro.setNome_usuario(nome_user);
+            membro.setId_grupo(id_grupo_selecionado);
+            membro.setNome_grupo(nome_grupo);
+            membro.SalvarSolicitacao();
+            notify = true;
+            botao_entrar_grupo.setText("Solicitação Enviada!");
+            if (notify) {
+                sendNotifiaction(forum.getIdauthor(), nome_user, "Olá quero participar do  " + forum.getTitulo());
+
+            }
+            notify = false;
+
+
+        }
+    }
+
     private void Verificar_solicitacao(){
          db.collection("Permissao_Grupo").whereEqualTo("id_grupo",id_grupo_selecionado)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -253,10 +268,7 @@ public class Page_Info_Grupo extends TrocarFundo {
 
                              }
                          });
-                     }else{
-                         botao_entrar_grupo.setText("Seja um Membro");
                      }
-
 
                      }
                  } else {
@@ -282,31 +294,7 @@ public class Page_Info_Grupo extends TrocarFundo {
   }
 
 
-    private void Verificar_Tipo_Grupo(){
-        Query query=  db
-                .collection("WeForum");
 
-        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
-                for (DocumentChange change : queryDocumentSnapshots.getDocumentChanges()) {
-
-                    Forum forum_tipo = change.getDocument().toObject(Forum.class);
-
-                    if(forum_tipo.getOpcao().equals("grupo_permissao")){
-
-                      botao_entrar_grupo.setText("Permissão");
-                    }else{
-                        botao_entrar_grupo.setText("Se torne um membro");
-
-                    }
-
-
-
-                }
-            }
-        });
-    }
 
   private void Verificar_situacao_membro(){
       Query query=  db

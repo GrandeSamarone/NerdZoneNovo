@@ -320,12 +320,14 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
     private void Status(String status) {
         String nome = nome_usuario.getString("nome", "");
         String foto = Foto_usuario.getString("foto_usuario", "");
+        String token = Foto_usuario.getString("token", "");
 
         Membro_Grupo membro_grupo = new Membro_Grupo();
         membro_grupo.setId_usuario(identificadorUsuario);
         membro_grupo.setId_grupo(Id_Forum_selecionado);
         membro_grupo.setNome_usuario(nome);
         membro_grupo.setFoto_usuario(foto);
+        membro_grupo.setToken_usuario(token);
         membro_grupo.setStatus(status);
         membro_grupo.SalvarMembro();
 

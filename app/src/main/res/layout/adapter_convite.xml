@@ -73,13 +73,14 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/botao_aceita"
                     android:layout_marginRight="8dp"
                 android:layout_width="60dp"
                 android:layout_height="40dp"
                 android:text="Aceita" />
 
             <Button
-
+                android:id="@+id/botao_recusar"
                 android:layout_width="60dp"
                 android:layout_height="40dp"
                 android:text="Recusar" />

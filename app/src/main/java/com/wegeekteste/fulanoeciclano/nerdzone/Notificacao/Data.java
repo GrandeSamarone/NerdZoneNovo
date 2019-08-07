@@ -1,10 +1,12 @@
 package com.wegeekteste.fulanoeciclano.nerdzone.Notificacao;
 
 public class Data {
+    //id de quem quer participar do grupo
     private String id_mandou;
     private int icon;
     private String body;
     private String title;
+    //id do admin do grupo
     private String id_recebe;
 
     public Data(String id_mandou, int icon, String body, String title, String id_recebe) {

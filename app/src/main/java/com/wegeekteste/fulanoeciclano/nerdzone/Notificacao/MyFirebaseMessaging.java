@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Convite_Activity;
 import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Grupo.Page_Chat_grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
 
@@ -28,14 +29,12 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        String id_recebe = remoteMessage.getData().get("id_recebe");
         String user_mandou = remoteMessage.getData().get("id_mandou");
 
         SharedPreferences preferences = getSharedPreferences("PREFS", MODE_PRIVATE);
         String Id_Admin = preferences.getString("Admin_grupo", "none");
 
-
-
+            //conferindo se  o id de quem criou está pedindo autorizacao
             if (!Id_Admin.equals(user_mandou)) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     sendOreoNotification(remoteMessage);
@@ -53,7 +52,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
-        Intent intent = new Intent(this, Page_Chat_grupo.class);
+        Intent intent = new Intent(this, Convite_Activity.class);
         Bundle bundle = new Bundle();
         bundle.putString("userid", user);
         intent.putExtras(bundle);
@@ -83,7 +82,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
-        Intent intent = new Intent(this, Page_Chat_grupo.class);
+        Intent intent = new Intent(this, Convite_Activity.class);
         Bundle bundle = new Bundle();
         bundle.putString("userid", user);
         intent.putExtras(bundle);

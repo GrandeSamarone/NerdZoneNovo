@@ -9,6 +9,7 @@ public class Membro_Grupo {
     private String id_usuario;
     private String nome_usuario;
     private String foto_usuario;
+    private String token_usuario;
     private String status;
     private String id_grupo;
     private Boolean digitando;
@@ -25,6 +26,7 @@ public class Membro_Grupo {
         HashMap<String, Object> membrosMap = new HashMap<>();
         membrosMap.put("status", getStatus());
         membrosMap.put("id_usuario", getId_usuario());
+        membrosMap.put("token_usuario", getToken_usuario());
         membrosMap.put("bloqueio",false);
         membrosMap.put("permissao",false);
         membrosMap.put("foto_usuario",getFoto_usuario() );
@@ -109,5 +111,14 @@ public class Membro_Grupo {
 
     public void setBloqueio(Boolean bloqueio) {
         this.bloqueio = bloqueio;
+    }
+
+
+    public String getToken_usuario() {
+        return token_usuario;
+    }
+
+    public void setToken_usuario(String token_usuario) {
+        this.token_usuario = token_usuario;
     }
 }
