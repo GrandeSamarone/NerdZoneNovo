@@ -42,7 +42,6 @@ public class Forum implements Serializable {
     public Map<String, Boolean> stars = new HashMap<>();
     String usuariologado = UsuarioFirebase.getIdentificadorUsuario();
     public Forum() {
-
     }
 
   public  void SalvarForum(){

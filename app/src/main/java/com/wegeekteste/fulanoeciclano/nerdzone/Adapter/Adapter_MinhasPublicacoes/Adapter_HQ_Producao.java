@@ -117,13 +117,15 @@ public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Produc
             holder.container.setBackgroundResource(bgResId);
         }
 
-        holder.img.setOnClickListener(new View.OnClickListener() {
+       /* holder.img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 RemoverItem(hq);
             }
         });
+    */
     }
+
 
     private void RemoverItem(HQ_Model hq_model) {
         int currPosition = listHQs.indexOf(hq_model);

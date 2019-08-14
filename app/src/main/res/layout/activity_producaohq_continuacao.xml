@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    tools:context=".Forum.Novo_Grupo_Forum">
+    <include layout="@layout/toolbarsecundario"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtlayout_titulo_hq"
+                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:counterEnabled="true"
+                app:counterMaxLength="100"
+                >
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/nome_hq_producao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/txt_titulo"
+                    android:padding="10dp"
+                    android:maxLength="100"
+                    android:background="@drawable/bg_edit_text"
+                    android:textAlignment="center"
+                    android:inputType="textMultiLine"
+                    android:minLines="2"
+                    android:fontFamily="@font/fontgeek"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtlayout_descricao_hq"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:counterEnabled="true"
+                app:counterMaxLength="400"
+                >
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/desc_hq_prod"
+                    android:maxLength="400"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:fontFamily="@font/fontgeek"
+                    android:hint="@string/descricao"
+                    android:background="@drawable/bg_edit_text"
+                    android:textAlignment="center"
+                    android:minLines="5"
+                    android:inputType="textMultiLine"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+
+            <Button
+                android:layout_marginTop="16dp"
+                android:id="@+id/botaosalvar_Grupo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="PRONTO"
+                android:fontFamily="@font/fontgeek"
+                android:textSize="24sp"
+                android:drawableRight="@drawable/ic_arrow_forward"
+                android:theme="@style/botaopadrao"/>
+        </LinearLayout>
+
+
+</LinearLayout>

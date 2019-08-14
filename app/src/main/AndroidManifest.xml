@@ -17,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Leilao.Novo_Leilao_Activity"></activity>
+        <activity android:name=".HQ.Producaohq_continuacao"></activity>
+        <activity android:name=".Leilao.Novo_Leilao_Activity" />
         <activity
             android:name=".Leilao.leilao_page_principal"
             android:label="@string/title_activity_leilai_page_principal"
