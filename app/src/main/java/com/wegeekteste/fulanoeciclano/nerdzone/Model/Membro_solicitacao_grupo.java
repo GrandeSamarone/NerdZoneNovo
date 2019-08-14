@@ -5,6 +5,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 
 public class Membro_solicitacao_grupo {
+   private String id;
     private String foto_usuario;
     private String id_admin_grupo;
     private String id_grupo;
@@ -30,7 +31,8 @@ public class Membro_solicitacao_grupo {
         membrosMap.put("nome_grupo", getNome_grupo());
         membrosMap.put("id_admin_grupo", getId_admin_grupo());
 
-        db.collection("Permissao_Grupo").add(membrosMap);
+        db.collection("Permissao_Grupo")
+                .add(membrosMap);
     }
 
     public void cancelar() {
@@ -109,5 +111,14 @@ public class Membro_solicitacao_grupo {
 
     public void setNome_grupo(String nome_grupo) {
         this.nome_grupo = nome_grupo;
+    }
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

@@ -17,10 +17,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Leilao.Novo_Leilao_Activity"></activity>
+        <activity
+            android:name=".Leilao.leilao_page_principal"
+            android:label="@string/title_activity_leilai_page_principal"
+            android:parentActivityName=".Activits.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.wegeekteste.fulanoeciclano.nerdzone.Activits.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Forum.Grupo.Configuracao_Grupo_Activity"
+            android:label="@string/title_activity_configuracao__grupo_"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Forum.Convite_Activity"
             android:label="@string/title_activity_convite_"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".HQ.Pag_producao_hq" />
         <activity android:name=".HQ.Lista_geral_hq" />
         <activity android:name=".Forum.Grupo.Page_Info_Grupo" />
@@ -99,7 +113,7 @@
         <activity
             android:name=".PerfilAmigos.Perfil"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Forum.Lista_Forum" />
+        <activity android:name=".Forum.Forum_principal" />
         <activity android:name=".Edit.Edit_evento_Activity" />
         <activity android:name=".Edit.Edit_Loja_Activity" />
         <activity android:name=".Forum.Novo_Grupo_Forum" />

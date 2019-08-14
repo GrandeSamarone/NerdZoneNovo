@@ -2,7 +2,7 @@
     <string name="app_name">WeGeek Teste</string>
     <string name="buscar_usuario">Ei %1$s, nemhum Usuario Foi encontrado.</string>
     <string name="title_activity_cadastrar_icon_nome_">Cadastrar_icon_nome_Activity</string>
-
+    <string name="picker_today">Hoje</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_descricao_gibi">DescricaoGibiActivity</string>
     <!--<string name="facebook_app_id">187928898608771</string>-->
@@ -18,19 +18,24 @@
     <string name="title_activity_minha_conta">MinhaConta</string>
 
 
-    <string name="title_shop">Home</string>
+    <string name="title_shop">Inicio</string>
     <string name="title_forum">Fórum</string>
-    <string name="title_gifts">Zoom</string>
+    <string name="title_leilao">Leilão</string>
+    <string name="title_gifts">Caixa de Mensagem</string>
     <string name="title_grupos">Grupos</string>
+    <string name="title_lance_leilao">Lance</string>
     <string name="title_topicos">Tópicos</string>
+    <string name="title_hist_leilao">Histórico</string>
     <string name="title_cart">Anterior</string>
     <string name="title_chat">Chat</string>
-    <string name="title_profile">Perfil</string>
+    <string name="title_profile">EU</string>
     <string name="title_Voltar">Voltar</string>
     <string name="text_icone_heroi">HERÓIS</string>
     <string name="text_icon_galeria">GALERIA</string>
     <string name="text_icon_camera">CÂMERA</string>
     <string name="text_lista_forum">Fórum</string>
+    <string name="text_lista_leilao">Leilão</string>
+    <string name="text_novo_leilao">Novo Leilão</string>
     <string name="drawer_colecoes_es">Coleções</string>
     <string name="drawer_loja">Loja</string>
     <string name="drawer_Criar_loja">Comércios</string>
@@ -91,6 +96,9 @@
     <string name="avalie_nos">Avalie-nos</string>
     <string name="texto_compartilhar">Ola, sou %1$ estou participando de uma competição no App %2$,vamos lá vote em mim!</string>
     <string name="regulamento"> 1- 1a Fase - 16/ 11/18 até 25/12/18\n 2- 2a Fase - 26/12/18 até 16/01/19\n \n Observação: 2a Fase o voto será secreto, revelando o campeão no dia do evento.</string>
+    <string name="ajuda_valor_lance">Os lances começará apartir do valor que for decidido aqui.</string>
+
+    <string name="duvida_novoLeilao"> Depois de carregar as imagens \n Clique e apagará a foto ou \n pressione para trocar de lugar.</string>
 
     <string-array name="estados">
         <item>Estado</item>
@@ -127,14 +135,34 @@
         <item>Selecione</item>
         <item>Action Figures</item>
         <item>Comércio</item>
-        <item>Mangá</item>
         <item>Filmes</item>
         <item>Ficção Cientifica</item>
         <item>Games</item>
         <item>HQ</item>
+        <item>Mangá</item>
+        <item>Musica</item>
+        <item>Leilão</item>
+        <item>K-PoP</item>
         <item>Tecnologia</item>
         <item>História</item>
     </string-array>
+
+    <string-array name="categoria_leilao">
+        <item>Selecione uma Categoria</item>
+        <item>Action Figures</item>
+        <item>Filmes</item>
+        <item>Games</item>
+        <item>HQ</item>
+        <item>Mangá</item>
+        <item>Roupas</item>
+        <item>Livros</item>
+        <item>Papelaria</item>
+        <item>Decoração</item>
+        <item>Cozinha</item>
+        <item>Cosplay</item>
+        <item>Outros</item>
+    </string-array>
+
     <string-array name="fanartcategoria">
         <item>Categoria</item>
         <item>Cosplay</item>
@@ -179,6 +207,7 @@
         <item>Agro</item>
     </string-array>
     <string name="title_activity_convite_">Convite_Activity</string>
-
+    <string name="title_activity_configuracao__grupo_">Configuracao_Grupo_Activity</string>
+    <string name="title_activity_leilai_page_principal">leilai_page_principal</string>
 
 </resources>

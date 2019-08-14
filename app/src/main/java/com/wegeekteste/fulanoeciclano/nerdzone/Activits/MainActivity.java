@@ -28,6 +28,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.wegeekteste.fulanoeciclano.nerdzone.Autenticacao.LoginActivity;
+import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.Caixa_Entrada_Fragment;
+import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.Chat_Fragment;
 import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.MinhaConta.Minha_Conta_Fragment;
 import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.MainActivityFragment;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.BottomNavigationBehavior;
@@ -152,14 +154,17 @@ public class MainActivity extends AppCompatActivity {
                     fragment = new MainActivityFragment();
                     loadFragment(fragment);
                     return true;
-                case R.id.navigation:
+                case R.id.navigation_entrada:
+                    fragment = new Caixa_Entrada_Fragment();
+                    loadFragment(fragment);
+                    return true;
+                case R.id.navigation_chat_pessoal:
+                    fragment = new Chat_Fragment();
+                    loadFragment(fragment);
                     return true;
                 case R.id.navigation_perfil:
                     fragment = new Minha_Conta_Fragment();
                     loadFragment(fragment);
-                    return true;
-                case R.id.navigation_voltar:
-
                     return true;
             }
             return false;

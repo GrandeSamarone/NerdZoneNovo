@@ -103,14 +103,7 @@ public class AbrirImagemComercio extends AppCompatActivity {
                 case R.id.navigation_home:
                     finish();
                     return true;
-                case R.id.navigation_zoom:
-                    Zoom();
-                    return true;
-                case R.id.navigation_voltar:
 
-                    viewPager.setCurrentItem(voltar(-1),true);
-
-                    return true;
                 case R.id.navigation_perfil:
 
                     viewPager.setCurrentItem(prox(+1),true);

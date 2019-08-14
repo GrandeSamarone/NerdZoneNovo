@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Forum.Grupo.Configuracao_Grupo_Activity"
+    android:fitsSystemWindows="true"
+    android:padding="8dp">
+
+
+<include layout="@layout/toolbarsecundario"/>
+<LinearLayout
+    android:layout_margin="8dp"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/img_icone_grupo"
+        android:layout_width="80dp"
+        android:layout_height="80dp" />
+
+  <TextView
+      android:textSize="16sp"
+      android:fontFamily="@font/fontgeek"
+      android:text="nome"
+      android:layout_toRightOf="@+id/img_icone_grupo"
+      android:layout_margin="8dp"
+      android:id="@+id/nome_grupo_conf"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+      <TextView
+          android:textSize="14sp"
+          android:fontFamily="@font/fontgeek"
+          android:text="desc"
+          android:layout_toRightOf="@+id/img_icone_grupo"
+          android:layout_margin="8dp"
+          android:id="@+id/desc_grupo_conf"
+          android:layout_below="@+id/nome_grupo_conf"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+  </RelativeLayout>
+    <TextView
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Membros:"
+        android:fontFamily="@font/fontgeek"/>
+
+
+   <androidx.recyclerview.widget.RecyclerView
+       android:id="@+id/membros_grupos_config"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:focusableInTouchMode="true"
+       android:focusable="true"/>
+</LinearLayout>
+</LinearLayout>

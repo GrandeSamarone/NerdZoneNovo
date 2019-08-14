@@ -7,18 +7,18 @@
         android:title="@string/title_shop" />
 
     <item
-        android:id="@+id/navigation_zoom"
-        android:icon="@drawable/ic_zoom"
+        android:id="@+id/navigation_entrada"
+        android:icon="@drawable/ic_main"
         android:title="@string/title_gifts" />
 
     <item
-        android:id="@+id/navigation_voltar"
-        android:icon="@drawable/ic_chat"
+        android:id="@+id/navigation_chat_pessoal"
+        android:icon="@drawable/ic_chat_pessoal"
         android:title="@string/title_chat" />
 
     <item
         android:id="@+id/navigation_perfil"
-        android:icon="@drawable/ic_perfil_black_24dp"
+        android:icon="@drawable/smile"
         android:title="@string/title_profile" />
 
 </menu>

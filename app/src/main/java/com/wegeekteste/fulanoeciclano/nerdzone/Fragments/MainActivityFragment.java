@@ -9,11 +9,9 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,30 +19,26 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
-import com.wegeekteste.fulanoeciclano.nerdzone.Activits.MainActivity;
-import com.wegeekteste.fulanoeciclano.nerdzone.Activits.MinhaConta;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.AdapterPagInicial.AdapterMercado;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.AdapterPagInicial.Adapter_Conto_pag_inicial;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.AdapterPagInicial.Adapter_FanArtsInicial;
@@ -54,15 +48,14 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Autenticacao.LoginActivity;
 import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Conto.ListaConto;
 import com.wegeekteste.fulanoeciclano.nerdzone.Evento.DetalheEvento;
-import com.wegeekteste.fulanoeciclano.nerdzone.FanArts.Lista_Arts;
-import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Lista_Forum;
+import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Forum_principal;
 import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.MinhaConta.Minha_Conta_Fragment;
+import com.wegeekteste.fulanoeciclano.nerdzone.Leilao.Page_Inicial_leiao_Fragment;
 import com.wegeekteste.fulanoeciclano.nerdzone.HQ.Pag_producao_hq;
-import com.wegeekteste.fulanoeciclano.nerdzone.Helper.BottomNavigationBehavior;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.IOnBackPressed;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.RecyclerItemClickListener;
-import com.wegeekteste.fulanoeciclano.nerdzone.Helper.TrocarFundo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
+import com.wegeekteste.fulanoeciclano.nerdzone.Leilao.leilao_page_principal;
 import com.wegeekteste.fulanoeciclano.nerdzone.Mercado.Detalhe_Mercado;
 import com.wegeekteste.fulanoeciclano.nerdzone.Mercado.MercadoActivity;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Comercio;
@@ -70,13 +63,10 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Model.Conto;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Evento;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.FanArts;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
-import com.wegeekteste.fulanoeciclano.nerdzone.Model.Usuario;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -99,7 +89,8 @@ public class MainActivityFragment extends Fragment   implements IOnBackPressed{
     private ArrayList<Forum> listaForum = new ArrayList<>();
     private ArrayList<Evento> ListaEvento = new ArrayList<>();
     private ArrayList<Conto> ListaContos = new ArrayList<>();
-    private TextView maiseventoTxt, maiscomercioTxt, maistopicoTxt, maiscontoTxt, maisfanartsTxt;
+    private TextView maiseventoTxt, maiscomercioTxt, maistopicoTxt, maiscontoTxt, maisfanartsTxt,maisLeilao;
+    private RelativeLayout clickMais_Leilao;
     private Toolbar toolbar;
     private StorageReference storageReference;
     SharedPreferences sPreferences = null;
@@ -119,7 +110,7 @@ public class MainActivityFragment extends Fragment   implements IOnBackPressed{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+                         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main_activity, container, false);
 
 
@@ -184,12 +175,13 @@ public class MainActivityFragment extends Fragment   implements IOnBackPressed{
 
 
 
-        //botaoMais
+
         maiseventoTxt = view.findViewById(R.id.maisevento);
         maiscomercioTxt = view.findViewById(R.id.maiscomercio);
         maistopicoTxt = view.findViewById(R.id.maisForum);
         maiscontoTxt = view.findViewById(R.id.maishistorias);
         maisfanartsTxt = view.findViewById(R.id.maisgaleria);
+
         botoes_Mais();
 
 
@@ -417,10 +409,12 @@ public class MainActivityFragment extends Fragment   implements IOnBackPressed{
                 startActivity(it);
             }
         });
+
         maistopicoTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent it = new Intent(getContext(), Lista_Forum.class);
+
+                Intent it = new Intent(getContext(), Forum_principal.class);
                 startActivity(it);
             }
         });

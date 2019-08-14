@@ -60,7 +60,7 @@ public class Forum implements Serializable {
       newForum.put("categoria", getCategoria());
       newForum.put("membro_count",0);
       newForum.put("data", FieldValue.serverTimestamp());
-
+     newForum.put("membros",FieldValue.arrayUnion(getIdauthor()));
 // Add a new document with a generated ID
       db.collection("WeForum")
               //.document(getIdauthor())

@@ -7,8 +7,8 @@
     android:layout_height="match_parent"
     android:background="@color/fundo_chat"
     android:fitsSystemWindows="true"
-    android:orientation="vertical">
-
+    android:orientation="vertical"
+    xmlns:shimmer="http://schemas.android.com/apk/res-auto">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbartopico"
@@ -162,25 +162,20 @@
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
+                android:gravity="center"
                 android:background="@android:color/white"
                 android:hint="Fale alguma coisa"
                 android:textColor="@color/pretoescrita"
                 android:fontFamily="@font/fontgeek"
                 android:inputType="textMultiLine" />
 
-            <ImageView
-                android:id="@+id/imageCamera"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:visibility="invisible"
-                app:srcCompat="@drawable/ic_emotion_chat" />
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_postar_comentario_topico"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="4dp"
             android:background="@drawable/icon_enviar" />
     </LinearLayout>
 

@@ -8,17 +8,22 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,6 +32,8 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_Forum_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Convite_Activity;
@@ -48,12 +55,11 @@ public class Forum_Fragment_principal extends Fragment implements View.OnClickLi
     private Adapter_Forum_Grupo adapter_Meus_forum;
     private RecyclerView recyclerView_lista_Meus_Forum;
     private ArrayList<Forum> listaForum = new ArrayList<>();
-    private Dialog dialog;
     private SharedPreferences preferences = null;
     private FirebaseFirestore db;
     private String identificadorUsuario;
-    private BottomNavigationView navigation;
     private ShimmerFrameLayout shimmerContainer;
+    private ListenerRegistration registration;
     private LinearLayout criarGrupo,line_convites;
     FirebaseUser fuser;
     public Forum_Fragment_principal() {
@@ -93,14 +99,17 @@ public class Forum_Fragment_principal extends Fragment implements View.OnClickLi
             @Override
             public void onItemClick(View view, int position) {
                 List<Forum> listaAtualizada = adapter_Meus_forum.getForuns();
-
+                Toast toast = Toast.makeText(getContext(), " Carregando...",Toast.LENGTH_SHORT);
+                toast.show();
                 if(listaAtualizada.size()>0){
                     String id_grupo_selecionado = adapter_Meus_forum.getForuns().get(position).getId();
                     Forum forumselecionado = listaAtualizada.get(position);
                     Intent it = new Intent(getContext(), Page_Chat_grupo.class);
                     it.putExtra("forum_selecionado",forumselecionado);
                     it.putExtra("id_forum_selecionado",id_grupo_selecionado);
+                    it.putExtra("id_admin",forumselecionado.getIdauthor());
                     startActivity(it);
+
 
                 }
             }
@@ -126,11 +135,12 @@ public class Forum_Fragment_principal extends Fragment implements View.OnClickLi
 
 
     private void RecuperarForum(){
+
         shimmerContainer.stopShimmerAnimation();
         shimmerContainer.setVisibility(View.GONE);
-        db.collection("WeForum")
-                .whereEqualTo("idauthor", identificadorUsuario)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+        Query query= db.collection("WeForum")
+                .whereArrayContains("membros", identificadorUsuario);
+        registration=query .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
                         if (e != null) {
@@ -140,6 +150,7 @@ public class Forum_Fragment_principal extends Fragment implements View.OnClickLi
 
                         for (DocumentChange change : snapshots.getDocumentChanges()) {
                             Forum forum_grupo = change.getDocument().toObject(Forum.class);
+                            Log.i("sdsdsd74798",change.getDocument().getId());
                             forum_grupo.setId(change.getDocument().getId());
                             //  Log.i("sdsdsd",change.getDocument().getId());
                             // Log.i("sdsdsd2",conto.getUid());
@@ -206,6 +217,7 @@ public class Forum_Fragment_principal extends Fragment implements View.OnClickLi
     public void onPause() {
         shimmerContainer.stopShimmerAnimation();
         super.onPause();
+        registration.remove();
     }
 
     @Override

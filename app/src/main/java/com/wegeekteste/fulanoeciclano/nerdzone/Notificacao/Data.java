@@ -6,15 +6,17 @@ public class Data {
     private int icon;
     private String body;
     private String title;
+    private String endereco;
     //id do admin do grupo
     private String id_recebe;
 
-    public Data(String id_mandou, int icon, String body, String title, String id_recebe) {
+    public Data(String id_mandou, int icon, String body, String title, String id_recebe,String end) {
         this.id_mandou = id_mandou;
         this.icon = icon;
         this.body = body;
         this.title = title;
         this.id_recebe = id_recebe;
+        this.endereco=end;
     }
 
     public Data() {
@@ -60,5 +62,11 @@ public class Data {
         this.title = title;
     }
 
+    public String getEndereco() {
+        return endereco;
+    }
 
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
 }

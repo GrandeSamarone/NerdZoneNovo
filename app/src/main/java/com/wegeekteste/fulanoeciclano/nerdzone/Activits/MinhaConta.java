@@ -170,9 +170,7 @@ public class MinhaConta extends AppCompatActivity implements  View.OnClickListen
                 case R.id.navigation_perfil:
 
                     return true;
-                case R.id.navigation_voltar:
 
-                    return true;
             }
             return false;
         }

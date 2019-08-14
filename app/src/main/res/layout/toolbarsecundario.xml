@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@drawable/gradiente_toolbar"
-        android:theme="@style/Theme.AppCompat">
+        android:theme="@style/DrawerArrowStyle">
     </androidx.appcompat.widget.Toolbar>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -26,11 +26,11 @@
 
         <ImageView
             android:id="@+id/icone_toolbar_secundario"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="24sp"
+            android:layout_height="24sp"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="8dp" />
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="8dp"/>
 
 
         <TextView
@@ -39,6 +39,8 @@
             android:id="@+id/app_toolbar_title_secundario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+
             android:text=""
             android:textAlignment="center"
             android:textSize="24dp"

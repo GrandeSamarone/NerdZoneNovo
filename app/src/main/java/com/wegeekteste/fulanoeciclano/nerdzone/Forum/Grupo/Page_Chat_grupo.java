@@ -45,12 +45,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -64,7 +64,7 @@ import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_Membro_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_chat_grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
-import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Lista_Forum;
+import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Forum_principal;
 import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.forum.APIService;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.CircleProgressDrawable;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.TrocarFundo;
@@ -79,6 +79,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static android.content.ContentValues.TAG;
@@ -101,7 +102,7 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
     private ImageView botaoicone;
     private View root;
     private String usuarioLogado;
-    private String Id_Forum_selecionado;
+    private String Id_Forum_selecionado,admin;
     private Forum forum_selecionado;
     private FirebaseFirestore db;
     private String identificadorUsuario;
@@ -118,6 +119,7 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
     private LinearLayoutManager layoutManager;
     private DocumentSnapshot lastVisible;
     private AlertDialog dialog;
+
     //notificacao
     APIService apiService;
     boolean notify = false;
@@ -133,7 +135,6 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
 
         //Configuracoes Iniciais
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
-
         storageReference = ConfiguracaoFirebase.getFirebaseStorage();
         db = FirebaseFirestore.getInstance();
         identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
@@ -172,6 +173,7 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
 
         forum_selecionado = (Forum) getIntent().getSerializableExtra("forum_selecionado");
         Id_Forum_selecionado = getIntent().getStringExtra("id_forum_selecionado");
+        admin = getIntent().getStringExtra("id_admin");
         if (forum_selecionado != null) {
             titulo.setText(forum_selecionado.getTitulo());
             detalhe_topico_quant_membros.setText(String.valueOf(forum_selecionado.getMembro_count()));
@@ -203,16 +205,12 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
             }
         }
 
-         //Notificação
-        updateToken(FirebaseInstanceId.getInstance().getToken());
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-// Notificação
-    private void updateToken(String token){
 
-    }
 
 
     @Override
@@ -233,7 +231,6 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
     protected void onStart() {
         super.onStart();
         Digitando();
-
         Recuperar_Mensagens();
         //Conta a quantidade de membros
         quant_membros();
@@ -251,7 +248,6 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         //  Adicionar_Membro();
         // Online();
 
-
     }
 
     @Override
@@ -260,7 +256,6 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         registration.remove();
         registration_membro.remove();
         Status("offline");
-
         //RemoveMembro
         // offline();
     }
@@ -329,6 +324,14 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         membro_grupo.setFoto_usuario(foto);
         membro_grupo.setToken_usuario(token);
         membro_grupo.setStatus(status);
+
+        if(admin.equals(identificadorUsuario)){
+             membro_grupo.setId_admin(admin);
+            membro_grupo.setAdmin(true);
+        }else{
+            membro_grupo.setId_admin(null);
+            membro_grupo.setAdmin(false);
+        }
         membro_grupo.SalvarMembro();
 
     }
@@ -392,11 +395,7 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
         }
         //Limpar comentario
         edit_chat_emoji.setText("");
-   String recebe= "Y3NtZWdhdHhAZ21haWwuY29t";
-        if (notify) {
-           // sendNotifiaction(recebe, nome, textoComentario);
-        }
-        notify = false;
+
 
 
     }
@@ -422,7 +421,6 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
 
     private void Recuperar_Mensagens(){
         list_conversa_grupo.clear();
-
         Query query=  db
                 .collection("WeForum").document(Id_Forum_selecionado)
                 .collection("Mensagens").orderBy("tempo", Query.Direction.ASCENDING);
@@ -436,7 +434,6 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
                             Chat_Grupo coment=doc.getDocument().toObject(Chat_Grupo.class);
                             list_conversa_grupo.add(coment);
                             adapter.notifyDataSetChanged();
-
                             recyclerView_chat.smoothScrollToPosition(recyclerView_chat.getAdapter().getItemCount());
                         }
 
@@ -522,7 +519,7 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
     private void quant_membros() {
         db = FirebaseFirestore.getInstance();
         db.collection("WeForum").document(Id_Forum_selecionado)
-                .collection("Membros").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .collection("Membros").whereEqualTo("bloqueio",false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -530,7 +527,10 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
                     HashMap<String, Object> membrosMap = new HashMap<>();
                     membrosMap.put("membro_count", task.getResult().size());
                     db.collection("WeForum").document(Id_Forum_selecionado).update(membrosMap);
-
+                    final Map<String, Object> addUserToArrayMap = new HashMap<>();
+                    addUserToArrayMap.put("membros", FieldValue.arrayUnion(identificadorUsuario));
+                    db.collection("WeForum").document(Id_Forum_selecionado)
+                            .update(addUserToArrayMap);
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }
@@ -556,17 +556,19 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
 
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
 
-                startActivity(new Intent(Page_Chat_grupo.this, Lista_Forum.class)
+                startActivity(new Intent(Page_Chat_grupo.this, Forum_principal.class)
                         .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 finish();
               break;
-            /*case R.id.menu_enviar_img:
-                Intent intent = CropImage.activity()
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .getIntent(Page_Chat_grupo.this);
-                startActivityForResult(intent, SELECAO_GALERIA);
+            case R.id.menu_configuracao:
+              Intent it = new Intent(Page_Chat_grupo.this,Configuracao_Grupo_Activity.class);
+              it.putExtra("id_grupo",Id_Forum_selecionado);
+                it.putExtra("nome_grupo",forum_selecionado.getTitulo());
+                it.putExtra("desc_grupo",forum_selecionado.getDescricao());
+                it.putExtra("img_grupo",forum_selecionado.getFoto());
+              startActivity(it);
                               break;
-        */
+
         }
 
         return super.onOptionsItemSelected(item);

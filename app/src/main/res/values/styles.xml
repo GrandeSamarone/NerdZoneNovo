@@ -23,6 +23,16 @@
         <item name="colorControlHighlight">#00bff9</item>
         <item name="colorButtonNormal">@color/colorPrimary</item>
         <item name="android:textColor">@color/background_geral</item>
+    </style>
+    <style name="botaopadrao2" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">#00bff9</item>
+        <item name="colorButtonNormal">@color/md_blue_400</item>
+        <item name="android:textColor">@color/background_geral</item>
+    </style>
+    <style name="botaopadrao_cinza" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">#85898B</item>
+        <item name="colorButtonNormal">@color/cinzabalao</item>
+        <item name="android:textColor">@color/background_geral</item>
 
     </style>
 

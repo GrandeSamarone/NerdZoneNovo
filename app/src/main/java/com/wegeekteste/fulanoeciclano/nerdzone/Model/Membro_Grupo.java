@@ -15,6 +15,8 @@ public class Membro_Grupo {
     private Boolean digitando;
     private Boolean permissao;
     private Boolean bloqueio;
+    private Boolean admin;
+    private String id_admin;
 
 
 
@@ -28,10 +30,13 @@ public class Membro_Grupo {
         membrosMap.put("id_usuario", getId_usuario());
         membrosMap.put("token_usuario", getToken_usuario());
         membrosMap.put("bloqueio",false);
-        membrosMap.put("permissao",false);
+        membrosMap.put("permissao",getPermissao());
+        membrosMap.put("admin",getAdmin());
+        membrosMap.put("id_admin",getId_admin());
         membrosMap.put("foto_usuario",getFoto_usuario() );
         membrosMap.put("nome_usuario", getNome_usuario());
         membrosMap.put("digitando", false);
+
         db.collection("WeForum").document(getId_grupo())
                 .collection("Membros").document(getId_usuario()).set(membrosMap);
 
@@ -120,5 +125,21 @@ public class Membro_Grupo {
 
     public void setToken_usuario(String token_usuario) {
         this.token_usuario = token_usuario;
+    }
+
+    public Boolean getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
+    }
+
+    public String getId_admin() {
+        return id_admin;
+    }
+
+    public void setId_admin(String id_admin) {
+        this.id_admin = id_admin;
     }
 }

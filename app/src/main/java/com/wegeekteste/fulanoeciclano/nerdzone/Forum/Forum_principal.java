@@ -41,7 +41,7 @@ import com.wegeekteste.fulanoeciclano.nerdzone.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Lista_Forum extends TrocarFundo implements View.OnClickListener {
+public class Forum_principal extends TrocarFundo implements View.OnClickListener {
     private Toolbar toolbar;
     private ImageView icone;
     private MaterialSearchView SeachViewTopico;
@@ -157,7 +157,7 @@ public class Lista_Forum extends TrocarFundo implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
            // case R.id.icone_toolbar_secundario :
-           // Intent it = new Intent(Lista_Forum.this,Lista_forum_Geral.class);
+           // Intent it = new Intent(Forum_principal.this,Lista_forum_Geral.class);
             //startActivity(it);
             //break;
         }
@@ -192,9 +192,7 @@ public class Lista_Forum extends TrocarFundo implements View.OnClickListener {
                     fragment = new Topico_Fragment();
                     loadFragment(fragment);
                     return true;
-                case R.id.navigation_voltar:
 
-                    return true;
             }
             return false;
         }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+    <item
+        android:id="@+id/navigation_leilao_inicial"
+        android:icon="@drawable/ic_leilao_inicial"
+        android:title="@string/title_forum" />
+
+    <item
+        android:id="@+id/navigation_leilao_lance"
+        android:icon="@drawable/ic_lance"
+        android:title="@string/title_lance_leilao" />
+
+    <item
+        android:id="@+id/navigation_leilao_historico"
+        android:icon="@drawable/historico_leilao"
+        android:title="@string/title_hist_leilao" />
+
+</menu>

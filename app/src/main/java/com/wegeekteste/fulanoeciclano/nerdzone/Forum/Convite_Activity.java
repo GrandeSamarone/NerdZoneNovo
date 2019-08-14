@@ -14,6 +14,7 @@ import androidx.core.view.MenuCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,6 +34,7 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Grupo.Page_Chat_grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.TrocarFundo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Chat_Grupo;
+import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Membro_solicitacao_grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
@@ -100,6 +102,19 @@ public class Convite_Activity extends TrocarFundo {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        registration.remove();
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        registration.remove();
+    }
+
     private void Recuperar_Convites(){
         list_membro.clear();
 
@@ -108,24 +123,62 @@ public class Convite_Activity extends TrocarFundo {
         registration = query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                List<DocumentChange> documentChanges = queryDocumentSnapshots.getDocumentChanges();
-                if (documentChanges != null) {
-                    for (DocumentChange doc: documentChanges) {
-                        if (doc.getType() == DocumentChange.Type.ADDED) {
-                            Membro_solicitacao_grupo membro=doc.getDocument().toObject(Membro_solicitacao_grupo.class);
-                            list_membro.add(membro);
+                if (e != null) {
+                    Log.w("", "listen:error", e);
+                    return;
+                }
+
+                for (DocumentChange change : queryDocumentSnapshots.getDocumentChanges()) {
+                    Log.i("sdsdsd777",change.getDocument().getId());
+                    Membro_solicitacao_grupo membro=change.getDocument().toObject(Membro_solicitacao_grupo.class);
+                    membro.setId(change.getDocument().getId());
+
+                    switch (change.getType()) {
+                        case ADDED:
+                            list_membro.add(0, membro);
+
+                            if (list_membro.size() > 0) {
+                                //  linear_nada_cadastrado.setVisibility(View.GONE);
+                            }
+
                             adapter_convites.notifyDataSetChanged();
+                            Log.d("ad", "New city: " + change.getDocument().getData());
+                            break;
+                        case MODIFIED:
+                            for (Membro_solicitacao_grupo ct : list_membro) {
 
+                                if(membro.getId().equals(ct.getId())){
+                                    list_membro.remove(ct);
+                                    break;
+                                }
+                            }
+                            list_membro.add(0, membro);
+                            if (list_membro.size() > 0) {
+                                //linear_nada_cadastrado.setVisibility(View.GONE);
+                            }
 
-                        }
+                            adapter_convites.notifyDataSetChanged();
+                            Log.d("md", "Modified city: " + change.getDocument().getData());
+                            break;
+                        case REMOVED:
+                            for (Membro_solicitacao_grupo ct : list_membro) {
 
+                                if(membro.getId().equals(ct.getId())){
+                                    list_membro.remove(ct);
+                                    break;
+                                }
+                            }
 
+                            adapter_convites.notifyDataSetChanged();
+                            Log.d("rem", "Removed city: " + change.getDocument().getData());
+                            break;
                     }
                 }
             }
         });
 
-    }
+            }
+
 
 
 }

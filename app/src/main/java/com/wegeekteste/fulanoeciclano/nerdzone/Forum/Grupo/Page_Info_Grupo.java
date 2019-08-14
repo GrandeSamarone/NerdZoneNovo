@@ -156,7 +156,7 @@ public class Page_Info_Grupo extends TrocarFundo {
                              Forum forum=document.toObject(Forum.class);
 
                                 Data data = new Data(identificadorUsuario, R.drawable.favicon,
-                                        username_de_quem_mando+": "+msg, "Nova Solicitação", receptor);
+                                        username_de_quem_mando+": "+msg, "Nova Solicitação", receptor,"admin_acc_convite");
                                 Sender sender = new Sender(data,  forum.getToken_author());
 
                                 Toast.makeText(Page_Info_Grupo.this, forum.getToken_author(), Toast.LENGTH_SHORT).show();

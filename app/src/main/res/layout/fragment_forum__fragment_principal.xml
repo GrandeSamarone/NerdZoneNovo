@@ -28,195 +28,197 @@
 
 
     <androidx.cardview.widget.CardView
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:elevation="6dp"
+        android:background="@drawable/fundoevento">
+        <LinearLayout
+            android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:elevation="6dp"
-            android:background="@drawable/fundoevento">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
             <LinearLayout
-                android:gravity="center"
-                android:layout_width="match_parent"
+                android:id="@+id/line_criarGrupo"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <LinearLayout
-                    android:id="@+id/line_criarGrupo"
-                    android:clickable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:orientation="vertical"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/img_game"
+                    android:layout_gravity="center"/>
+
+
+                <TextView
+                    android:fontFamily="@font/fontgeek"
+                    android:textColor="@color/pretoescrita"
+                    android:textSize="14sp"
+                    android:text="Criar Grupo"
+
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="8dp">
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:src="@drawable/img_game"
-                        android:layout_gravity="center"/>
-
-
-                    <TextView
-                        android:fontFamily="@font/fontgeek"
-                        android:textColor="@color/pretoescrita"
-                        android:textSize="14sp"
-                        android:text="Criar Grupo"
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:clickable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:layout_weight="0"
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="8dp">
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:src="@drawable/img_game"
-                        android:layout_gravity="center"/>
-
-
-                    <TextView
-                        android:fontFamily="@font/fontgeek"
-                        android:textColor="@color/pretoescrita"
-                        android:textSize="14sp"
-                        android:text="Novo Tópico"
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/line_convite"
-                    android:clickable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:layout_weight="0"
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="8dp">
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:src="@drawable/img_game"
-                        android:layout_gravity="center"/>
-
-
-                    <TextView
-                        android:fontFamily="@font/fontgeek"
-                        android:textColor="@color/pretoescrita"
-                        android:textSize="14sp"
-                        android:text="Convites"
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
+                    android:layout_height="wrap_content" />
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
-        <androidx.core.widget.NestedScrollView
+
+            <LinearLayout
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:layout_weight="0"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/img_game"
+                    android:layout_gravity="center"/>
+
+
+                <TextView
+                    android:fontFamily="@font/fontgeek"
+                    android:textColor="@color/pretoescrita"
+                    android:textSize="14sp"
+                    android:text="Novo Tópico"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/line_convite"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:layout_weight="0"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/img_game"
+                    android:layout_gravity="center"/>
+
+
+                <TextView
+                    android:fontFamily="@font/fontgeek"
+                    android:textColor="@color/pretoescrita"
+                    android:textSize="14sp"
+                    android:text="Solicitação"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <LinearLayout
-                android:orientation="vertical"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <androidx.cardview.widget.CardView
+                android:layout_height="wrap_content"
+                android:elevation="6dp">
+
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:elevation="6dp">
+                    android:layout_height="match_parent">
 
-                    <RelativeLayout
+                    <TextView
+                        android:layout_marginTop="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:id="@+id/nome_grupo"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:layout_marginTop="16dp"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginRight="16dp"
-                            android:layout_marginBottom="8dp"
-                            android:id="@+id/nome_grupo"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Grupos"
-                            android:textSize="18dp"
-                            android:fontFamily="@font/fontgeek"
-                            />
-                        <View
-                            android:layout_below="@+id/nome_grupo"
-                            android:id="@+id/line_div_grupo"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_gravity="bottom"
-                            android:background="@drawable/line_divider" />
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:layout_marginTop="8dp"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginRight="16dp"
-                            android:layout_marginBottom="8dp"
-                            android:layout_below="@+id/line_div_grupo"
-                            android:id="@+id/recycleview_grupo"
-                            android:clipToPadding="false"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:scrollbars="vertical"
-                            />
-                    </RelativeLayout>
-                </androidx.cardview.widget.CardView>
+                        android:layout_height="wrap_content"
+                        android:text="Grupos"
+                        android:textSize="18dp"
+                        android:fontFamily="@font/fontgeek"
+                        />
+                    <View
+                        android:layout_below="@+id/nome_grupo"
+                        android:id="@+id/line_div_grupo"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/line_divider" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_below="@+id/line_div_grupo"
+                        android:id="@+id/recycleview_grupo"
+                        android:focusableInTouchMode="true"
+                        android:focusable="true"
+                        android:clipToPadding="false"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="vertical"
+                        />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
 
 
-                <androidx.cardview.widget.CardView
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="6dp">
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:elevation="6dp">
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                    android:layout_height="match_parent">
 
-                        <TextView
-                            android:layout_marginTop="16dp"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginRight="16dp"
-                            android:layout_marginBottom="8dp"
-                            android:id="@+id/nome_topico"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Tópicos"
-                            android:textSize="18dp"
-                            android:fontFamily="@font/fontgeek"
-                            />
-                        <View
-                            android:layout_below="@+id/nome_topico"
-                            android:id="@+id/line_div_topico"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_gravity="bottom"
-                            android:background="@drawable/line_divider" />
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:layout_marginTop="8dp"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginRight="16dp"
-                            android:layout_marginBottom="8dp"
-                            android:layout_below="@+id/line_div_topico"
-                            android:id="@+id/recycleview_topico"
-                            android:clipToPadding="false"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:scrollbars="vertical"
-                            />
-                    </RelativeLayout>
-                </androidx.cardview.widget.CardView>
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+                    <TextView
+                        android:layout_marginTop="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:id="@+id/nome_topico"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tópicos"
+                        android:textSize="18dp"
+                        android:fontFamily="@font/fontgeek"
+                        />
+                    <View
+                        android:layout_below="@+id/nome_topico"
+                        android:id="@+id/line_div_topico"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/line_divider" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_below="@+id/line_div_topico"
+                        android:id="@+id/recycleview_topico"
+                        android:clipToPadding="false"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="vertical"
+                        />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

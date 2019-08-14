@@ -2,21 +2,27 @@ package com.wegeekteste.fulanoeciclano.nerdzone.Fragments.forum;
 
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentChange;
@@ -31,6 +37,7 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_Forum_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Adapter.Adapter_Membro_Grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Grupo.Page_Chat_grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Grupo.Page_Info_Grupo;
+import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Novo_Grupo_Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.IOnBackPressed;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.RecyclerItemClickListener;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
@@ -132,6 +139,7 @@ public class Grupo_Fragment extends Fragment implements IOnBackPressed {
     public void onPause() {
         shimmerContainer.stopShimmerAnimation();
         super.onPause();
+        registration.remove();
     }
 
     public void Recuperar_Grupo_geral(){
@@ -184,6 +192,7 @@ public class Grupo_Fragment extends Fragment implements IOnBackPressed {
                                     for (Forum ct : ListaG) {
 
                                         if(forum_grupo.getId().equals(ct.getId())){
+
                                             ListaG.remove(ct);
                                             break;
                                         }
@@ -203,24 +212,36 @@ public class Grupo_Fragment extends Fragment implements IOnBackPressed {
 
 
 private void Verificar_membro(String id_grupo,Forum forum_selecionado){
-
+    Toast toast = Toast.makeText(getContext(), " Carregando...",Toast.LENGTH_SHORT);
+    toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
+    toast.show();
     //Verifica se é a primeira vez para vizualizar as informacoes do grupo
     db.collection("WeForum").document(id_grupo)
             .collection("Membros").document(identificadorUsuario).get()
             .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if(documentSnapshot.exists()){
-                        Intent it = new Intent(getContext(), Page_Chat_grupo.class);
-                        it.putExtra("forum_selecionado",forum_selecionado);
-                        it.putExtra("id_forum_selecionado",id_grupo);
-                        startActivity(it);
-                    }else{
-                        Intent it = new Intent(getContext(), Page_Info_Grupo.class);
-                        it.putExtra("grupo_info",forum_selecionado);
-                        it.putExtra("grupo_id",id_grupo);
-                        startActivity(it);
-                    }
+                    Membro_Grupo membro_grupo= documentSnapshot.toObject(Membro_Grupo.class);
+
+                      if(documentSnapshot.exists()) {
+                          assert membro_grupo != null;
+                          if (!membro_grupo.getBloqueio()) {
+                              Intent it = new Intent(getContext(), Page_Chat_grupo.class);
+                              it.putExtra("forum_selecionado", forum_selecionado);
+                              it.putExtra("id_forum_selecionado", id_grupo);
+                              it.putExtra("id_admin", forum_selecionado.getIdauthor());
+                              startActivity(it);
+
+                          }else{
+                              Toast.makeText(getContext(), "Voce está bloqueado Otario!", Toast.LENGTH_SHORT).show();
+                          }
+                      }else{
+
+                          Intent it = new Intent(getContext(), Page_Info_Grupo.class);
+                          it.putExtra("grupo_info",forum_selecionado);
+                          it.putExtra("grupo_id",id_grupo);
+                          startActivity(it);
+                      }
                 }
             });
 

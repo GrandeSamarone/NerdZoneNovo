@@ -2,6 +2,7 @@ package com.wegeekteste.fulanoeciclano.nerdzone.Adapter;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +24,14 @@ import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Grupo.Page_Info_Grupo;
@@ -34,6 +40,7 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Helper.CircleProgressDrawable;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Comercio;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Forum;
 import com.wegeekteste.fulanoeciclano.nerdzone.Model.Membro_solicitacao_grupo;
+import com.wegeekteste.fulanoeciclano.nerdzone.Model.Usuario;
 import com.wegeekteste.fulanoeciclano.nerdzone.Notificacao.Client;
 import com.wegeekteste.fulanoeciclano.nerdzone.Notificacao.Data;
 import com.wegeekteste.fulanoeciclano.nerdzone.Notificacao.MyResponse;
@@ -42,6 +49,7 @@ import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -53,8 +61,8 @@ public class Adapter_Convites extends RecyclerView.Adapter<Adapter_Convites.MyVi
     private List<Membro_solicitacao_grupo> membro_solitando;
     private Context context;
     boolean notify = false;
-    APIService apiService;
-    private FirebaseDatabase databases=FirebaseDatabase.getInstance();
+   private APIService apiService;
+    private FirebaseFirestore db;
     public Adapter_Convites(List<Membro_solicitacao_grupo> solicitacao, Context context){
         this.membro_solitando = solicitacao;
         this.context=context;
@@ -104,18 +112,77 @@ public class Adapter_Convites extends RecyclerView.Adapter<Adapter_Convites.MyVi
                 membrosMap.put("id_admin_grupo",membro.getId_admin_grupo());
                 notify=true;
                 if (notify) {
-                    sendNotifiaction( membro.getId_admin_grupo(),membro.getNome_usuario(), "Olá quero participar do  "+membro.getNome_grupo());
+                    sendNotifiaction( membro.getId_usuario(),membro.getNome_usuario(), "Ola voce foi aceito no   "+membro.getNome_grupo(),
+                            membro.getId_admin_grupo());
 
                 }
                 notify = false;
-                db.collection("WeForum").document(membro.getId_grupo()).collection("Membros").add(membrosMap);
+                //addicionando no documento Membros
+                db.collection("WeForum").document(membro.getId_grupo())
+                        .collection("Membros").document(membro.getId_usuario()).set(membrosMap);
+               //addicionando no Array Membros
+                final Map<String, Object> addUserToArrayMap = new HashMap<>();
+                addUserToArrayMap.put("membros", FieldValue.arrayUnion(membro.getId_usuario()));
+                db.collection("WeForum").document(membro.getId_grupo())
+                        .update(addUserToArrayMap);
+
+                //deletando
+                CollectionReference itemsRef = db.collection("Permissao_Grupo");
+                Query query=itemsRef.whereEqualTo("id_grupo",membro.getId_grupo()).whereEqualTo("id_usuario",membro.getId_usuario());
+               query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                   @Override
+                   public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                       if (task.isSuccessful()) {
+                           for (DocumentSnapshot document : task.getResult()) {
+                               itemsRef.document(document.getId()).delete();
+                           }
+                       } else {
+                           Log.d("54", "Error getting documents: ", task.getException());
+                       }
+                   }
+               });
             }
         });
 
     }
 
-    private void sendNotifiaction(String id_admin_grupo, String nome_usuario, String s) {
+    private void sendNotifiaction(String receptor, String nome_usuario, String s,String id__quem_envia) {
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+        db = FirebaseFirestore.getInstance();
+        db.collection("Usuarios").whereEqualTo("id",receptor).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                               Usuario user_receptor=document.toObject(Usuario.class);
+
+                                Data data = new Data(id__quem_envia, R.drawable.favicon, nome_usuario+": "+s,
+                                        "Permissão", receptor,"convite_aceito");
+                                Sender sender = new Sender(data,  user_receptor.getToken());
+                                apiService.sendNotification(sender)
+                                        .enqueue(new Callback<MyResponse>() {
+                                            @Override
+                                            public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                                if (response.code() == 200){
+                                                    if (response.body().success != 1){
+                                                        Toast.makeText(context, "Failed!", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<MyResponse> call, Throwable t) {
+
+                                            }
+                                        });
+                            }
+
+                        }
+                    }
+                });
+
+
     }
 
 

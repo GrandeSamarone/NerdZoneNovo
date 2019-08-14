@@ -51,7 +51,7 @@ dependencies {
     // alterar texto do botao google
     implementation 'com.shobhitpuri.custombuttons:google-signin:1.0.0'
     //Fresco imagem
-    implementation 'com.facebook.fresco:fresco:1.8.1'
+    implementation 'com.facebook.fresco:fresco:2.0.0'
     //mask
     implementation 'com.github.rtoshiro.mflibrary:mflibrary:1.0.0'
 
@@ -63,7 +63,6 @@ dependencies {
 
     //emojion
     implementation 'com.vanniktech:emoji-google:0.5.1'
-
     //Carregar img Telegram
     implementation 'com.library.tangxiaolv:telegramgallery:1.0.5'
 
@@ -74,17 +73,17 @@ dependencies {
     //firebase
     // implementation "com.google.firebase:firebase-firestore:11.8.0"
     //noinspection GradleCompatible
-    implementation 'com.google.android.gms:play-services-auth:12.0.0'
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.miguelcatalan:materialsearchview:1.4.0'
     //  compile 'com.github.barteksc:android-pdf-viewer:3.0.0-beta.5'
-    implementation 'com.google.firebase:firebase-storage:12.0.0'
-    implementation 'com.google.firebase:firebase-database:12.0.0'
+    implementation 'com.google.firebase:firebase-storage:18.1.1'
+    implementation 'com.google.firebase:firebase-database:18.0.1'
     // implementation 'com.firebaseui:firebase-ui-database:3.0.0'
-    implementation 'com.google.firebase:firebase-auth:12.0.0'
-    implementation 'com.google.firebase:firebase-firestore:12.0.0'
-    implementation 'com.google.firebase:firebase-messaging:12.0.0'
-    implementation 'com.google.firebase:firebase-core:12.0.0'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
+    implementation 'com.google.firebase:firebase-auth:18.1.0'
+    implementation 'com.google.firebase:firebase-firestore:20.2.0'
+    implementation 'com.google.firebase:firebase-messaging:19.0.1'
+    implementation 'com.google.firebase:firebase-core:17.0.1'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
@@ -120,6 +119,8 @@ dependencies {
     // Editor de texto
     implementation 'com.github.irshulx:laser-native-editor:2.3.1'
 
+    //Data e hora
+    implementation 'com.github.florent37:SingleDateAndTimePicker:v2.0.4'
 
     //carregando
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'

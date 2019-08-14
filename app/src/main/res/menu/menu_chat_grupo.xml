@@ -3,15 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
-
-    <group android:id="@+id/sorting" >
     <item
         android:id="@+id/menu_configuracao"
         android:title="Configuração" />
-    </group>
-    <group android:id="@+id/sorting_" >
-    <item
-        android:id="@+id/menu_membro"
-        android:title="Membros" />
-    </group>
 </menu>

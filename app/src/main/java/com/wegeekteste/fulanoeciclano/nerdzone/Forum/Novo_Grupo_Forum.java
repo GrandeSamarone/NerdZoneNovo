@@ -10,7 +10,6 @@ import android.provider.MediaStore;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -44,7 +43,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
-import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Grupo.Page_Chat_grupo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.TrocarFundo;
 import com.wegeekteste.fulanoeciclano.nerdzone.Config.ConfiguracaoFirebase;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.UsuarioFirebase;
@@ -53,15 +51,10 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Model.Usuario;
 import com.wegeekteste.fulanoeciclano.nerdzone.R;
 
 import java.io.ByteArrayOutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Random;
 import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static com.tangxiaolv.telegramgallery.Utils.Utilities.random;
 
 public class Novo_Grupo_Forum extends TrocarFundo {
 
@@ -142,9 +135,9 @@ public class Novo_Grupo_Forum extends TrocarFundo {
                 int[] location = new int[2];
                 v.getLocationInWindow(location);
                 if (random.nextBoolean()) {
-                    bubbleLayout.setArrowDirection(ArrowDirection.RIGHT_CENTER);
+                    bubbleLayout.setArrowDirection(ArrowDirection.TOP_CENTER);
                 } else {
-                    bubbleLayout.setArrowDirection(ArrowDirection.RIGHT_CENTER);
+                    bubbleLayout.setArrowDirection(ArrowDirection.TOP_CENTER);
                 }
                 popupWindow.showAtLocation(v, Gravity.NO_GRAVITY, location[0], v.getHeight() + location[1]);
             }
@@ -332,9 +325,8 @@ public class Novo_Grupo_Forum extends TrocarFundo {
 
                     forum.SalvarForum();
 
-
                     Toast.makeText(Novo_Grupo_Forum.this, "Grupo Criado Com Sucesso!", Toast.LENGTH_SHORT).show();
-                    Intent it = new Intent(Novo_Grupo_Forum.this, Lista_Forum.class);
+                    Intent it = new Intent(Novo_Grupo_Forum.this, Forum_principal.class);
                     startActivity(it);
                     finish();
                 } else {
@@ -378,7 +370,7 @@ public class Novo_Grupo_Forum extends TrocarFundo {
 
         switch (item.getItemId()) {
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                startActivity(new Intent(this, Lista_Forum.class));
+                startActivity(new Intent(this, Forum_principal.class));
                 finish();
         }
               /*

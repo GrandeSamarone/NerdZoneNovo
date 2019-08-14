@@ -71,27 +71,7 @@ public class MeusSeguidores extends AppCompatActivity {
         recyclerMeusSeguidores.setHasFixedSize(true);
         recyclerMeusSeguidores.setAdapter(adapterseguidores);
 
-        SeachView = findViewById(R.id.materialSeach_toolbar_sem_foto);
-        SeachView.setHint("Pesquisar");
-        SeachView.setHintTextColor(R.color.cinzaclaro);
-        SeachView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if(newText!=null && !newText.isEmpty()){
-                   PesquisarContato(newText.toLowerCase());
-
-                }else{
-                   RecarregarContato();
-                }
-
-                return true;
-            }
-        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

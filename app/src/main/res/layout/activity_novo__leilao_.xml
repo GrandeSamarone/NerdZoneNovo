@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Leilao.Novo_Leilao_Activity"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    >
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbarsecundario" />
+    <ScrollView
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_margin="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:layout_below="@+id/toolbar">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rec_img_leilao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:layout_below="@+id/rec_img_leilao"
+        android:layout_marginTop="16dp"
+        android:id="@+id/botaoadd_mg_leilao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ADICIONAR FOTO"
+        android:fontFamily="@font/fontgeek"
+        android:textSize="24sp"
+        android:drawableRight="@drawable/ic_add_a_photo"
+        android:theme="@style/botaopadrao_cinza"/>
+</RelativeLayout>
+
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtlayout_titulo_leilao"
+        android:layout_gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:counterEnabled="true"
+        app:counterMaxLength="100"
+        >
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/titulo_leilao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/txt_titulo"
+            android:padding="10dp"
+            android:maxLength="100"
+            android:background="@drawable/bg_edit_text"
+            android:textAlignment="center"
+            android:inputType="textMultiLine"
+            android:minLines="2"
+            android:fontFamily="@font/fontgeek"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtlayout_descricao_leilao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:counterEnabled="true"
+        app:counterMaxLength="400"
+        >
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/desc_leilao"
+            android:maxLength="400"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:fontFamily="@font/fontgeek"
+            android:hint="@string/descricao"
+            android:background="@drawable/bg_edit_text"
+            android:textAlignment="center"
+            android:minLines="5"
+            android:inputType="textMultiLine"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Spinner
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:id="@+id/spinner_leilao_categoria"
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+               >
+
+                <ImageView
+
+                    android:id="@+id/id_ic_money"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginTop="16dp"
+                    android:layout_width="24sp"
+                    android:layout_height="24sp"
+                    android:src="@drawable/ic_money"/>
+                <TextView
+                    android:layout_toRightOf="@+id/id_ic_money"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/fontgeek"
+                    android:textSize="16dp"
+                    android:text=" Lance Mínimo:"
+                    android:id="@+id/textlance"/>
+
+
+                <com.blackcat.currencyedittext.CurrencyEditText
+                    android:id="@+id/desc_preco_leilao"
+                    android:layout_toRightOf="@+id/textlance"
+                    android:layout_marginBottom="16dp"
+                    android:padding="10dp"
+                    android:background="@drawable/bg_edit_text"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:hint="R$ 20,50"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="16dp"
+                    android:layout_width="28sp"
+                    android:layout_height="28sp"
+                    android:id="@+id/ic_help_valor"
+                    android:src="@drawable/ic_help_outline_black_24dp"
+                   />
+            </RelativeLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+            <Button
+                android:id="@+id/botao_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="data"
+                android:theme="@style/botaopadrao2"
+                android:drawableRight="@drawable/ic_today_black_24dp"
+               />
+    <TextView
+        android:id="@+id/data_selecionada"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/fontgeek"
+        android:textSize="16sp"
+        android:textAlignment="center"/>
+</LinearLayout>
+    <Button
+                android:layout_below="@+id/rec_img_leilao"
+                android:layout_marginTop="20dp"
+                android:id="@+id/botao_salvar_item_leilao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SALVAR"
+                android:fontFamily="@font/fontgeek"
+                android:textSize="24sp"
+                android:drawableRight="@drawable/ic_arrow_forward"
+                android:theme="@style/botaopadrao"/>
+    </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
