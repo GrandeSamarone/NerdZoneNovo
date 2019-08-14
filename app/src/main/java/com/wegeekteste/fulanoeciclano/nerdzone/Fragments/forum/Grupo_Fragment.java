@@ -84,8 +84,8 @@ public class Grupo_Fragment extends Fragment implements IOnBackPressed {
         identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
 
         //efeito carregando do facebook
-        shimmerContainer = (ShimmerFrameLayout) view.findViewById(R.id.shimmer_view_container_Grupo);
-        recicle_Grupo_geral=view.findViewById(R.id.RecycleViewGrupo_geral);
+        shimmerContainer = (ShimmerFrameLayout) view.findViewById(R.id.shimmer_view_container_Grupos);
+        recicle_Grupo_geral=view.findViewById(R.id.RecycleViewGrupsso_geral);
         adapter_forumGrupo = new Adapter_Forum_Grupo(ListaG,getContext());
         //Adapter
         @SuppressLint("WrongConstant") RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false);

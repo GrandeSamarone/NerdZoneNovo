@@ -50,6 +50,7 @@ import com.wegeekteste.fulanoeciclano.nerdzone.Conto.ListaConto;
 import com.wegeekteste.fulanoeciclano.nerdzone.Evento.DetalheEvento;
 import com.wegeekteste.fulanoeciclano.nerdzone.Forum.Forum_principal;
 import com.wegeekteste.fulanoeciclano.nerdzone.Fragments.MinhaConta.Minha_Conta_Fragment;
+import com.wegeekteste.fulanoeciclano.nerdzone.HQ.Lista_geral_hq;
 import com.wegeekteste.fulanoeciclano.nerdzone.Leilao.Page_Inicial_leiao_Fragment;
 import com.wegeekteste.fulanoeciclano.nerdzone.HQ.Pag_producao_hq;
 import com.wegeekteste.fulanoeciclano.nerdzone.Helper.IOnBackPressed;
@@ -89,7 +90,7 @@ public class MainActivityFragment extends Fragment   implements IOnBackPressed{
     private ArrayList<Forum> listaForum = new ArrayList<>();
     private ArrayList<Evento> ListaEvento = new ArrayList<>();
     private ArrayList<Conto> ListaContos = new ArrayList<>();
-    private TextView maiseventoTxt, maiscomercioTxt, maistopicoTxt, maiscontoTxt, maisfanartsTxt,maisLeilao;
+    private TextView maiseventoTxt, maiscomercioTxt, maistopicoTxt, maisHQTxt, maisfanartsTxt,maisLeilao;
     private RelativeLayout clickMais_Leilao;
     private Toolbar toolbar;
     private StorageReference storageReference;
@@ -179,7 +180,7 @@ public class MainActivityFragment extends Fragment   implements IOnBackPressed{
         maiseventoTxt = view.findViewById(R.id.maisevento);
         maiscomercioTxt = view.findViewById(R.id.maiscomercio);
         maistopicoTxt = view.findViewById(R.id.maisForum);
-        maiscontoTxt = view.findViewById(R.id.maishistorias);
+        maisHQTxt = view.findViewById(R.id.maisHQ);
         maisfanartsTxt = view.findViewById(R.id.maisgaleria);
 
         botoes_Mais();
@@ -418,10 +419,10 @@ public class MainActivityFragment extends Fragment   implements IOnBackPressed{
                 startActivity(it);
             }
         });
-        maiscontoTxt.setOnClickListener(new View.OnClickListener() {
+        maisHQTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent it = new Intent(getContext(), ListaConto.class);
+                Intent it = new Intent(getContext(), Lista_geral_hq.class);
                 startActivity(it);
             }
         });

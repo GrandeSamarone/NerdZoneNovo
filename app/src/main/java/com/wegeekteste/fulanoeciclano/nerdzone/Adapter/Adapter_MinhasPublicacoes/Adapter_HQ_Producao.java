@@ -69,7 +69,7 @@ public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Produc
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
          HQ_Model hq= listHQs.get(position);
             Log.i("lsditre7890", String.valueOf(listHQs.size()));
-            Uri uri = Uri.parse("file:///" +hq.getImg_name());
+            Uri uri = Uri.parse("file:///" +hq.getFotos());
             ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
                     .setLocalThumbnailPreviewsEnabled(true)
                     .setProgressiveRenderingEnabled(true)
@@ -87,11 +87,14 @@ public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Produc
                     .build();
             holder.img.setHierarchy(hierarchy);
 
+            if(hq.getImg_id()==0){
+             //   holder.posicao.setText("Capa");
+            }
         //Log.i("lsditre789", String.valueOf(hq.getImg_id()));
-        if(hq.getNova_pos()==null){
-            holder.posicao.setText(hq.getAntiga_pos());
-        }else{
-            holder.posicao.setText(hq.getNova_pos());
+        if(hq.getNova_pos()==null) {
+              //  holder.posicao.setText(String.valueOf(hq.getImg_id()));
+            }else{
+              //  holder.posicao.setText(hq.getNova_pos());
         }
 
         // set background resource (target view ID: container)
@@ -179,7 +182,7 @@ public class Adapter_HQ_Producao  extends RecyclerView.Adapter<Adapter_HQ_Produc
             super(itemView);
             container=itemView.findViewById(R.id.container);
            img=itemView.findViewById(R.id.iconefanart);
-           posicao=itemView.findViewById(R.id.textpos);
+         //  posicao=itemView.findViewById(R.id.textpos);
         }
     }
 }

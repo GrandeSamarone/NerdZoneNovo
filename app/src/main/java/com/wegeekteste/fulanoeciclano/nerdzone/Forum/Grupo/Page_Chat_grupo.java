@@ -527,6 +527,7 @@ public class Page_Chat_grupo extends TrocarFundo implements View.OnClickListener
                     HashMap<String, Object> membrosMap = new HashMap<>();
                     membrosMap.put("membro_count", task.getResult().size());
                     db.collection("WeForum").document(Id_Forum_selecionado).update(membrosMap);
+
                     final Map<String, Object> addUserToArrayMap = new HashMap<>();
                     addUserToArrayMap.put("membros", FieldValue.arrayUnion(identificadorUsuario));
                     db.collection("WeForum").document(Id_Forum_selecionado)

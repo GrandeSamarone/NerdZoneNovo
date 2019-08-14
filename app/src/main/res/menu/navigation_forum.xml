@@ -14,9 +14,6 @@
         android:icon="@drawable/ic_group"
         android:title="@string/title_grupos" />
 
-    <item
-        android:id="@+id/navigation_topico"
-        android:icon="@drawable/icon_topico"
-        android:title="@string/title_topicos" />
+
 
 </menu>

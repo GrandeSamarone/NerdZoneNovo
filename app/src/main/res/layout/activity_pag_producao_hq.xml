@@ -5,9 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HQ.Pag_producao_hq"
-    android:orientation="vertical">
-
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
+ <include
+     android:id="@+id/tolbar"
+     layout="@layout/toolbarsecundario"/>
     <RelativeLayout
+        android:fitsSystemWindows="true"
+        android:layout_below="@+id/tolbar"
         android:id="@+id/primier"
         android:layout_margin="10dp"
         android:layout_width="match_parent"
@@ -16,15 +21,23 @@
     <Button
         android:id="@+id/carregar_img_hq"
         android:layout_gravity="center"
-        android:layout_width="80dp"
+        android:layout_width="wrap_content"
         android:layout_height="46dp"
-        android:text="carregar"/>
+        android:text="Carregar "
+        android:textSize="18sp"
+        android:fontFamily="@font/fontgeek"
+        android:drawableRight="@drawable/ic_add_a_photo"
+        android:theme="@style/botaopadrao"/>
         <Button
             android:id="@+id/prox_etapa_prod_hq"
             android:layout_gravity="center"
-            android:layout_width="80dp"
+            android:layout_width="wrap_content"
             android:layout_height="46dp"
-            android:text="Proximo"
+            android:text="AVANÇAR "
+            android:textSize="18sp"
+            android:fontFamily="@font/fontgeek"
+            android:drawableRight="@drawable/ic_arrow_forward"
+            android:theme="@style/botaopadrao"
             android:layout_alignParentRight="true"
             />
 

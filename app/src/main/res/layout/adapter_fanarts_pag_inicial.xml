@@ -20,6 +20,9 @@
         android:layout_width="100dp"
         android:layout_height="160dp"
         android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/iconefanart"
             android:layout_width="100sp"
@@ -27,18 +30,23 @@
             android:layout_gravity="center"
             android:background="@drawable/gradiente_icone"
             />
-        <TextView
-            android:id="@+id/textpos"
-            android:text="00"
-            android:textSize="18dp"
-            android:textAlignment="center"
-            android:layout_below="@+id/iconefanart"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content" />
+
         <View
             android:id="@+id/drag_handle"
             android:layout_width="32dp"
             android:layout_height="match_parent" />
+
+            <TextView
+              android:visibility="gone"
+                android:id="@+id/textpos"
+                android:textSize="18dp"
+                android:textAlignment="center"
+                android:layout_below="@+id/iconefanart"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/fontgeek" />
+
+        </RelativeLayout>
     </FrameLayout>
 
 </androidx.cardview.widget.CardView>
